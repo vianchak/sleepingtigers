@@ -41,7 +41,7 @@ export default function NewsletterClient({
       setNewsletter(data);
     } catch (error) {
       console.error("Failed to generate newsletter:", error);
-      alert("Failed to generate newsletter. Check console or API keys.");
+      alert(`Failed to generate newsletter. Error: ${error instanceof Error ? error.message : String(error)}`);
     } finally {
       setLoading(false);
     }
