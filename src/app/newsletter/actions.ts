@@ -1,7 +1,7 @@
 'use server'
 
 import { generateObject } from 'ai';
-import { google } from '@ai-sdk/google';
+import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import { z } from 'zod';
 import { getLeagueData, getMatchups, getUsers, getRosters } from '@/lib/sleeper-api';
 
@@ -121,8 +121,12 @@ export async function generateNewsletter(leagueId: string, week: number) {
   4. Power Rankings: Rank the teams based on current standings, with a snarky 1-sentence blurb for each.
   `;
 
+  const googleProvider = createGoogleGenerativeAI({
+    apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY || '',
+  });
+
   const { object } = await generateObject({
-    model: google('gemini-3.8-flash'),
+    model: googleProvider('gemini-3.8-flash'),
     schema: NewsletterSchema,
     prompt,
   });
