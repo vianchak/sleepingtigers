@@ -121,9 +121,11 @@ export async function generateNewsletter(leagueId: string, week: number) {
   4. Power Rankings: Rank the teams based on current standings, with a snarky 1-sentence blurb for each.
   `;
 
-  const googleProvider = createGoogleGenerativeAI({
-    apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY || '',
-  });
+  // Prevent Next.js build from hardcoding undefined by dynamically accessing it
+  const env = process.env as any;
+  const apiKey = env.GOOGLE_GENERATIVE_AI_API_KEY || '';
+  
+  const googleProvider = createGoogleGenerativeAI({ apiKey });
 
   const { object } = await generateObject({
     model: googleProvider('gemini-3.8-flash'),
