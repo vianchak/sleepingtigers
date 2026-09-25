@@ -38,6 +38,9 @@ export default function NewsletterClient({
     setIsSaved(false);
     try {
       const data = await generateNewsletter(leagueId, week);
+      if (data && 'error' in data) {
+        throw new Error(data.error);
+      }
       setNewsletter(data);
     } catch (error) {
       console.error("Failed to generate newsletter:", error);
