@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { generateNewsletter } from './actions';
 import { saveNewsletterArchive, getArchivedNewsletter } from './storage-actions';
 import { Loader2, Flame, FlameKindling, AlertTriangle, Save, ArchiveRestore } from 'lucide-react';
 
@@ -37,10 +36,18 @@ export default function NewsletterClient({
     setLoading(true);
     setIsSaved(false);
     try {
-      const data = await generateNewsletter(leagueId, week);
-      if (data && 'error' in data) {
-        throw new Error(data.error);
+      const res = await fetch('/api/newsletter', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ leagueId, week })
+      });
+      
+      const data = await res.json();
+      
+      if (!res.ok) {
+        throw new Error(data.error || 'Failed to generate newsletter');
       }
+      
       setNewsletter(data);
     } catch (error) {
       console.error("Failed to generate newsletter:", error);
