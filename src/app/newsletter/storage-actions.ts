@@ -36,7 +36,7 @@ export async function saveNewsletterArchive(leagueId: string, week: number, data
 export async function getNewsletterArchives(leagueId: string) {
   try {
     if (!fs || !path) return [];
-    const dirPath = path.join(process.cwd(), 'src', 'data', 'newsletters', leagueId);
+    const dirPath = path.join(process.cwd(), 'public', 'newsletters', leagueId);
     if (!fs.existsSync(dirPath)) {
       return [];
     }
@@ -61,7 +61,7 @@ export async function getNewsletterArchives(leagueId: string) {
 export async function getArchivedNewsletter(leagueId: string, week: number) {
   try {
     if (!fs || !path) return null;
-    const filePath = path.join(process.cwd(), 'src', 'data', 'newsletters', leagueId, `week-${week}.json`);
+    const filePath = path.join(process.cwd(), 'public', 'newsletters', leagueId, `week-${week}.json`);
     if (!fs.existsSync(filePath)) {
       return null;
     }
