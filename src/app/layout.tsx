@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import Link from 'next/link';
-import { Trophy, Activity, ArrowRightLeft, History, CalendarDays, Swords, Search } from 'lucide-react';
+import { Trophy, Activity, ArrowRightLeft, History, CalendarDays, Swords, Search, Newspaper } from 'lucide-react';
 import { RefreshButton } from '@/components/RefreshButton';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -36,6 +36,10 @@ export default function RootLayout({
               <Link href="/schedule" className="flex items-center space-x-1 hover:text-blue-400 transition-colors">
                 <CalendarDays className="w-4 h-4" />
                 <span>Schedule</span>
+              </Link>
+              <Link href="/news" className="flex items-center space-x-1 hover:text-orange-400 transition-colors">
+                <Newspaper className="w-4 h-4" />
+                <span>The News</span>
               </Link>
               <Link href="/true-standings" className="flex items-center space-x-1 hover:text-emerald-400 transition-colors">
                 <Activity className="w-4 h-4" />

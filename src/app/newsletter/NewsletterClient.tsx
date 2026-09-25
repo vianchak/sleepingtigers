@@ -8,11 +8,13 @@ import { Loader2, Flame, FlameKindling, AlertTriangle, Save, ArchiveRestore } fr
 export default function NewsletterClient({ 
   leagueId, 
   currentWeek, 
-  initialArchives 
+  initialArchives,
+  readOnly = false
 }: { 
   leagueId: string, 
   currentWeek: number,
-  initialArchives: number[]
+  initialArchives: number[],
+  readOnly?: boolean
 }) {
   const [week, setWeek] = useState(currentWeek > 0 ? currentWeek : 1);
   const [loading, setLoading] = useState(false);
@@ -116,31 +118,35 @@ export default function NewsletterClient({
             </div>
           )}
 
-          <div className="flex items-center gap-2">
-            <select 
-              className="p-2 rounded-md border-2 border-orange-300 bg-white font-bold text-orange-700 focus:ring-orange-500 focus:border-orange-500"
-              value={week} 
-              onChange={(e) => setWeek(Number(e.target.value))}
-            >
-              {[...Array(14)].map((_, i) => (
-                <option key={i + 1} value={i + 1}>Week {i + 1}</option>
-              ))}
-            </select>
-          </div>
-          <button 
-            onClick={handleGenerate}
-            disabled={loading}
-            className="bg-orange-600 text-white hover:bg-orange-700 px-6 py-2 rounded-md font-bold uppercase tracking-wide flex items-center gap-2 disabled:opacity-50 transition-colors"
-          >
-            {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <FlameKindling className="h-5 w-5" />}
-            {loading ? 'Igniting...' : 'Light the Fire'}
-          </button>
+          {!readOnly && (
+            <>
+              <div className="flex items-center gap-2">
+                <select 
+                  className="p-2 rounded-md border-2 border-orange-300 bg-white font-bold text-orange-700 focus:ring-orange-500 focus:border-orange-500"
+                  value={week} 
+                  onChange={(e) => setWeek(Number(e.target.value))}
+                >
+                  {[...Array(14)].map((_, i) => (
+                    <option key={i + 1} value={i + 1}>Week {i + 1}</option>
+                  ))}
+                </select>
+              </div>
+              <button 
+                onClick={handleGenerate}
+                disabled={loading}
+                className="bg-orange-600 text-white hover:bg-orange-700 px-6 py-2 rounded-md font-bold uppercase tracking-wide flex items-center gap-2 disabled:opacity-50 transition-colors"
+              >
+                {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <FlameKindling className="h-5 w-5" />}
+                {loading ? 'Igniting...' : 'Light the Fire'}
+              </button>
+            </>
+          )}
         </div>
       </div>
 
       {newsletter && (
         <div className="flex justify-end gap-3 print:hidden">
-          {!isSaved && (
+          {!readOnly && !isSaved && (
             <button 
               onClick={handlePublish}
               disabled={saving}
@@ -150,7 +156,7 @@ export default function NewsletterClient({
               Publish to Archive
             </button>
           )}
-          {isSaved && (
+          {!readOnly && isSaved && (
             <span className="bg-green-100 text-green-800 px-4 py-2 rounded-md font-bold uppercase tracking-wide flex items-center gap-2">
               ✓ Published
             </span>
