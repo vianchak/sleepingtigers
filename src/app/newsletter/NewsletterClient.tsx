@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { saveNewsletterArchive, getArchivedNewsletter } from './storage-actions';
+import { saveNewsletterArchive } from './storage-actions';
 import { Loader2, Flame, FlameKindling, AlertTriangle, Save, ArchiveRestore } from 'lucide-react';
 
 export default function NewsletterClient({ 
@@ -61,7 +61,12 @@ export default function NewsletterClient({
     setLoading(true);
     setWeek(archiveWeek);
     try {
-      const data = await getArchivedNewsletter(leagueId, archiveWeek);
+      const res = await fetch(`/newsletters/${leagueId}/week-${archiveWeek}.json`);
+      if (!res.ok) {
+        alert("Archive not found!");
+        return;
+      }
+      const data = await res.json();
       if (data) {
         setNewsletter(data);
         setIsSaved(true);
