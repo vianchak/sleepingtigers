@@ -43,13 +43,13 @@ export async function getNewsletterArchives(leagueId: string) {
     
     const files = fs.readdirSync(dirPath);
     const weeks = files
-      .filter(f => f.startsWith('week-') && f.endsWith('.json'))
-      .map(f => {
+      .filter((f: string) => f.startsWith('week-') && f.endsWith('.json'))
+      .map((f: string) => {
         const match = f.match(/week-(\d+)\.json/);
         return match ? Number(match[1]) : 0;
       })
-      .filter(w => w > 0)
-      .sort((a, b) => b - a); // sort descending
+      .filter((w: number) => w > 0)
+      .sort((a: number, b: number) => b - a); // sort descending
       
     return weeks;
   } catch (error) {
