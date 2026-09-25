@@ -122,20 +122,10 @@ export async function generateNewsletter(leagueId: string, week: number) {
   `;
 
   try {
-    // Prevent Next.js build from hardcoding undefined by dynamically accessing it
-    const env = process.env as any;
-    let apiKey = env.GOOGLE_GENERATIVE_AI_API_KEY || '';
+    const apiKey = process.env.GOOGLE_GENERATIVE_AI_API_KEY || '';
     
-    // Cloudflare fallback
     if (!apiKey) {
-      try {
-        const { getRequestContext } = require('@cloudflare/next-on-pages');
-        apiKey = getRequestContext().env.GOOGLE_GENERATIVE_AI_API_KEY;
-      } catch (e) {}
-    }
-
-    if (!apiKey) {
-      return { error: 'API Key is missing on the server' };
+      return { error: 'API Key is missing on the server! process.env is empty.' };
     }
 
     const googleProvider = createGoogleGenerativeAI({ apiKey });
@@ -148,7 +138,7 @@ export async function generateNewsletter(leagueId: string, week: number) {
 
     return object;
   } catch (error: any) {
-    return { error: error.message || String(error) };
+    return { error: `Server Error: ${error.message || String(error)}` };
   }
 }
 
