@@ -10,8 +10,24 @@ async function fetchWithCache(endpoint: string) {
   return res.json();
 }
 
-export async function getNflState(): Promise<{ week: number; season_type: string }> {
+export async function getNflState(): Promise<{ week: number; season_type: string, leg?: number }> {
   return fetchWithCache('/state/nfl');
+}
+
+export function getCompletedWeek(nflState: any): number {
+  let currentWeek = nflState.season_type === 'regular' ? (nflState.week || nflState.leg || 1) : 14;
+  if (nflState.season_type === 'pre') currentWeek = 0;
+  if (nflState.season_type === 'post') currentWeek = 14; 
+
+  const day = new Date().getDay();
+  // 0=Sun, 1=Mon, 4=Thu, 5=Fri, 6=Sat
+  // If it's any of these days, the current NFL week is ongoing, so the last completed week is currentWeek - 1.
+  // On Tuesday/Wednesday, the games are done, so the week is completed.
+  let completedWeek = currentWeek;
+  if ([0, 1, 4, 5, 6].includes(day)) {
+    completedWeek = currentWeek - 1;
+  }
+  return Math.max(0, completedWeek);
 }
 
 export async function getUsers(leagueId: string): Promise<SleeperUser[]> {
@@ -37,10 +53,8 @@ export async function getLeagueData(leagueId: string): Promise<TeamStats[]> {
     getNflState(),
   ]);
 
-  // If season hasn't started, default to 1, otherwise cap at 14 (standard fantasy regular season)
-  let currentWeek = nflState.season_type === 'regular' ? nflState.week : 14;
-  if (nflState.season_type === 'pre') currentWeek = 0;
-  if (nflState.season_type === 'post') currentWeek = 14; 
+  // Use the helper to determine which weeks are fully completed
+  const completedWeek = getCompletedWeek(nflState);
   
   // Also we should ensure we don't fetch weeks that haven't happened if we only want played weeks,
   // but Sleeper returns 0s for future weeks. Let's fetch all 14 weeks to be safe, 
@@ -91,6 +105,10 @@ export async function getLeagueData(leagueId: string): Promise<TeamStats[]> {
   // Populate matchups
   allMatchupsByWeek.forEach((matchups, index) => {
     const week = index + 1;
+    
+    // Ignore matchups that haven't fully completed yet
+    if (week > completedWeek) return;
+
     // Map matchup_id to roster_ids
     const matchupToRosters = new Map<number, number[]>();
     
@@ -160,6 +178,7 @@ export async function getLeagueData(leagueId: string): Promise<TeamStats[]> {
     for (const weekStr of Object.keys(team.weeklyScores)) {
        const week = Number(weekStr);
        const score = team.weeklyScores[week];
+       
        if (score > 0) liveFpts += score;
        
        const oppId = team.weeklyOpponentRosterIds[week];
@@ -169,7 +188,6 @@ export async function getLeagueData(leagueId: string): Promise<TeamStats[]> {
             const oppScore = oppTeam.weeklyScores[week] || 0;
             if (oppScore > 0) liveFptsAgainst += oppScore;
             
-            // Only count games that have points
             if (score > 0 || oppScore > 0) {
               if (score > oppScore) liveWins++;
               else if (score < oppScore) liveLosses++;
@@ -270,7 +288,7 @@ export async function getSchedule(leagueId: string): Promise<WeeklySchedule[]> {
     fetchWithCache('https://api.sleeper.app/v1/state/nfl').catch(() => ({ leg: 1, season_type: 'regular' }))
   ]);
 
-  const currentWeek = nflState.leg || 1;
+  const completedWeek = getCompletedWeek(nflState);
   
   const userMap = new Map<string, SleeperUser>();
   for (const u of users) userMap.set(u.user_id, u);
@@ -325,7 +343,7 @@ export async function getSchedule(leagueId: string): Promise<WeeklySchedule[]> {
     if (parsedMatchups.length > 0) {
       schedule.push({
         week,
-        isCompleted: week < currentWeek,
+        isCompleted: week <= completedWeek,
         matchups: parsedMatchups
       });
     }
@@ -341,11 +359,13 @@ export async function getDraftReport(leagueId: string) {
   const draftId = drafts[0].draft_id;
 
   // Fetch picks, users, rosters
-  const [picks, users, rosters] = await Promise.all([
+  const [picks, users, rosters, nflState] = await Promise.all([
     fetchWithCache(`/draft/${draftId}/picks`).catch(() => []),
     getUsers(leagueId),
-    getRosters(leagueId)
+    getRosters(leagueId),
+    fetchWithCache('https://api.sleeper.app/v1/state/nfl').catch(() => ({ leg: 1, season_type: 'regular' }))
   ]);
+  const completedWeek = getCompletedWeek(nflState);
   
   if (!picks || picks.length === 0) return { steal: null, bust: null, managerGrades: [], biggestRegret: null, positionalReach: null, waiverHero: null, redraftBoard: [] };
 
@@ -361,8 +381,10 @@ export async function getDraftReport(leagueId: string) {
 
   const playerPoints = new Map<string, number>();
   
-  for (const matchupsForWeek of allMatchups) {
-    if (!matchupsForWeek) continue;
+  allMatchups.forEach((matchupsForWeek: any, index: number) => {
+    const week = index + 1;
+    if (week > completedWeek || !matchupsForWeek) return;
+    
     for (const match of matchupsForWeek) {
       if (match.players_points) {
         for (const [playerId, points] of Object.entries(match.players_points)) {
@@ -371,7 +393,7 @@ export async function getDraftReport(leagueId: string) {
         }
       }
     }
-  }
+  });
 
   const parsedPicks = picks.map((p: any) => {
     const totalPoints = playerPoints.get(p.player_id) || 0;
@@ -534,6 +556,8 @@ export async function getDraftReport(leagueId: string) {
 export async function getAllTimeMatchups(currentLeagueId: string) {
   const allMatchups = [];
   let leagueIdToFetch: string | null = currentLeagueId;
+  const nflState = await fetchWithCache('https://api.sleeper.app/v1/state/nfl').catch(() => ({ leg: 1, season_type: 'regular', season: '2026' }));
+  const completedWeek = getCompletedWeek(nflState);
 
   while (leagueIdToFetch) {
     const leagueData = await fetchWithCache(`/league/${leagueIdToFetch}`);
@@ -573,6 +597,7 @@ export async function getAllTimeMatchups(currentLeagueId: string) {
 
     for (const { week, data } of weeklyData) {
       if (!data || data.length === 0) continue;
+      if (season === nflState.season && week > completedWeek) continue;
 
       // Group by matchup_id
       const matchupPairs = new Map<number, any[]>();
