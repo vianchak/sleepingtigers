@@ -5,8 +5,9 @@ import Image from 'next/image';
 
 
 
-export default async function SchedulePage() {
-  const t = await getTranslations('Schedule');
+export default async function SchedulePage({params}: {params: Promise<{locale: string}>}) {
+  const {locale} = await params;
+  const t = await getTranslations({locale, namespace: 'Schedule'});
   const leagueId = process.env.NEXT_PUBLIC_SLEEPER_LEAGUE_ID;
   if (!leagueId) {
     return <div className="text-red-500">Error: NEXT_PUBLIC_SLEEPER_LEAGUE_ID is not set.</div>;

@@ -40,12 +40,12 @@ export default async function RootLayout({
     notFound();
   }
 
-  let messages; let t; try { messages = await getMessages(); t = await getTranslations('Layout'); } catch(e: any) { return <html><body>Error: {e.message || String(e)}</body></html> }
+  let messages; let t; try { messages = await getMessages({locale}); t = await getTranslations({locale, namespace: "Layout"}); } catch(e: any) { return <html><body>Error: {e.message || String(e)}</body></html> }
 
   return (
     <html lang={locale}>
       <body className={`${inter.className} text-slate-100 antialiased`}>
-        <NextIntlClientProvider messages={messages}>
+        <NextIntlClientProvider messages={messages} locale={locale}>
           <div className="flex flex-col min-h-screen">
             <header className="glass-panel sticky top-0 z-50 rounded-none border-t-0 border-x-0 border-b border-white/10 px-6 py-4 flex items-center justify-between">
               <Link href="/" className="flex items-center space-x-3">
@@ -114,4 +114,6 @@ export default async function RootLayout({
 }
 
 export const runtime = 'edge';
+
+
 

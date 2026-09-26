@@ -2,7 +2,7 @@ import NewsletterClient from './NewsletterClient';
 import { getNflState, getCompletedWeek } from '@/lib/sleeper-api';
 import { getNewsletterArchives } from './storage-actions';
 
-export default async function NewsletterPage() {
+export default async function NewsletterPage({params}: {params: Promise<{locale: string}>}) {
   const state = await getNflState();
   const completedWeek = getCompletedWeek(state) || 1;
   const leagueId = process.env.NEXT_PUBLIC_SLEEPER_LEAGUE_ID || '1125211995400511488'; // fallback if not in env

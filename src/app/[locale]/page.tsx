@@ -6,8 +6,9 @@ import { getTranslations } from 'next-intl/server';
 
 
 
-export default async function DashboardHome() {
-  const t = await getTranslations('Home');
+export default async function DashboardHome({params}: {params: Promise<{locale: string}>}) {
+  const {locale} = await params;
+  const t = await getTranslations({locale, namespace: 'Home'});
   const leagueId = process.env.NEXT_PUBLIC_SLEEPER_LEAGUE_ID;
   if (!leagueId) {
     return <div className="text-red-500">Error: NEXT_PUBLIC_SLEEPER_LEAGUE_ID is not set.</div>;

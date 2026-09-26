@@ -5,8 +5,9 @@ import TrueStandingsClient from '@/components/TrueStandingsClient';
 
 
 
-export default async function TrueStandingsPage() {
-  const t = await getTranslations('TrueStandings');
+export default async function TrueStandingsPage({params}: {params: Promise<{locale: string}>}) {
+  const {locale} = await params;
+  const t = await getTranslations({locale, namespace: 'TrueStandings'});
   const leagueId = process.env.NEXT_PUBLIC_SLEEPER_LEAGUE_ID;
   if (!leagueId) {
     return <div className="text-red-500">Error: NEXT_PUBLIC_SLEEPER_LEAGUE_ID is not set.</div>;

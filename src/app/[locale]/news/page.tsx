@@ -3,7 +3,7 @@ import { getTranslations } from 'next-intl/server';
 import { getNflState, getCompletedWeek } from '@/lib/sleeper-api';
 import { getNewsletterArchives } from '../newsletter/storage-actions';
 
-export default async function NewsPage() {
+export default async function NewsPage({params}: {params: Promise<{locale: string}>}) {
   const t = await getTranslations("News");
   const state = await getNflState();
   const completedWeek = getCompletedWeek(state) || 1;
