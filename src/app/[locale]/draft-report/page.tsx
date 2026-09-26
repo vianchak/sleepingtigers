@@ -1,3 +1,4 @@
+import { getTranslations } from 'next-intl/server';
 import { getDraftReport } from '@/lib/sleeper-api';
 import { Search, TrendingUp, TrendingDown, ArrowRight, Award, Frown, Compass, UserPlus, History } from 'lucide-react';
 import Link from 'next/link';
@@ -6,6 +7,7 @@ import Image from 'next/image';
 export const revalidate = 3600;
 
 export default async function DraftReportPage() {
+  const t = await getTranslations('DraftReport');
   const leagueId = process.env.NEXT_PUBLIC_SLEEPER_LEAGUE_ID;
   if (!leagueId) {
     return <div className="text-red-500">Error: NEXT_PUBLIC_SLEEPER_LEAGUE_ID is not set.</div>;
@@ -21,13 +23,13 @@ export default async function DraftReportPage() {
         <div className="w-20 h-20 rounded-full bg-indigo-500/20 flex items-center justify-center border-2 border-indigo-500/50 shadow-[0_0_30px_rgba(99,102,241,0.3)]">
           <Search className="w-10 h-10 text-indigo-400" />
         </div>
-        <h1 className="text-4xl md:text-5xl font-bold font-heading text-gradient">The Hindsight Report</h1>
+        <h1 className="text-4xl md:text-5xl font-bold font-heading text-gradient">{t('title')}</h1>
         <p className="text-slate-400 text-lg max-w-2xl mx-auto">
-          Hindsight is 20/20. We analyzed every pick, calculated the value over expectation, and exposed every single draft mistake made in your league this season.
+          {t('description')}
         </p>
         <Link href="/" className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors bg-slate-800 px-4 py-2 rounded-full mt-4">
           <ArrowRight className="w-4 h-4 rotate-180" />
-          Back to Dashboard
+          {t('back')}
         </Link>
       </div>
 
@@ -36,19 +38,19 @@ export default async function DraftReportPage() {
         <section>
           <div className="flex items-center gap-3 mb-6 border-b border-slate-700/50 pb-2">
             <Award className="w-6 h-6 text-yellow-500" />
-            <h2 className="text-2xl font-bold text-white">Manager Draft Grades</h2>
+            <h2 className="text-2xl font-bold text-white">{t('managerDraftGrades')}</h2>
           </div>
           <div className="glass-card overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-sm text-left">
                 <thead className="text-xs uppercase bg-slate-900/80 border-b border-slate-700">
                   <tr>
-                    <th className="px-6 py-4 font-bold text-slate-300">Rank</th>
-                    <th className="px-6 py-4 font-bold text-slate-300">Manager</th>
-                    <th className="px-6 py-4 font-bold text-slate-300 text-right">Drafted Pts</th>
-                    <th className="px-6 py-4 font-bold text-slate-300 text-right">Expected</th>
-                    <th className="px-6 py-4 font-bold text-slate-300 text-right">Value (VOE)</th>
-                    <th className="px-6 py-4 font-bold text-slate-300 text-center">Grade</th>
+                    <th className="px-6 py-4 font-bold text-slate-300">{t('rank')}</th>
+                    <th className="px-6 py-4 font-bold text-slate-300">{t('manager')}</th>
+                    <th className="px-6 py-4 font-bold text-slate-300 text-right">{t('draftedPts')}</th>
+                    <th className="px-6 py-4 font-bold text-slate-300 text-right">{t('expected')}</th>
+                    <th className="px-6 py-4 font-bold text-slate-300 text-right">{t('value')}</th>
+                    <th className="px-6 py-4 font-bold text-slate-300 text-center">{t('grade')}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -96,27 +98,27 @@ export default async function DraftReportPage() {
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-rose-500 to-orange-500"></div>
             <div className="flex items-center gap-3 mb-6">
               <Frown className="w-6 h-6 text-rose-400" />
-              <h2 className="text-xl font-bold text-rose-400">The Biggest Regret</h2>
+              <h2 className="text-xl font-bold text-rose-400">{t('biggestRegret')}</h2>
             </div>
             
             <p className="text-sm text-slate-300 mb-6">
-              <span className="font-bold text-white">{biggestRegret.managerName}</span> passed on a superstar for a total bust, costing them <span className="font-bold text-rose-400 font-mono">{biggestRegret.pointDiff.toFixed(1)}</span> points.
+              <span className="font-bold text-white">{biggestRegret.managerName}</span>{t('passedOn')}<span className="font-bold text-rose-400 font-mono">{biggestRegret.pointDiff.toFixed(1)}</span>{t('pointsDot')}
             </p>
 
             <div className="flex flex-col sm:flex-row items-center gap-4 bg-slate-900/50 p-4 rounded-xl border border-slate-700/50">
               <div className="flex-1 w-full text-center p-3 rounded-lg border border-rose-500/30 bg-rose-500/5">
-                <span className="text-[10px] uppercase text-rose-400 font-bold block mb-1">Drafted (Pick {biggestRegret.draftedPlayer.pickNo})</span>
+                <span className="text-[10px] uppercase text-rose-400 font-bold block mb-1">{t('draftedPick')}{biggestRegret.draftedPlayer.pickNo})</span>
                 <span className="font-bold text-white block truncate">{biggestRegret.draftedPlayer.playerName}</span>
-                <span className="text-rose-400 font-mono font-bold mt-1 block">{biggestRegret.draftedPlayer.totalPoints.toFixed(1)} pts</span>
+                <span className="text-rose-400 font-mono font-bold mt-1 block">{biggestRegret.draftedPlayer.totalPoints.toFixed(1)} {t('pts')}</span>
               </div>
               <div className="shrink-0 text-slate-500 font-bold px-2 flex flex-col items-center">
-                <span>VS</span>
+                <span>{t('vs')}</span>
                 <ArrowRight className="w-4 h-4 mt-1" />
               </div>
               <div className="flex-1 w-full text-center p-3 rounded-lg border border-emerald-500/30 bg-emerald-500/5">
-                <span className="text-[10px] uppercase text-emerald-400 font-bold block mb-1">Passed (Pick {biggestRegret.passedPlayer.pickNo})</span>
+                <span className="text-[10px] uppercase text-emerald-400 font-bold block mb-1">{t('passedPick')}{biggestRegret.passedPlayer.pickNo})</span>
                 <span className="font-bold text-white block truncate">{biggestRegret.passedPlayer.playerName}</span>
-                <span className="text-emerald-400 font-mono font-bold mt-1 block">{biggestRegret.passedPlayer.totalPoints.toFixed(1)} pts</span>
+                <span className="text-emerald-400 font-mono font-bold mt-1 block">{biggestRegret.passedPlayer.totalPoints.toFixed(1)} {t('pts')}</span>
               </div>
             </div>
           </section>
@@ -128,27 +130,27 @@ export default async function DraftReportPage() {
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-orange-500 to-yellow-500"></div>
             <div className="flex items-center gap-3 mb-6">
               <Compass className="w-6 h-6 text-orange-400" />
-              <h2 className="text-xl font-bold text-orange-400">The Positional Reach</h2>
+              <h2 className="text-xl font-bold text-orange-400">{t('positionalReach')}</h2>
             </div>
             
             <p className="text-sm text-slate-300 mb-6">
-              <span className="font-bold text-white">{positionalReach.managerName}</span> reached for a {positionalReach.reachPlayer.position} too early, passing on an elite skill player.
+              <span className="font-bold text-white">{positionalReach.managerName}</span>{t('reachedFor')}{positionalReach.reachPlayer.position}{t('tooEarly')}
             </p>
 
             <div className="flex flex-col sm:flex-row items-center gap-4 bg-slate-900/50 p-4 rounded-xl border border-slate-700/50">
               <div className="flex-1 w-full text-center p-3 rounded-lg border border-orange-500/30 bg-orange-500/5">
-                <span className="text-[10px] uppercase text-orange-400 font-bold block mb-1">Reached (Pick {positionalReach.reachPlayer.pickNo})</span>
+                <span className="text-[10px] uppercase text-orange-400 font-bold block mb-1">{t('reachedPick')}{positionalReach.reachPlayer.pickNo})</span>
                 <span className="font-bold text-white block truncate">{positionalReach.reachPlayer.playerName}</span>
-                <span className="text-orange-400 font-mono font-bold mt-1 block">{positionalReach.reachPlayer.totalPoints.toFixed(1)} pts</span>
+                <span className="text-orange-400 font-mono font-bold mt-1 block">{positionalReach.reachPlayer.totalPoints.toFixed(1)} {t('pts')}</span>
               </div>
               <div className="shrink-0 text-slate-500 font-bold px-2 flex flex-col items-center">
-                <span>VS</span>
+                <span>{t('vs')}</span>
                 <ArrowRight className="w-4 h-4 mt-1" />
               </div>
               <div className="flex-1 w-full text-center p-3 rounded-lg border border-emerald-500/30 bg-emerald-500/5">
-                <span className="text-[10px] uppercase text-emerald-400 font-bold block mb-1">Passed (Pick {positionalReach.passedPlayer.pickNo})</span>
+                <span className="text-[10px] uppercase text-emerald-400 font-bold block mb-1">{t('passedPick')}{positionalReach.passedPlayer.pickNo})</span>
                 <span className="font-bold text-white block truncate">{positionalReach.passedPlayer.playerName}</span>
-                <span className="text-emerald-400 font-mono font-bold mt-1 block">{positionalReach.passedPlayer.totalPoints.toFixed(1)} pts</span>
+                <span className="text-emerald-400 font-mono font-bold mt-1 block">{positionalReach.passedPlayer.totalPoints.toFixed(1)} {t('pts')}</span>
               </div>
             </div>
           </section>
@@ -165,22 +167,22 @@ export default async function DraftReportPage() {
               <div className="flex-1 text-center md:text-left">
                 <div className="flex items-center justify-center md:justify-start gap-3 mb-4">
                   <UserPlus className="w-8 h-8 text-purple-400" />
-                  <h2 className="text-2xl font-bold font-heading text-purple-400 tracking-wide uppercase">The Waiver Hero</h2>
+                  <h2 className="text-2xl font-bold font-heading text-purple-400 tracking-wide uppercase">{t('waiverHero')}</h2>
                 </div>
                 <p className="text-slate-300 text-lg">
-                  <span className="font-bold text-white">{waiverHero.managerName}'s</span> highest scoring player wasn't even drafted by them! They saved their season by acquiring this absolute unit.
+                  <span className="font-bold text-white">{waiverHero.managerName}</span>{t('highestScoring')}
                 </p>
               </div>
 
               <div className="flex-1 flex justify-center md:justify-end w-full">
                 <div className="bg-slate-900/80 p-6 rounded-2xl border border-purple-500/30 text-center w-full max-w-sm shadow-2xl relative">
                    <div className="absolute -top-3 -right-3 bg-purple-500 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest shadow-lg">
-                     Undrafted Gem
+                     {t('undraftedGem')}
                    </div>
                    <p className="text-sm text-purple-400 font-bold mb-1">{waiverHero.team} • {waiverHero.position}</p>
                    <h3 className="text-3xl font-black text-white mb-2">{waiverHero.playerName}</h3>
                    <div className="bg-purple-500/20 text-purple-300 font-mono font-bold text-2xl py-2 rounded-lg mt-4 border border-purple-500/30">
-                     {waiverHero.totalPoints.toFixed(1)} PTS
+                     {waiverHero.totalPoints.toFixed(1)} {t('ptsCaps')}
                    </div>
                 </div>
               </div>
@@ -201,8 +203,8 @@ export default async function DraftReportPage() {
               <TrendingUp className="w-6 h-6 text-emerald-400" />
             </div>
             <div>
-              <h2 className="text-2xl font-bold text-emerald-400">The Steal of the Draft</h2>
-              <p className="text-sm text-slate-400">Massive production for zero draft capital.</p>
+              <h2 className="text-2xl font-bold text-emerald-400">{t('stealOfDraft')}</h2>
+              <p className="text-sm text-slate-400">{t('stealDesc')}</p>
             </div>
           </div>
 
@@ -213,16 +215,16 @@ export default async function DraftReportPage() {
                 <h3 className="text-3xl font-black text-white mb-2 truncate">{steal.playerName}</h3>
                 <div className="flex items-center justify-between mt-4 text-sm border-t border-slate-700/50 pt-4">
                   <div className="text-slate-400">
-                    Drafted: <span className="text-white font-bold">Round {steal.round}</span> (Pick {steal.pickNo})
+                    {t('drafted')}<span className="text-white font-bold">{t('round')}{steal.round}</span> (Pick {steal.pickNo})
                   </div>
                   <div className="text-slate-400">
-                    Points: <span className="text-emerald-400 font-bold font-mono text-lg">{steal.totalPoints.toFixed(1)}</span>
+                    {t('points')}<span className="text-emerald-400 font-bold font-mono text-lg">{steal.totalPoints.toFixed(1)}</span>
                   </div>
                 </div>
               </div>
             </div>
           ) : (
-            <p className="text-slate-400">Not enough data to determine a steal yet.</p>
+            <p className="text-slate-400">{t('notEnoughSteal')}</p>
           )}
         </div>
 
@@ -235,8 +237,8 @@ export default async function DraftReportPage() {
               <TrendingDown className="w-6 h-6 text-rose-400" />
             </div>
             <div>
-              <h2 className="text-2xl font-bold text-rose-400">The Biggest Bust</h2>
-              <p className="text-sm text-slate-400">Premium draft capital entirely wasted.</p>
+              <h2 className="text-2xl font-bold text-rose-400">{t('biggestBust')}</h2>
+              <p className="text-sm text-slate-400">{t('bustDesc')}</p>
             </div>
           </div>
 
@@ -247,30 +249,30 @@ export default async function DraftReportPage() {
                 <h3 className="text-3xl font-black text-white mb-2 truncate">{bust.playerName}</h3>
                 <div className="flex items-center justify-between mt-4 text-sm border-t border-slate-700/50 pt-4">
                   <div className="text-slate-400">
-                    Drafted: <span className="text-white font-bold">Round {bust.round}</span> (Pick {bust.pickNo})
+                    {t('drafted')}<span className="text-white font-bold">{t('round')}{bust.round}</span> (Pick {bust.pickNo})
                   </div>
                   <div className="text-slate-400">
-                    Points: <span className="text-rose-400 font-bold font-mono text-lg">{bust.totalPoints.toFixed(1)}</span>
+                    {t('points')}<span className="text-rose-400 font-bold font-mono text-lg">{bust.totalPoints.toFixed(1)}</span>
                   </div>
                 </div>
               </div>
             </div>
           ) : (
-            <p className="text-slate-400">Not enough data to determine a bust yet.</p>
+            <p className="text-slate-400">{t('notEnoughBust')}</p>
           )}
         </div>
       </div>
 
-      {/* 5. The Hindsight First Round */}
+      {/* 5. The Hindsight First {t('round')}*/}
       {redraftBoard.length > 0 && (
         <section>
           <div className="flex flex-col items-center justify-center text-center space-y-4 mb-8 mt-8">
             <div className="w-16 h-16 rounded-full bg-cyan-500/20 flex items-center justify-center border-2 border-cyan-500/50 shadow-[0_0_20px_rgba(6,182,212,0.3)]">
               <History className="w-8 h-8 text-cyan-400" />
             </div>
-            <h2 className="text-3xl font-bold font-heading text-white">The Redraft Board</h2>
+            <h2 className="text-3xl font-bold font-heading text-white">{t('redraftBoard')}</h2>
             <p className="text-slate-400 text-lg max-w-2xl mx-auto">
-              If the draft happened today, knowing what we know now, here is what the First Round should have looked like.
+              {t('redraftDesc')}
             </p>
           </div>
 
@@ -280,9 +282,9 @@ export default async function DraftReportPage() {
               return (
                 <div key={pick.shouldHaveGone} className="glass-card p-4 border border-slate-700/50 flex flex-col relative overflow-hidden group hover:border-cyan-500/50 transition-colors">
                   <div className="flex items-center justify-between mb-3 border-b border-slate-700/50 pb-3">
-                    <span className="text-sm font-bold text-slate-400">Pick 1.{pick.shouldHaveGone}</span>
+                    <span className="text-sm font-bold text-slate-400">{t('pick1')}{pick.shouldHaveGone}</span>
                     <span className="text-xs font-bold px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">
-                      Actually: #{pick.actualPickNo}
+                      {t('actually')}{pick.actualPickNo}
                     </span>
                   </div>
                   
@@ -308,3 +310,4 @@ export default async function DraftReportPage() {
     </div>
   );
 }
+

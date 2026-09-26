@@ -1,3 +1,4 @@
+import { getTranslations } from 'next-intl/server';
 import { getAllTimeMatchups } from '@/lib/sleeper-api';
 import { getRivalries } from '@/lib/stats-engine';
 import { Swords, Skull, Trophy, History } from 'lucide-react';
@@ -6,6 +7,7 @@ import Image from 'next/image';
 export const revalidate = 3600;
 
 export default async function RivalriesPage() {
+  const t = await getTranslations('Rivalries');
   const leagueId = process.env.NEXT_PUBLIC_SLEEPER_LEAGUE_ID;
   if (!leagueId) {
     return <div className="text-red-500">Error: NEXT_PUBLIC_SLEEPER_LEAGUE_ID is not set.</div>;
@@ -45,13 +47,13 @@ export default async function RivalriesPage() {
         <div className="w-20 h-20 mx-auto rounded-full bg-rose-500/20 flex items-center justify-center border-2 border-rose-500/50 shadow-[0_0_30px_rgba(244,63,94,0.3)]">
           <Swords className="w-10 h-10 text-rose-400" />
         </div>
-        <h1 className="text-4xl font-bold font-heading text-gradient">League Rivalries</h1>
+        <h1 className="text-4xl font-bold font-heading text-gradient">{t('title')}</h1>
         <div className="inline-flex items-center gap-2 bg-slate-800/80 px-3 py-1 rounded-full border border-slate-700/50">
           <History className="w-4 h-4 text-emerald-400" />
-          <span className="text-sm font-bold text-slate-300">All-Time Data (Since {firstSeason})</span>
+          <span className="text-sm font-bold text-slate-300">{t('allTimeData')}{firstSeason}{t('allTimeDataEnd')}</span>
         </div>
         <p className="text-slate-400 text-lg max-w-2xl mx-auto">
-          Every league has bad blood. Explore head-to-head records across every season to discover who is your ultimate kryptonite.
+          {t('description')}
         </p>
       </div>
 
@@ -62,7 +64,7 @@ export default async function RivalriesPage() {
             <div className="bg-slate-950 p-8 rounded-xl relative z-10 flex flex-col items-center">
               <div className="flex items-center gap-2 mb-8">
                 <div className="h-px w-12 bg-gradient-to-r from-transparent to-yellow-500"></div>
-                <h2 className="text-xl font-bold font-heading text-yellow-500 tracking-widest uppercase">El Clásico</h2>
+                <h2 className="text-xl font-bold font-heading text-yellow-500 tracking-widest uppercase">{t('elClasico')}</h2>
                 <div className="h-px w-12 bg-gradient-to-l from-transparent to-yellow-500"></div>
               </div>
               
@@ -82,7 +84,7 @@ export default async function RivalriesPage() {
 
                 {/* VS */}
                 <div className="flex flex-col items-center px-8">
-                  <span className="text-sm font-bold text-slate-500 uppercase tracking-widest mb-2">Total Matches</span>
+                  <span className="text-sm font-bold text-slate-500 uppercase tracking-widest mb-2">{t('totalMatches')}</span>
                   <span className="text-3xl font-black text-slate-300 font-mono mb-2">{elClasico.totalMatches}</span>
                   <Swords className="w-12 h-12 text-slate-700" />
                 </div>
@@ -109,7 +111,7 @@ export default async function RivalriesPage() {
         <section>
           <div className="flex items-center gap-3 mb-6 border-b border-slate-700/50 pb-2">
             <History className="w-6 h-6 text-indigo-400" />
-            <h2 className="text-2xl font-bold text-white">Most Frequent Matchups</h2>
+            <h2 className="text-2xl font-bold text-white">{t('mostFrequent')}</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
             {mostFrequent.map((r, idx) => (
@@ -119,7 +121,7 @@ export default async function RivalriesPage() {
                   <span className={`text-xl font-black mt-1 font-mono ${r.winsA > r.winsB ? 'text-emerald-400' : r.winsA < r.winsB ? 'text-rose-400' : 'text-slate-400'}`}>{r.winsA}</span>
                 </div>
                 <div className="flex flex-col items-center w-1/3 border-x border-slate-800/50 px-2">
-                  <span className="text-[10px] uppercase tracking-widest text-slate-500 font-bold mb-1">Games</span>
+                  <span className="text-[10px] uppercase tracking-widest text-slate-500 font-bold mb-1">{t('games')}</span>
                   <span className="font-bold text-lg text-white font-mono">{r.totalMatches}</span>
                 </div>
                 <div className="flex flex-col items-center w-1/3">
@@ -136,7 +138,7 @@ export default async function RivalriesPage() {
         <section>
           <div className="flex items-center gap-3 mb-6 border-b border-slate-700/50 pb-2">
             <Skull className="w-6 h-6 text-rose-500" />
-            <h2 className="text-2xl font-bold text-white">Kryptonite (Complete Sweeps)</h2>
+            <h2 className="text-2xl font-bold text-white">{t('kryptonite')}</h2>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -162,7 +164,7 @@ export default async function RivalriesPage() {
                   </div>
 
                   <div className="px-6 flex flex-col items-center">
-                    <span className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Owns</span>
+                    <span className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">{t('owns')}</span>
                     <Swords className="w-6 h-6 text-rose-500" />
                   </div>
 
@@ -187,7 +189,7 @@ export default async function RivalriesPage() {
       <section>
         <div className="flex items-center gap-3 mb-6 border-b border-slate-700/50 pb-2">
           <Trophy className="w-6 h-6 text-yellow-500" />
-          <h2 className="text-2xl font-bold text-white">All Head-to-Head Records</h2>
+          <h2 className="text-2xl font-bold text-white">{t('allHeadToHead')}</h2>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -263,3 +265,4 @@ export default async function RivalriesPage() {
     </div>
   );
 }
+

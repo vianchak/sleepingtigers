@@ -1,8 +1,10 @@
 import NewsletterClient from '../newsletter/NewsletterClient';
+import { getTranslations } from 'next-intl/server';
 import { getNflState, getCompletedWeek } from '@/lib/sleeper-api';
 import { getNewsletterArchives } from '../newsletter/storage-actions';
 
 export default async function NewsPage() {
+  const t = await getTranslations("News");
   const state = await getNflState();
   const completedWeek = getCompletedWeek(state) || 1;
   const leagueId = process.env.NEXT_PUBLIC_SLEEPER_LEAGUE_ID || '1125211995400511488';

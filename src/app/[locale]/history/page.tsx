@@ -1,3 +1,4 @@
+import { getTranslations } from 'next-intl/server';
 import { getLeagueHistory } from '@/lib/sleeper-api';
 import { Trophy, Skull, Crown, Trash2 } from 'lucide-react';
 import Image from 'next/image';
@@ -5,6 +6,7 @@ import Image from 'next/image';
 export const revalidate = 3600;
 
 export default async function HistoryPage() {
+  const t = await getTranslations('History');
   const leagueId = process.env.NEXT_PUBLIC_SLEEPER_LEAGUE_ID;
   if (!leagueId) {
     return <div className="text-red-500">Error: NEXT_PUBLIC_SLEEPER_LEAGUE_ID is not set.</div>;
@@ -16,9 +18,9 @@ export default async function HistoryPage() {
     return (
       <div className="flex flex-col items-center justify-center py-20 text-center animate-in fade-in">
         <Trophy className="w-16 h-16 text-slate-600 mb-4" />
-        <h2 className="text-2xl font-bold text-slate-300">No History Found</h2>
+        <h2 className="text-2xl font-bold text-slate-300">{t('noHistory')}</h2>
         <p className="text-slate-500 mt-2 max-w-md">
-          This league does not have a previous season linked to it on Sleeper, or the data is unavailable.
+          {t('noHistoryDesc')}
         </p>
       </div>
     );
@@ -28,10 +30,10 @@ export default async function HistoryPage() {
     <div className="space-y-12 animate-in fade-in duration-500">
       <div className="text-center max-w-2xl mx-auto mb-12">
         <h2 className="text-4xl font-bold font-heading text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-amber-600 mb-4 flex items-center justify-center gap-3">
-          <HistoryIcon /> League History
+          <HistoryIcon /> {t('title')}
         </h2>
         <p className="text-slate-400">
-          A look back at the eternal glory of our past champions, and the eternal shame of our past losers.
+          {t('description')}
         </p>
       </div>
 
@@ -42,7 +44,7 @@ export default async function HistoryPage() {
               <span className="text-[20rem] font-bold font-heading">{season.year}</span>
             </div>
             
-            <h3 className="text-3xl font-bold text-center mb-8 text-slate-300 relative z-10">{season.year} Season</h3>
+            <h3 className="text-3xl font-bold text-center mb-8 text-slate-300 relative z-10">{season.year}{t('season')}</h3>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
               
@@ -53,7 +55,7 @@ export default async function HistoryPage() {
                   <Crown className="w-12 h-12" />
                 </div>
                 
-                <h4 className="font-bold text-2xl mb-1 text-yellow-400">League Champion</h4>
+                <h4 className="font-bold text-2xl mb-1 text-yellow-400">{t('leagueChampion')}</h4>
                 
                 {season.winner ? (
                   <>
@@ -70,11 +72,11 @@ export default async function HistoryPage() {
                     </div>
                     <p className="font-bold text-white text-3xl mb-2">{season.winner.displayName}</p>
                     <p className="text-yellow-300/80">
-                      Record: {season.winner.wins}-{season.winner.losses} | {season.winner.fpts.toFixed(1)} PF | {season.winner.fptsAgainst.toFixed(1)} PA
+                      {t('record')}{season.winner.wins}-{season.winner.losses} | {season.winner.fpts.toFixed(1)}{t('pf')}{season.winner.fptsAgainst.toFixed(1)} {t('pa')}
                     </p>
                   </>
                 ) : (
-                  <p className="text-slate-500 mt-8">Data Unavailable</p>
+                  <p className="text-slate-500 mt-8">{t('dataUnavailable')}</p>
                 )}
               </div>
 
@@ -85,7 +87,7 @@ export default async function HistoryPage() {
                   <Trash2 className="w-12 h-12" />
                 </div>
                 
-                <h4 className="font-bold text-2xl mb-1 text-red-400">Last Place (Toilet Bowl)</h4>
+                <h4 className="font-bold text-2xl mb-1 text-red-400">{t('lastPlace')}</h4>
                 
                 {season.loser ? (
                   <>
@@ -102,11 +104,11 @@ export default async function HistoryPage() {
                     </div>
                     <p className="font-bold text-white text-3xl mb-2">{season.loser.displayName}</p>
                     <p className="text-red-300/80">
-                      Record: {season.loser.wins}-{season.loser.losses} | {season.loser.fpts.toFixed(1)} PF | {season.loser.fptsAgainst.toFixed(1)} PA
+                      {t('record')}{season.loser.wins}-{season.loser.losses} | {season.loser.fpts.toFixed(1)}{t('pf')}{season.loser.fptsAgainst.toFixed(1)} {t('pa')}
                     </p>
                   </>
                 ) : (
-                  <p className="text-slate-500 mt-8">Data Unavailable</p>
+                  <p className="text-slate-500 mt-8">{t('dataUnavailable')}</p>
                 )}
               </div>
 
@@ -127,3 +129,4 @@ function HistoryIcon() {
     </svg>
   );
 }
+

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { saveNewsletterArchive } from './storage-actions';
 import { Loader2, Flame, FlameKindling, AlertTriangle, Save, ArchiveRestore } from 'lucide-react';
+import { useLocale, useTranslations } from 'next-intl';
 
 export default function NewsletterClient({ 
   leagueId, 
@@ -15,6 +16,8 @@ export default function NewsletterClient({
   initialArchives: number[],
   readOnly?: boolean
 }) {
+  const locale = useLocale();
+  const t = useTranslations('NewsletterClient');
   const [week, setWeek] = useState(currentWeek > 0 ? currentWeek : 1);
   const [loading, setLoading] = useState(false);
   const [newsletter, setNewsletter] = useState<any>(null);
@@ -39,7 +42,7 @@ export default function NewsletterClient({
       const res = await fetch('/api/newsletter', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ leagueId, week })
+        body: JSON.stringify({ leagueId, week, locale })
       });
       
       const data = await res.json();
@@ -109,9 +112,9 @@ export default function NewsletterClient({
         <div>
           <h1 className="text-3xl font-black flex items-center gap-3 text-orange-600 uppercase tracking-tight">
             <Flame className="h-8 w-8 text-red-600 fill-red-600" />
-            ЩОТИЖНЕВЕ ГОРІННЯ
+            {t('title')}
           </h1>
-          <p className="text-slate-500 mt-1 font-medium">Because fantasy is pain, and we are all suffering.</p>
+          <p className="text-slate-500 mt-1 font-medium">{t('subtitle')}</p>
         </div>
         
         <div className="flex flex-col sm:flex-row items-center gap-4">
@@ -124,7 +127,7 @@ export default function NewsletterClient({
                   onChange={(e) => setWeek(Number(e.target.value))}
                 >
                   {[...Array(14)].map((_, i) => (
-                    <option key={i + 1} value={i + 1}>Week {i + 1}</option>
+                    <option key={i + 1} value={i + 1}>{t('week')}{i + 1}</option>
                   ))}
                 </select>
               </div>
@@ -134,7 +137,7 @@ export default function NewsletterClient({
                 className="bg-orange-600 text-white hover:bg-orange-700 px-6 py-2 rounded-md font-bold uppercase tracking-wide flex items-center gap-2 disabled:opacity-50 transition-colors"
               >
                 {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <FlameKindling className="h-5 w-5" />}
-                {loading ? 'Igniting...' : 'Light the Fire'}
+                {loading ? t('igniting') : t('lightTheFire')}
               </button>
             </>
           )}
@@ -146,7 +149,7 @@ export default function NewsletterClient({
         <div className="flex flex-wrap items-center gap-2 bg-white/50 p-3 rounded-xl border border-slate-200 shadow-sm print:hidden">
           <div className="text-slate-500 font-bold text-sm px-3 uppercase tracking-wider flex items-center gap-2 border-r border-slate-300">
             <ArchiveRestore className="w-4 h-4" />
-            Editions
+            {t('editions')}
           </div>
           {archives.sort((a,b) => a - b).map(w => (
             <button
@@ -158,7 +161,7 @@ export default function NewsletterClient({
                   : 'bg-white text-slate-600 hover:bg-orange-100 hover:text-orange-700 border border-slate-200 shadow-sm'
               }`}
             >
-              Week {w}
+              {t('week')}{w}
             </button>
           ))}
         </div>
@@ -172,19 +175,19 @@ export default function NewsletterClient({
               className="bg-blue-600 text-white hover:bg-blue-700 px-4 py-2 rounded-md font-bold uppercase tracking-wide flex items-center gap-2 transition-colors disabled:opacity-50"
             >
               {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
-              Publish to Archive
+              {t('publishToArchive')}
             </button>
           )}
           {!readOnly && isSaved && (
             <span className="bg-green-100 text-green-800 px-4 py-2 rounded-md font-bold uppercase tracking-wide flex items-center gap-2">
-              ✓ Published
+              ✓ {t('published')}
             </span>
           )}
           <button 
             onClick={() => window.print()}
             className="bg-zinc-800 text-white hover:bg-zinc-900 px-4 py-2 rounded-md font-bold uppercase tracking-wide flex items-center gap-2 transition-colors"
           >
-            Save as PDF
+            {t('saveAsPdf')}
           </button>
         </div>
       )}
@@ -201,12 +204,12 @@ export default function NewsletterClient({
           {/* Newspaper Header */}
           <div className="text-center border-b-4 border-zinc-900 pb-8 mb-8 mt-4">
             <h2 className="text-5xl md:text-7xl font-black uppercase tracking-widest mb-2 text-zinc-900" style={{ fontFamily: 'Impact, sans-serif' }}>
-              ВІСНИК <span className="text-orange-600">ГОРІННЯ</span>
+              {t('herald')} <span className="text-orange-600">{t('burning')}</span>
             </h2>
             <div className="flex justify-between items-center text-sm font-bold uppercase tracking-widest border-y-2 border-zinc-900 py-3 mt-6 text-zinc-800">
-              <span>Vol. {week}</span>
-              <span className="text-red-600 flex items-center gap-1"><Flame className="w-4 h-4 fill-red-600" /> OFFICIAL MELTDOWN REPORT</span>
-              <span>Price: Your Sanity</span>
+              <span>{t('vol')}{week}</span>
+              <span className="text-red-600 flex items-center gap-1"><Flame className="w-4 h-4 fill-red-600" /> {t('officialReport')}</span>
+              <span>{t('price')}</span>
             </div>
           </div>
 
@@ -224,7 +227,7 @@ export default function NewsletterClient({
 
               <div className="border-t-4 border-zinc-900 pt-8">
                 <h3 className="text-2xl font-black mb-6 flex items-center gap-2 text-zinc-900 uppercase tracking-wide">
-                  <FlameKindling className="h-7 w-7 text-orange-600" /> Week {week} Dumpster Fires
+                  <FlameKindling className="h-7 w-7 text-orange-600" /> {t('week')}{week} {t('dumpsterFires')}
                 </h3>
                 <div className="space-y-6">
                   {newsletter.matchups.map((m: any, i: number) => (
@@ -244,19 +247,19 @@ export default function NewsletterClient({
               <div className="bg-zinc-900 text-white p-6 rounded-lg shadow-md border-b-4 border-orange-600">
                 <h3 className="text-2xl font-black mb-5 flex items-center gap-2 text-white uppercase border-b border-zinc-700 pb-3 tracking-wide">
                   <AlertTriangle className="h-6 w-6 text-yellow-500" /> 
-                  Tragedy Awards
+                  {t('tragedyAwards')}
                 </h3>
                 <div className="space-y-5 font-serif text-zinc-100">
                   <div>
-                    <span className="font-bold text-orange-400 block text-sm uppercase tracking-wider mb-1">Honor Roll (Lucky Bastard)</span>
+                    <span className="font-bold text-orange-400 block text-sm uppercase tracking-wider mb-1">{t('honorRoll')}</span>
                     <span className="text-base">{newsletter.awards.honorRoll}</span>
                   </div>
                   <div>
-                    <span className="font-bold text-orange-400 block text-sm uppercase tracking-wider mb-1">Detention (Total Failure)</span> 
+                    <span className="font-bold text-orange-400 block text-sm uppercase tracking-wider mb-1">{t('detention')}</span> 
                     <span className="text-base">{newsletter.awards.detention}</span>
                   </div>
                   <div>
-                    <span className="font-bold text-orange-400 block text-sm uppercase tracking-wider mb-1">Fraud Watch</span> 
+                    <span className="font-bold text-orange-400 block text-sm uppercase tracking-wider mb-1">{t('fraudWatch')}</span> 
                     <span className="text-base">{newsletter.awards.fraudWatch}</span>
                   </div>
                 </div>
@@ -264,7 +267,7 @@ export default function NewsletterClient({
 
               <div>
                 <h3 className="text-2xl font-black mb-6 uppercase tracking-wide text-zinc-900 border-b-4 border-zinc-900 pb-2 flex items-center gap-2">
-                  Power Rankings <Flame className="w-5 h-5 text-orange-600 fill-orange-600" />
+                  {t('powerRankings')} <Flame className="w-5 h-5 text-orange-600 fill-orange-600" />
                 </h3>
                 <div className="space-y-5">
                   {newsletter.powerRankings.map((team: any) => (

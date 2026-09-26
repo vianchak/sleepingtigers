@@ -2,10 +2,12 @@ import { getLeagueData } from '@/lib/sleeper-api';
 import { calculateBadges, calculateAllPlayRecord, calculatePowerRankings } from '@/lib/stats-engine';
 import { Award, Zap, HeartPulse, ShieldAlert, Skull, Wrench, Medal, Backpack, RefreshCw, Trash2, AlertTriangle, TrendingUp, TrendingDown, Minus, Crown } from 'lucide-react';
 import Image from 'next/image';
+import { getTranslations } from 'next-intl/server';
 
 export const revalidate = 3600; // Next.js ISR
 
 export default async function DashboardHome() {
+  const t = await getTranslations('Home');
   const leagueId = process.env.NEXT_PUBLIC_SLEEPER_LEAGUE_ID;
   if (!leagueId) {
     return <div className="text-red-500">Error: NEXT_PUBLIC_SLEEPER_LEAGUE_ID is not set.</div>;
@@ -16,7 +18,7 @@ export default async function DashboardHome() {
     return <div className="text-yellow-400">Loading league data...</div>;
   }
 
-  // Current leader by wins, then points
+  // {t('currentLeader')} by wins, then points
   const sortedTeams = [...teams].sort((a, b) => b.wins - a.wins || b.fpts - a.fpts);
   const leader = sortedTeams[0];
 
@@ -37,7 +39,7 @@ export default async function DashboardHome() {
           <Award className="w-48 h-48" />
         </div>
         <div className="relative z-10">
-          <h2 className="text-sm uppercase tracking-wider text-emerald-400 font-semibold mb-2">Current Leader</h2>
+          <h2 className="text-sm uppercase tracking-wider text-emerald-400 font-semibold mb-2">{t('currentLeader')}</h2>
           <div className="flex items-center space-x-6">
             {leader.avatarUrl ? (
               <Image src={leader.avatarUrl} alt="Avatar" width={80} height={80} className="rounded-full border-4 border-emerald-500 shadow-xl" />
@@ -49,7 +51,7 @@ export default async function DashboardHome() {
             <div>
               <h3 className="text-4xl font-bold">{leader.displayName}</h3>
               <p className="text-slate-300 mt-2 text-lg">
-                Record: {leader.wins}-{leader.losses}{leader.ties > 0 ? `-${leader.ties}` : ''} | {leader.fpts.toFixed(1)} PF
+                {t('record')}: {leader.wins}-{leader.losses}{leader.ties > 0 ? `-${leader.ties}` : ''} | {leader.fpts.toFixed(1)} {t('pf')}
               </p>
             </div>
           </div>
@@ -57,7 +59,7 @@ export default async function DashboardHome() {
       </section>
 
       {/* Badges Grid */}
-      <h2 className="text-2xl font-bold text-gradient inline-block mb-4">Dynamic Badges</h2>
+      <h2 className="text-2xl font-bold text-gradient inline-block mb-4">{t('dynamicBadges')}</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 
         {/* Bench Whisperer */}
@@ -69,8 +71,8 @@ export default async function DashboardHome() {
           <div className="w-16 h-16 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
             <Zap className="w-8 h-8" />
           </div>
-          <h4 className="font-bold text-lg mb-1">The Bench Whisperer</h4>
-          <p className="text-xs text-slate-400 mb-4 px-2 leading-relaxed">Your bench went nuclear while your starters choked. Stop overthinking your lineup.</p>
+          <h4 className="font-bold text-lg mb-1">{t('benchWhisperer')}</h4>
+          <p className="text-xs text-slate-400 mb-4 px-2 leading-relaxed">{t('benchWhispererDesc')}</p>
           <div className="mt-auto">
             <p className="font-bold text-blue-300">{badges.benchWhisperer?.team.displayName || 'N/A'}</p>
           </div>
@@ -85,8 +87,8 @@ export default async function DashboardHome() {
           <div className="w-16 h-16 rounded-full bg-rose-500/20 text-rose-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
             <HeartPulse className="w-8 h-8" />
           </div>
-          <h4 className="font-bold text-lg mb-1">The Cardiac Kid</h4>
-          <p className="text-xs text-slate-400 mb-4 px-2 leading-relaxed">Every week comes down to Monday Night Football. Have you checked your blood pressure recently?</p>
+          <h4 className="font-bold text-lg mb-1">{t('cardiacKid')}</h4>
+          <p className="text-xs text-slate-400 mb-4 px-2 leading-relaxed">{t('cardiacKidDesc')}</p>
           <div className="mt-auto">
             <p className="font-bold text-rose-300">{badges.cardiacKid?.team.displayName || 'N/A'}</p>
           </div>
@@ -101,8 +103,8 @@ export default async function DashboardHome() {
           <div className="w-16 h-16 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
             <ShieldAlert className="w-8 h-8" />
           </div>
-          <h4 className="font-bold text-lg mb-1">The Glass Cannon</h4>
-          <p className="text-xs text-slate-400 mb-4 px-2 leading-relaxed">You either drop 150 points or 60. Pure boom or bust chaos every single week.</p>
+          <h4 className="font-bold text-lg mb-1">{t('glassCannon')}</h4>
+          <p className="text-xs text-slate-400 mb-4 px-2 leading-relaxed">{t('glassCannonDesc')}</p>
           <div className="mt-auto">
             <p className="font-bold text-amber-300">{badges.glassCannon?.team.displayName || 'N/A'}</p>
           </div>
@@ -117,8 +119,8 @@ export default async function DashboardHome() {
           <div className="w-16 h-16 rounded-full bg-purple-500/20 text-purple-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
             <Skull className="w-8 h-8" />
           </div>
-          <h4 className="font-bold text-lg mb-1">Unlucky</h4>
-          <p className="text-xs text-slate-400 mb-4 px-2 leading-relaxed">Everyone has their best week of the season when they play you. Brutal schedule luck.</p>
+          <h4 className="font-bold text-lg mb-1">{t('unlucky')}</h4>
+          <p className="text-xs text-slate-400 mb-4 px-2 leading-relaxed">{t('unluckyDesc')}</p>
           <div className="mt-auto">
             <p className="font-bold text-purple-300">{badges.unlucky?.team.displayName || 'N/A'}</p>
             <p className="text-xs text-slate-500 mt-1">{badges.unlucky?.team.fptsAgainst.toFixed(1)} PA</p>
@@ -134,8 +136,8 @@ export default async function DashboardHome() {
           <div className="w-16 h-16 rounded-full bg-indigo-500/20 text-indigo-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
             <Wrench className="w-8 h-8" />
           </div>
-          <h4 className="font-bold text-lg mb-1">The Tinkerer</h4>
-          <p className="text-xs text-slate-400 mb-4 px-2 leading-relaxed">You actively managed yourself out of wins by constantly starting the wrong guys.</p>
+          <h4 className="font-bold text-lg mb-1">{t('tinkerer')}</h4>
+          <p className="text-xs text-slate-400 mb-4 px-2 leading-relaxed">{t('tinkererDesc')}</p>
           <div className="mt-auto">
             <p className="font-bold text-indigo-300">{badges.tinkerer?.team.displayName || 'N/A'}</p>
           </div>
@@ -150,8 +152,8 @@ export default async function DashboardHome() {
           <div className="w-16 h-16 rounded-full bg-green-500/20 text-green-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
             <Medal className="w-8 h-8" />
           </div>
-          <h4 className="font-bold text-lg mb-1">Participation Trophy</h4>
-          <p className="text-xs text-slate-400 mb-4 px-2 leading-relaxed">You won a matchup while scoring absolutely nothing. The best cum in the world.</p>
+          <h4 className="font-bold text-lg mb-1">{t('participationTrophy')}</h4>
+          <p className="text-xs text-slate-400 mb-4 px-2 leading-relaxed">{t('participationTrophyDesc')}</p>
           <div className="mt-auto">
             <p className="font-bold text-green-300">{badges.participationTrophy?.team.displayName || 'N/A'}</p>
           </div>
@@ -166,8 +168,8 @@ export default async function DashboardHome() {
           <div className="w-16 h-16 rounded-full bg-orange-500/20 text-orange-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
             <Backpack className="w-8 h-8" />
           </div>
-          <h4 className="font-bold text-lg mb-1">The Backpack</h4>
-          <p className="text-xs text-slate-400 mb-4 px-2 leading-relaxed">Your team is literally one superstar dragging eight corpses to the finish line.</p>
+          <h4 className="font-bold text-lg mb-1">{t('backpack')}</h4>
+          <p className="text-xs text-slate-400 mb-4 px-2 leading-relaxed">{t('backpackDesc')}</p>
           <div className="mt-auto">
             <p className="font-bold text-orange-300">{badges.backpack?.team.displayName || 'N/A'}</p>
             <p className="text-xs text-slate-500 mt-1">{badges.backpack ? `${(badges.backpack.team.maxPlayerPercentage * 100).toFixed(1)}% of points` : ''}</p>
@@ -179,8 +181,8 @@ export default async function DashboardHome() {
           <div className="w-16 h-16 rounded-full bg-yellow-500/20 text-yellow-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
             <Crown className="w-8 h-8" />
           </div>
-          <h4 className="font-bold text-lg mb-1">Best Ball Champ</h4>
-          <p className="text-xs text-slate-400 mb-4 px-2 leading-relaxed">If you just played best ball, you'd be undefeated. Too bad you actually have to set a lineup.</p>
+          <h4 className="font-bold text-lg mb-1">{t('bestBallChamp')}</h4>
+          <p className="text-xs text-slate-400 mb-4 px-2 leading-relaxed">{t('bestBallChampDesc')}</p>
           <div className="mt-auto">
             <p className="font-bold text-yellow-300">{badges.bestBallChampion?.team.displayName || 'N/A'}</p>
           </div>
@@ -195,8 +197,8 @@ export default async function DashboardHome() {
           <div className="w-16 h-16 rounded-full bg-cyan-500/20 text-cyan-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
             <TrendingUp className="w-8 h-8" />
           </div>
-          <h4 className="font-bold text-lg mb-1">One-Hit Wonder</h4>
-          <p className="text-xs text-slate-400 mb-4 px-2 leading-relaxed">You had one random week where your team went nuclear. The rest was garbage.</p>
+          <h4 className="font-bold text-lg mb-1">{t('oneHitWonder')}</h4>
+          <p className="text-xs text-slate-400 mb-4 px-2 leading-relaxed">{t('oneHitWonderDesc')}</p>
           <div className="mt-auto">
             <p className="font-bold text-cyan-300">{badges.oneHitWonder?.team.displayName || 'N/A'}</p>
           </div>
@@ -215,8 +217,8 @@ export default async function DashboardHome() {
           <div className="w-16 h-16 rounded-full bg-teal-500/20 text-teal-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
             <RefreshCw className="w-8 h-8" />
           </div>
-          <h4 className="font-bold text-lg mb-1">Churn and Burn</h4>
-          <p className="text-xs text-slate-400 mb-4 px-2 leading-relaxed">You made 100 transactions and your team still stinks. Stop trading for the sake of trading.</p>
+          <h4 className="font-bold text-lg mb-1">{t('churnAndBurn')}</h4>
+          <p className="text-xs text-slate-400 mb-4 px-2 leading-relaxed">{t('churnAndBurnDesc')}</p>
           <div className="mt-auto">
             <p className="font-bold text-teal-300">{badges.churnAndBurn?.team.displayName || 'N/A'}</p>
             <p className="text-xs text-slate-500 mt-1">{badges.churnAndBurn?.team.totalMoves} moves</p>
@@ -232,8 +234,8 @@ export default async function DashboardHome() {
           <div className="w-16 h-16 rounded-full bg-pink-500/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
             <span className="text-3xl">💩</span>
           </div>
-          <h4 className="font-bold text-lg mb-1">Hyrox Moment</h4>
-          <p className="text-xs text-slate-400 mb-4 px-2 leading-relaxed">You left a ton of points on the bench and completely crapped the bed, but hey... a win is a win!</p>
+          <h4 className="font-bold text-lg mb-1">{t('hyroxMoment')}</h4>
+          <p className="text-xs text-slate-400 mb-4 px-2 leading-relaxed">{t('hyroxMomentDesc')}</p>
           <div className="mt-auto">
             <p className="font-bold text-pink-300">{badges.hyroxMoment?.team.displayName || 'N/A'}</p>
           </div>
@@ -242,16 +244,16 @@ export default async function DashboardHome() {
       </div>
 
 
-      {/* Official Power Rankings */}
+      {/* {t('officialPowerRankings')} */}
       <div className="mt-12 mb-12">
         <div className="flex items-center justify-between mb-6 border-b border-slate-700/50 pb-2">
           <div className="flex items-center gap-3">
             <TrendingUp className="w-6 h-6 text-emerald-400" />
             <h2 className="text-2xl font-bold font-heading text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-500">
-              Official Power Rankings
+              {t('officialPowerRankings')}
             </h2>
           </div>
-          <p className="text-sm text-slate-400 hidden sm:block">Algorithm: True Win % + Recent Form + Points For</p>
+          <p className="text-sm text-slate-400 hidden sm:block">{t('algorithm')}</p>
         </div>
 
         <div className="glass-card overflow-hidden">
@@ -259,10 +261,10 @@ export default async function DashboardHome() {
             <table className="w-full text-sm text-left">
               <thead className="text-xs uppercase bg-slate-900/50 border-b border-slate-700">
                 <tr>
-                  <th className="px-6 py-4 font-bold text-slate-300 text-center w-16">Rank</th>
-                  <th className="px-6 py-4 font-bold text-slate-300">Manager</th>
-                  <th className="px-6 py-4 font-bold text-slate-300 text-center hidden sm:table-cell">Power Score</th>
-                  <th className="px-6 py-4 font-bold text-slate-300 text-center hidden md:table-cell">Recent Form</th>
+                  <th className="px-6 py-4 font-bold text-slate-300 text-center w-16">{t('rank')}</th>
+                  <th className="px-6 py-4 font-bold text-slate-300">{t('manager')}</th>
+                  <th className="px-6 py-4 font-bold text-slate-300 text-center hidden sm:table-cell">{t('powerScore')}</th>
+                  <th className="px-6 py-4 font-bold text-slate-300 text-center hidden md:table-cell">{t('recentForm')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -297,7 +299,7 @@ export default async function DashboardHome() {
                       <span className="text-xs text-slate-400 mt-1 block">{(pr.powerScore * 100).toFixed(1)}</span>
                     </td>
                     <td className="px-6 py-4 text-center hidden md:table-cell text-emerald-400 font-mono">
-                      {pr.recentForm.toFixed(1)} <span className="text-xs text-slate-500 font-sans block">pts/wk</span>
+                      {pr.recentForm.toFixed(1)} <span className="text-xs text-slate-500 font-sans block">{t('ptsWk')}</span>
                     </td>
                   </tr>
                 ))}
@@ -324,8 +326,8 @@ export default async function DashboardHome() {
               <div className="w-20 h-20 rounded-full bg-red-500/20 text-red-400 flex items-center justify-center mb-4 relative">
                 <Trash2 className="w-10 h-10" />
               </div>
-              <h3 className="font-bold text-xl mb-1 text-red-400">The Resident</h3>
-              <p className="text-xs text-slate-400 mb-4">Dead last in True Standings</p>
+              <h3 className="font-bold text-xl mb-1 text-red-400">{t('resident')}</h3>
+              <p className="text-xs text-slate-400 mb-4">{t('deadLast')}</p>
 
               {parashaResident.team.avatarUrl ? (
                 <div className="w-12 h-12 rounded-full overflow-hidden mb-2 border-2 border-red-500/50">
@@ -339,8 +341,8 @@ export default async function DashboardHome() {
 
               <div className="mt-auto">
                 <p className="font-bold text-white text-lg">{parashaResident.team.displayName}</p>
-                <p className="text-sm text-red-400 mt-1">{(parashaResident.winPercentage * 100).toFixed(1)}% True Win Rate</p>
-                <p className="text-xs text-slate-500">{parashaResident.team.fpts.toFixed(1)} PF</p>
+                <p className="text-sm text-red-400 mt-1">{(parashaResident.winPercentage * 100).toFixed(1)}% {t('trueWinRate')}</p>
+                <p className="text-xs text-slate-500">{parashaResident.team.fpts.toFixed(1)} {t('pf')}</p>
               </div>
             </div>
           )}
@@ -349,7 +351,7 @@ export default async function DashboardHome() {
           <div className="md:col-span-3 glass-card p-6 border-orange-500/20">
             <div className="flex items-center gap-2 mb-6">
               <AlertTriangle className="w-5 h-5 text-orange-400" />
-              <h3 className="font-bold text-lg text-orange-400">At Risk (The Candidates)</h3>
+              <h3 className="font-bold text-lg text-orange-400">{t('atRisk')}</h3>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -368,7 +370,7 @@ export default async function DashboardHome() {
                     </div>
                   )}
                   <p className="font-bold text-slate-200 text-sm">{candidate.team.displayName}</p>
-                  <p className="text-xs text-orange-300 mt-1">{(candidate.winPercentage * 100).toFixed(1)}% WR</p>
+                  <p className="text-xs text-orange-300 mt-1">{(candidate.winPercentage * 100).toFixed(1)}% {t('wr')}</p>
                 </div>
               ))}
             </div>

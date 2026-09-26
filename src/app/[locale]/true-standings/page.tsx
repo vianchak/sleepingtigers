@@ -1,3 +1,4 @@
+import { getTranslations } from 'next-intl/server';
 import { getLeagueData } from '@/lib/sleeper-api';
 import { calculateAllPlayRecord } from '@/lib/stats-engine';
 import TrueStandingsClient from '@/components/TrueStandingsClient';
@@ -5,6 +6,7 @@ import TrueStandingsClient from '@/components/TrueStandingsClient';
 export const revalidate = 3600;
 
 export default async function TrueStandingsPage() {
+  const t = await getTranslations('TrueStandings');
   const leagueId = process.env.NEXT_PUBLIC_SLEEPER_LEAGUE_ID;
   if (!leagueId) {
     return <div className="text-red-500">Error: NEXT_PUBLIC_SLEEPER_LEAGUE_ID is not set.</div>;
@@ -12,7 +14,7 @@ export default async function TrueStandingsPage() {
 
   const teams = await getLeagueData(leagueId);
   if (!teams || teams.length === 0) {
-    return <div className="text-yellow-400">Loading league data...</div>;
+    return <div className="text-yellow-400">{t('loading')}</div>;
   }
 
   const allPlayResults = calculateAllPlayRecord(teams);
@@ -37,3 +39,4 @@ export default async function TrueStandingsPage() {
     />
   );
 }
+

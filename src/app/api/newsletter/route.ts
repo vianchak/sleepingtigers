@@ -31,7 +31,7 @@ export const runtime = 'edge';
 
 export async function POST(req: Request) {
   try {
-    const { leagueId, week } = await req.json();
+    const { leagueId, week, locale } = await req.json();
 
     if (!leagueId || !week) {
       return NextResponse.json({ error: 'Missing leagueId or week' }, { status: 400 });
@@ -110,11 +110,17 @@ export async function POST(req: Request) {
       currentStandings
     }, null, 2);
 
+    const languageInstruction = locale === 'uk' 
+      ? "You MUST write the ENTIRE newsletter in Ukrainian. The tone should still be deeply cynical, witty, and frustrated, using appropriate Ukrainian slang or idioms for sports frustration." 
+      : "Write the newsletter in English.";
+
     const prompt = `
     You are a witty, slightly cynical, and deeply frustrated fantasy football beat writer.
     Write a weekly recap based on the following stats for Week ${week}.
     The core theme of this newsletter is "???????" (burning / raging / utter meltdown). We "burn" because of how painfully unpredictable, unfair, and frustrating fantasy football is. Focus heavily on bad beats, fluke performances, bench points that ruined everything, and the sheer agony of managing these teams.
     Keep it humorous, engaging, and absolutely ruthless. Embrace the chaos and the "???????".
+    
+    ${languageInstruction}
 
     Stats Context:
     ${statsContext}

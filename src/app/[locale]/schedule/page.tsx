@@ -1,3 +1,4 @@
+import { getTranslations } from 'next-intl/server';
 import { getSchedule } from '@/lib/sleeper-api';
 import { CalendarDays, Swords, CheckCircle2 } from 'lucide-react';
 import Image from 'next/image';
@@ -5,6 +6,7 @@ import Image from 'next/image';
 export const revalidate = 3600;
 
 export default async function SchedulePage() {
+  const t = await getTranslations('Schedule');
   const leagueId = process.env.NEXT_PUBLIC_SLEEPER_LEAGUE_ID;
   if (!leagueId) {
     return <div className="text-red-500">Error: NEXT_PUBLIC_SLEEPER_LEAGUE_ID is not set.</div>;
@@ -16,9 +18,9 @@ export default async function SchedulePage() {
     return (
       <div className="flex flex-col items-center justify-center py-20 text-center animate-in fade-in">
         <CalendarDays className="w-16 h-16 text-slate-600 mb-4" />
-        <h2 className="text-2xl font-bold text-slate-300">No Schedule Found</h2>
+        <h2 className="text-2xl font-bold text-slate-300">{t('noSchedule')}</h2>
         <p className="text-slate-500 mt-2 max-w-md">
-          The schedule data is unavailable for this league.
+          {t('noScheduleDesc')}
         </p>
       </div>
     );
@@ -28,10 +30,10 @@ export default async function SchedulePage() {
     <div className="space-y-12 animate-in fade-in duration-500">
       <div className="text-center max-w-2xl mx-auto mb-12">
         <h2 className="text-4xl font-bold font-heading text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500 mb-4 flex items-center justify-center gap-3">
-          <CalendarDays className="w-8 h-8 text-blue-400" /> Season Schedule
+          <CalendarDays className="w-8 h-8 text-blue-400" /> {t('title')}
         </h2>
         <p className="text-slate-400">
-          Week-by-week matchups and results for the current season.
+          {t('description')}
         </p>
       </div>
 
@@ -39,7 +41,7 @@ export default async function SchedulePage() {
         {schedule.map((week) => (
           <div key={week.week} className="relative">
             <h3 className="text-2xl font-bold text-center mb-6 text-slate-200 border-b border-slate-700/50 pb-4 flex items-center justify-center gap-2">
-              Week {week.week}
+              {t('week')}{week.week}
               {week.isCompleted && <CheckCircle2 className="w-5 h-5 text-emerald-500" />}
             </h3>
             
@@ -83,7 +85,7 @@ export default async function SchedulePage() {
                       {/* VS Divider */}
                       <div className="flex flex-col items-center justify-center px-4">
                         <Swords className="w-5 h-5 text-slate-500 mb-1" />
-                        {!hasScores && <span className="text-xs font-bold text-slate-600">VS</span>}
+                        {!hasScores && <span className="text-xs font-bold text-slate-600">{t('vs')}</span>}
                       </div>
 
                       {/* Team B */}
@@ -118,3 +120,4 @@ export default async function SchedulePage() {
     </div>
   );
 }
+

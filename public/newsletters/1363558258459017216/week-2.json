@@ -1,127 +1,127 @@
 {
   "leadStory": {
-    "headline": "The Smell of Fresh Ash: Total Meltdowns and Fraudulent Miracles Define Week 2",
-    "content": "Welcome back to the weekly inferno. If you smell burning flesh and scorched pride, do not panic—it is merely the sacred ritual of 'горіння' consuming fantasy owners across the league. Nothing encapsulates our shared mental illness quite like Week 2: Fantaser drops a solid 130.64 points only to get completely obliterated by Rookie39's spontaneous thermonuclear detonation of 163.92. Meanwhile, Dankom completely forgot how to play football, crashing down to earth with an abysmal 91.46 points in the week's most grotesque massacre courtesy of Hlopchik. You spent hours analyzing depth charts and waiver wires just for the cruel fantasy gods to roast your hopes over an open spit. Crack open a cold beverage to soothe the third-degree burns, because the agony has only begun."
+    "headline": "Тиждень 2: Попільничка надій та велике багаття розчарувань",
+    "content": "Ласкаво просимо до другого тижня нашого спільного пекла під назвою фентезі-футбол, де логіка вмирає першою, а душевний спокій вигорає дотла. Якщо ви думали, що перший тиждень був випадковістю, то зараз ваші ілюзії остаточно перетворилися на токсичний дим. Rookie39 раптово вибухнув ядерним зарядом на 163.92 бала, наче продав душу дияволу на перехресті, тоді як Dankom навіть не спромігся перетнути ганебну позначку в 100 балів і отримав принизливого ляпаса від Hlopchik з різницею у майже 64 пункти. Тим часом dawg8 якимось дивом іде 2-0, волочачи за собою жалюгідні 234 очки за два тижні, що викликає лише неконтрольоване бажання кинути телефон об стіну. Наші нерви палають, лавка запасних знову знущально глузує з основного складу, а попереду ще цілий сезон цього щотижневого мазохізму."
   },
   "matchups": [
     {
       "teamA": "Fantaser",
       "teamB": "Rookie39",
       "scoreText": "Fantaser 130.64 - 163.92 Rookie39",
-      "recap": "The textbook definition of fantasy heartbreak. Fantaser put up a roster capable of beating almost anyone else in the league, only to run face-first into Rookie39's unholy buzzsaw of 163.92 points. Enjoy the pure, unadulterated rage of losing while scoring 130."
+      "recap": "Fantaser набрав солідні 130 балів і вже готувався святкувати, але натрапив на оскаженілого Rookie39, чий склад раптом видав матч усього життя з 163.92 балами; класичний ніж у спину від генератора випадкових чисел."
     },
     {
       "teamA": "Olegi",
       "teamB": "echoCloud",
-      "scoreText": "Olegi 112.1 - 125.58 echoCloud",
-      "recap": "echoCloud remains relentless and undefeated, leaving Olegi to curse at the ceiling as another respectable week went up in smoke. It was a grind, but echoCloud had just enough juice to keep the furnace stoked."
+      "scoreText": "Olegi 112.10 - 125.58 echoCloud",
+      "recap": "echoCloud продовжує йти без поразок, навіть граючи на пів сили, тоді як Olegi просто дивилися, як їхні гравці один за одним відмовлялися бігати в редзоні."
     },
     {
       "teamA": "dawg8",
       "teamB": "TigersFlames",
       "scoreText": "dawg8 114.78 - 111.22 TigersFlames",
-      "recap": "An absolute crime scene of a matchup. Both managers threw up mid performances, but TigersFlames found a way to lose by less than four points, securing an 0-2 start while dawg8 stumbled blindly into a win."
+      "recap": "Найбільш огидна та виснажлива битва тижня: dawg8 вигриз перемогу завдяки якимось кострубатим трьом очкам, залишивши TigersFlames горіти у вогні зі статистикою 0-2."
     },
     {
       "teamA": "Hlopchik",
       "teamB": "Dankom",
       "scoreText": "Hlopchik 155.26 - 91.46 Dankom",
-      "recap": "A 63.8-point public execution. Hlopchik went full scorched-earth mode, while Dankom's squad flatlined with the week's lone sub-century score. The stench of Dankom's bench and starters alike will linger for weeks."
+      "recap": "Публічна страта в прямому ефірі; Hlopchik набрав люті 155.26 очок, у той час як Dankom показав абсолютно безпорадний перформанс на 91.46, змусивши очі фанатів кровоточити."
     },
     {
       "teamA": "Chivascat",
       "teamB": "snickone",
       "scoreText": "Chivascat 127.28 - 141.72 snickone",
-      "recap": "Chivascat put up a spirited fight with 127.28 points, which in typical fantasy fashion only served to make the defeat hurt twice as much against snickone's balanced onslaught. Chivascat slides to 0-2, surrounded by flames."
+      "recap": "Chivascat боровся з усіх сил і видав пристойний результат, але snickone просто переїхав суперника катком завдяки 141.72 балам, кинувши котів у підвал турнірної таблиці."
     },
     {
       "teamA": "janitorQA",
       "teamB": "j4wsomeD",
-      "scoreText": "janitorQA 132.48 - 103.6 janitorQA",
-      "recap": "janitorQA took out the trash this week, mopping the floor with j4wsomeD who looked thoroughly disinterested in fielding a competitive lineup. An easy, painless win in an otherwise painful week."
+      "scoreText": "janitorQA 132.48 - 103.60 j4wsomeD",
+      "recap": "janitorQA спокійно підмів паркет своїм опонентом, скориставшись повною летаргією та клінічною імпотенцією нападу j4wsomeD."
     },
     {
       "teamA": "Easybeat",
       "teamB": "ArtemC",
       "scoreText": "Easybeat 138.62 - 106.36 ArtemC",
-      "recap": "Living up to the inverse of their name, Easybeat handed ArtemC a comfortable thrashing. ArtemC's roster sputtered out early, leaving their manager staring blankly at the waiver wire in despair."
+      "recap": "Easybeat повністю виправдав свою назву, легко та безжально розібравши на запчастини команду ArtemC, яка просто забула вийти на поле в другій половині гри."
     }
   ],
   "awards": {
-    "honorRoll": "Rookie39 exploded for a week-high 163.92 points, ruthlessly vaporizing Fantaser and setting the league scoring benchmark with extreme prejudice.",
-    "detention": "Dankom takes the walk of shame after scraping together an embarrassing 91.46 points, earning the title of lone sub-100 dumpster fire of Week 2.",
-    "fraudWatch": "dawg8 is somehow 2-0 despite sitting 10th overall in total points (234.34) and scraping past TigersFlames in an ugly slugfest. Regression is coming with a flamethrower."
+    "honorRoll": "Rookie39 — 163.92 очка. Абсолютний божевільний бенефіс тижня. Усе, до чого торкався цей склад, перетворювалося на золото, доводячи суперника до нервового зриву.",
+    "detention": "Dankom — 91.46 очка. Жалюгідне, беззубе видовище, за яке має бути соромно перед предками; єдина команда ліги, що не спромоглася розміняти сотню.",
+    "fraudWatch": "dawg8 — рекорд 2-0 при мізерних 234.34 сумарних очках за два тижні. Це найбільша афера в історії ліги, яка тримається виключно на сліпій удачі календарної сітки."
   },
   "powerRankings": [
     {
       "team": "echoCloud",
       "rank": 1,
-      "blurb": "Sitting at 2-0 with a league-best 321.94 points, their owners are enjoying the view while everyone else burns alive."
+      "blurb": "Лідер таблиці з ідеальним балансом очок та фарту, але їхнє самовдоволення вже починає дратувати всіх навколо."
     },
     {
       "team": "snickone",
       "rank": 2,
-      "blurb": "Second in points scored and lethal on offense, Week 1's loss is already a distant memory."
+      "blurb": "Машина з набору очок нарешті здобула перемогу, підтвердивши, що минулий тиждень був просто дурним непорозумінням."
     },
     {
       "team": "Fantaser",
       "rank": 3,
-      "blurb": "Cruelly betrayed by the schedule gods despite putting up numbers that should easily have them sitting undefeated."
+      "blurb": "Співчуваємо: набрати 130 очок і програти — це саме та душевна травма, заради якої ми всі тут зібралися."
     },
     {
       "team": "Hlopchik",
       "rank": 4,
-      "blurb": "Dissected Dankom with surgical cruelty, proving that when their stars align, they can drop 155 without breaking a sweat."
-    },
-    {
-      "team": "Dankom",
-      "rank": 5,
-      "blurb": "A catastrophic 91-point disaster class that wiped away whatever goodwill Week 1 had built."
+      "blurb": "Розтрощив суперника на друзки і тепер ходить лігою з пафосним виглядом, наче виграв Супербоул."
     },
     {
       "team": "Rookie39",
-      "rank": 6,
-      "blurb": "A terrifying 163-point ceiling that makes you wonder where this team was hiding seven days ago."
+      "rank": 5,
+      "blurb": "Видав монструозний тиждень, але ми всі чудово розуміємо, що повторити це диво йому навряд чи вдасться."
     },
     {
-      "team": "j4wsomeD",
-      "rank": 7,
-      "blurb": "Came crashing down to earth with a dud performance that left fantasy managers questioning their life choices."
+      "team": "Dankom",
+      "rank": 6,
+      "blurb": "Повна катастрофа тижня з 91 балом; терміново купуйте вогнегасники, бо там палає так, що видно з космосу."
     },
     {
       "team": "Easybeat",
-      "rank": 8,
-      "blurb": "Put together a clinical rebound victory, but consistency remains a major question mark."
+      "rank": 7,
+      "blurb": "Упевнена та спокійна перемога, але питання щодо глибини складу залишаються відкритими."
     },
     {
       "team": "janitorQA",
+      "rank": 8,
+      "blurb": "Зробив свою брудну роботу, прибравши слабкого суперника, але проти топів такого темпу точно не вистачить."
+    },
+    {
+      "team": "j4wsomeD",
       "rank": 9,
-      "blurb": "Took care of business and cleaned up nicely, staying right in the thick of the mid-table chaos."
+      "blurb": "103 очки після непоганого старту — це жорстоке приземлення об тверду реальність посередності."
     },
     {
       "team": "dawg8",
       "rank": 10,
-      "blurb": "Undefeated at 2-0 through sheer dark magic and an abysmal scoring output that cannot possibly hold up."
+      "blurb": "Йти 2-0 з таким убогим тоталом — це чисте шахрайство, і карма вже готує свій жорстокий удар."
     },
     {
       "team": "ArtemC",
       "rank": 11,
-      "blurb": "Muddled through a mediocre 106-point week and got handled with zero resistance."
+      "blurb": "Безликий матч, у якому гравці виглядали так, ніби їх змусили вийти на поле проти власної волі."
     },
     {
       "team": "TigersFlames",
       "rank": 12,
-      "blurb": "Losing by 3.5 points in an ugly mud fight is the exact flavor of pain this newsletter exists to celebrate."
+      "blurb": "Назва команди тепер повністю відповідає стану менеджера: повне горіння після прикрої поразки на 3 очки."
     },
     {
       "team": "Olegi",
       "rank": 13,
-      "blurb": "Not quite awful enough to be funny, not quite good enough to win, just perfectly positioned to suffer."
+      "blurb": "Набрали мало, боролися мляво і заслужено опинилися серед аутсайдерів за загальним рівнем гри."
     },
     {
       "team": "Chivascat",
       "rank": 14,
-      "blurb": "Sitting winless in the league basement with 214 points total; break out the fire extinguishers."
+      "blurb": "Останнє місце, нуль перемог і повна безвихідь — час оголошувати сезонний траур і зливати активи."
     }
   ]
 }
