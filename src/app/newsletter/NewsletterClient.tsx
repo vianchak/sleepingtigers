@@ -115,24 +115,6 @@ export default function NewsletterClient({
         </div>
         
         <div className="flex flex-col sm:flex-row items-center gap-4">
-          {archives.length > 0 && (
-            <div className="flex items-center gap-2 border-r-2 border-orange-200 pr-4">
-              <ArchiveRestore className="w-4 h-4 text-slate-500" />
-              <select 
-                className="p-2 rounded-md border border-slate-300 bg-slate-50 text-slate-700 text-sm font-bold"
-                onChange={(e) => {
-                  if (e.target.value) handleLoadArchive(Number(e.target.value));
-                }}
-                defaultValue=""
-              >
-                <option value="" disabled>Load Archive...</option>
-                {archives.map(w => (
-                  <option key={w} value={w}>Week {w}</option>
-                ))}
-              </select>
-            </div>
-          )}
-
           {!readOnly && (
             <>
               <div className="flex items-center gap-2">
@@ -159,6 +141,28 @@ export default function NewsletterClient({
         </div>
       </div>
 
+      {/* Archives Tab Bar */}
+      {archives.length > 0 && (
+        <div className="flex flex-wrap items-center gap-2 bg-white/50 p-3 rounded-xl border border-slate-200 shadow-sm print:hidden">
+          <div className="text-slate-500 font-bold text-sm px-3 uppercase tracking-wider flex items-center gap-2 border-r border-slate-300">
+            <ArchiveRestore className="w-4 h-4" />
+            Editions
+          </div>
+          {archives.sort((a,b) => a - b).map(w => (
+            <button
+              key={w}
+              onClick={() => handleLoadArchive(w)}
+              className={`px-4 py-1.5 rounded-full font-bold text-sm transition-all ${
+                newsletter && week === w 
+                  ? 'bg-orange-600 text-white shadow-md scale-105'
+                  : 'bg-white text-slate-600 hover:bg-orange-100 hover:text-orange-700 border border-slate-200 shadow-sm'
+              }`}
+            >
+              Week {w}
+            </button>
+          ))}
+        </div>
+      )}
       {newsletter && (
         <div className="flex justify-end gap-3 print:hidden">
           {!readOnly && !isSaved && (
