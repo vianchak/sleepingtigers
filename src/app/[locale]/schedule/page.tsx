@@ -1,4 +1,4 @@
-import { getTranslations } from 'next-intl/server';
+import { getScopedTranslator } from '@/lib/i18n/dictionaries';
 import { getSchedule } from '@/lib/sleeper-api';
 import { CalendarDays, Swords, CheckCircle2 } from 'lucide-react';
 import Image from 'next/image';
@@ -7,7 +7,7 @@ import Image from 'next/image';
 
 export default async function SchedulePage({params}: {params: Promise<{locale: string}>}) {
   const {locale} = await params;
-  let t; try { t = await getTranslations({locale, namespace: "Schedule"}); } catch(e: any) { return <div className="text-red-500 text-center mt-20">Translation Error: {e.message}</div>; }
+  const t = getScopedTranslator(locale, "Schedule");
   const leagueId = process.env.NEXT_PUBLIC_SLEEPER_LEAGUE_ID;
   if (!leagueId) {
     return <div className="text-red-500">Error: NEXT_PUBLIC_SLEEPER_LEAGUE_ID is not set.</div>;

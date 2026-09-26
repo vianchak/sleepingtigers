@@ -1,4 +1,4 @@
-import { getTranslations } from 'next-intl/server';
+import { getScopedTranslator } from '@/lib/i18n/dictionaries';
 import { getAllTimeMatchups } from '@/lib/sleeper-api';
 import { getRivalries } from '@/lib/stats-engine';
 import { Swords, Skull, Trophy, History } from 'lucide-react';
@@ -8,7 +8,7 @@ import Image from 'next/image';
 
 export default async function RivalriesPage({params}: {params: Promise<{locale: string}>}) {
   const {locale} = await params;
-  const t = await getTranslations({locale, namespace: 'Rivalries'});
+  const t = getScopedTranslator(locale, 'Rivalries');
   const leagueId = process.env.NEXT_PUBLIC_SLEEPER_LEAGUE_ID;
   if (!leagueId) {
     return <div className="text-red-500">Error: NEXT_PUBLIC_SLEEPER_LEAGUE_ID is not set.</div>;
@@ -269,4 +269,5 @@ export default async function RivalriesPage({params}: {params: Promise<{locale: 
 
 
 export const runtime = 'edge';
+
 

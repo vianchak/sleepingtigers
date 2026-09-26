@@ -3,7 +3,8 @@
 import { useState, useEffect } from 'react';
 import { saveNewsletterArchive } from './storage-actions';
 import { Loader2, Flame, FlameKindling, AlertTriangle, Save, ArchiveRestore } from 'lucide-react';
-import { useLocale, useTranslations } from 'next-intl';
+import { useTranslation } from '@/lib/i18n/client';
+import { useParams } from 'next/navigation';
 
 export default function NewsletterClient({ 
   leagueId, 
@@ -16,8 +17,8 @@ export default function NewsletterClient({
   initialArchives: number[],
   readOnly?: boolean
 }) {
-  const locale = useLocale();
-  const t = useTranslations('NewsletterClient');
+  const params = useParams(); const locale = params.locale as string;
+  const t = useTranslation('NewsletterClient');
   const [week, setWeek] = useState(currentWeek > 0 ? currentWeek : 1);
   const [loading, setLoading] = useState(false);
   const [newsletter, setNewsletter] = useState<any>(null);
@@ -288,3 +289,5 @@ export default function NewsletterClient({
     </div>
   );
 }
+
+

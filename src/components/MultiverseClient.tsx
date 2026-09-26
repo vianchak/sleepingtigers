@@ -3,14 +3,14 @@
 import { useState } from 'react';
 import { TeamStats } from '@/types/sleeper';
 import { calculateScheduleSwapper } from '@/lib/stats-engine';
-import { useTranslations } from 'next-intl';
+import { useTranslation } from '@/lib/i18n/client';
 
 interface MultiverseClientProps {
   teams: TeamStats[];
 }
 
 export default function MultiverseClient({ teams }: MultiverseClientProps) {
-  const t = useTranslations('MultiverseClient');
+  const t = useTranslation('MultiverseClient');
   const [myTeamId, setMyTeamId] = useState<number>(teams[0]?.rosterId || 0);
   const [targetScheduleId, setTargetScheduleId] = useState<number>(teams.length > 1 ? teams[1]?.rosterId : teams[0]?.rosterId || 0);
 

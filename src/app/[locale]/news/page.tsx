@@ -1,10 +1,10 @@
 import NewsletterClient from '../newsletter/NewsletterClient';
-import { getTranslations } from 'next-intl/server';
+import { getScopedTranslator } from '@/lib/i18n/dictionaries';
 import { getNflState, getCompletedWeek } from '@/lib/sleeper-api';
 import { getNewsletterArchives } from '../newsletter/storage-actions';
 
 export default async function NewsPage({params}: {params: Promise<{locale: string}>}) {
-  const t = await getTranslations("News");
+  const t = getScopedTranslator((await params).locale, "News");
   const state = await getNflState();
   const completedWeek = getCompletedWeek(state) || 1;
   const leagueId = process.env.NEXT_PUBLIC_SLEEPER_LEAGUE_ID || '1125211995400511488';
@@ -24,4 +24,5 @@ export default async function NewsPage({params}: {params: Promise<{locale: strin
 }
 
 export const runtime = 'edge';
+
 

@@ -2,7 +2,7 @@
 
 import { AllPlayResult } from '@/lib/stats-engine';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { useTranslations } from 'next-intl';
+import { useTranslation } from '@/lib/i18n/client';
 
 interface TrueStandingsClientProps {
   allPlayResults: AllPlayResult[];
@@ -10,7 +10,7 @@ interface TrueStandingsClientProps {
 }
 
 export default function TrueStandingsClient({ allPlayResults, chartData }: TrueStandingsClientProps) {
-  const t = useTranslations('TrueStandingsClient');
+  const t = useTranslation('TrueStandingsClient');
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
       <div className="flex items-center justify-between">

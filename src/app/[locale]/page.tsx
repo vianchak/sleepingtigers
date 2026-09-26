@@ -2,13 +2,13 @@ import { getLeagueData } from '@/lib/sleeper-api';
 import { calculateBadges, calculateAllPlayRecord, calculatePowerRankings } from '@/lib/stats-engine';
 import { Award, Zap, HeartPulse, ShieldAlert, Skull, Wrench, Medal, Backpack, RefreshCw, Trash2, AlertTriangle, TrendingUp, TrendingDown, Minus, Crown } from 'lucide-react';
 import Image from 'next/image';
-import { getTranslations } from 'next-intl/server';
+import { getScopedTranslator } from '@/lib/i18n/dictionaries';
 
 
 
 export default async function DashboardHome({params}: {params: Promise<{locale: string}>}) {
   const {locale} = await params;
-  let t; try { t = await getTranslations({locale, namespace: "Home"}); } catch(e: any) { return <div className="text-red-500 text-center mt-20">Translation Error: {e.message}</div>; }
+  const t = getScopedTranslator(locale, "Home");
   const leagueId = process.env.NEXT_PUBLIC_SLEEPER_LEAGUE_ID;
   if (!leagueId) {
     return <div className="text-red-500">Error: NEXT_PUBLIC_SLEEPER_LEAGUE_ID is not set.</div>;

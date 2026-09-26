@@ -1,16 +1,16 @@
-import createMiddleware from 'next-intl/middleware';
-import {routing} from './i18n/routing';
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 
-const intlMiddleware = createMiddleware(routing);
-
-export default function middleware(request: any) {
-  return intlMiddleware(request);
+export function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+  
+  if (pathname === '/') {
+    return NextResponse.redirect(new URL('/en', request.url));
+  }
+  
+  return NextResponse.next();
 }
 
 export const config = {
-  matcher: ['/', '/(uk|en)/:path*']
+  matcher: ['/']
 };
-
-
-
-

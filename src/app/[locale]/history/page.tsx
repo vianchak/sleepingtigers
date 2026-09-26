@@ -1,4 +1,4 @@
-import { getTranslations } from 'next-intl/server';
+import { getScopedTranslator } from '@/lib/i18n/dictionaries';
 import { getLeagueHistory } from '@/lib/sleeper-api';
 import { Trophy, Skull, Crown, Trash2 } from 'lucide-react';
 import Image from 'next/image';
@@ -7,7 +7,7 @@ import Image from 'next/image';
 
 export default async function HistoryPage({params}: {params: Promise<{locale: string}>}) {
   const {locale} = await params;
-  const t = await getTranslations({locale, namespace: 'History'});
+  const t = getScopedTranslator(locale, 'History');
   const leagueId = process.env.NEXT_PUBLIC_SLEEPER_LEAGUE_ID;
   if (!leagueId) {
     return <div className="text-red-500">Error: NEXT_PUBLIC_SLEEPER_LEAGUE_ID is not set.</div>;
@@ -133,4 +133,5 @@ function HistoryIcon() {
 
 
 export const runtime = 'edge';
+
 
