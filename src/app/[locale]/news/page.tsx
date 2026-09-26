@@ -26,3 +26,5 @@ export default async function NewsPage({params}: {params: Promise<{locale: strin
 export const runtime = 'edge';
 
 
+
+export const dynamic = 'force-dynamic';

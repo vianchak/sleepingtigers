@@ -45,3 +45,5 @@ export default async function TrueStandingsPage({params}: {params: Promise<{loca
 export const runtime = 'edge';
 
 
+
+export const dynamic = 'force-dynamic';

@@ -271,3 +271,5 @@ export default async function RivalriesPage({params}: {params: Promise<{locale: 
 export const runtime = 'edge';
 
 
+
+export const dynamic = 'force-dynamic';

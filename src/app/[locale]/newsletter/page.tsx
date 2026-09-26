@@ -19,3 +19,5 @@ export default async function NewsletterPage({params}: {params: Promise<{locale:
 
 export const runtime = 'edge';
 
+
+export const dynamic = 'force-dynamic';

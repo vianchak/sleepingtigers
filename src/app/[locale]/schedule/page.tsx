@@ -126,3 +126,5 @@ export default async function SchedulePage({params}: {params: Promise<{locale: s
 export const runtime = 'edge';
 
 
+
+export const dynamic = 'force-dynamic';

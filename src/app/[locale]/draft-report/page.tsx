@@ -316,3 +316,5 @@ export default async function DraftReportPage({params}: {params: Promise<{locale
 export const runtime = 'edge';
 
 
+
+export const dynamic = 'force-dynamic';
