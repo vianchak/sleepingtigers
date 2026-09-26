@@ -11,3 +11,5 @@ export const config = {
   matcher: ['/', '/(uk|en)/:path*']
 };
 
+
+export const runtime = 'edge';
