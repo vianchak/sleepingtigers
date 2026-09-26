@@ -13,11 +13,18 @@ const inter = Inter({ subsets: ['latin'] });
 
 export async function generateMetadata({params}: {params: Promise<{locale: string}>}) {
   const {locale} = await params;
-  const t = await getTranslations({locale, namespace: 'Layout'});
-  return {
-    title: t('title'),
-    description: t('description'),
-  };
+  try {
+    const t = await getTranslations({locale, namespace: 'Layout'});
+    return {
+      title: t('title'),
+      description: t('description'),
+    };
+  } catch(e) {
+    return {
+      title: 'Error',
+      description: 'Error'
+    }
+  }
 }
 
 export default async function RootLayout({
@@ -33,7 +40,7 @@ export default async function RootLayout({
     notFound();
   }
 
-  let messages; let t; try { messages = await getMessages(); t = await getTranslations('Layout'); } catch(e: any) { return <html><body>Error: {e.message}</body></html> }
+  let messages; let t; try { messages = await getMessages(); t = await getTranslations('Layout'); } catch(e: any) { return <html><body>Error: {e.message || String(e)}</body></html> }
 
   return (
     <html lang={locale}>
@@ -48,53 +55,29 @@ export default async function RootLayout({
                 <h1 className="text-lg lg:text-xl font-bold text-gradient whitespace-nowrap hidden sm:block">{t('title')}</h1>
               </Link>
               <nav className="hidden md:flex space-x-3 lg:space-x-5 text-sm">
-                <Link href="/" className="flex items-center space-x-1 hover:text-blue-400 transition-colors">
-                  <Trophy className="w-4 h-4" />
                   <span className="whitespace-nowrap">{t('dashboard')}</span>
-                </Link>
-                <Link href="/schedule" className="flex items-center space-x-1 hover:text-blue-400 transition-colors">
-                  <CalendarDays className="w-4 h-4" />
                   <span className="whitespace-nowrap">{t('schedule')}</span>
-                </Link>
-                <Link href="/news" className="flex items-center space-x-1 hover:text-orange-400 transition-colors">
-                  <Newspaper className="w-4 h-4" />
                   <span className="whitespace-nowrap">{t('news')}</span>
-                </Link>
-                <Link href="/true-standings" className="flex items-center space-x-1 hover:text-emerald-400 transition-colors">
-                  <Activity className="w-4 h-4" />
                   <span className="whitespace-nowrap">{t('trueStandings')}</span>
-                </Link>
-                <Link href="/multiverse" className="flex items-center space-x-1 hover:text-purple-400 transition-colors">
-                  <ArrowRightLeft className="w-4 h-4" />
                   <span className="whitespace-nowrap">{t('multiverse')}</span>
-                </Link>
-                <Link href="/rivalries" className="flex items-center space-x-1 hover:text-rose-400 transition-colors">
-                  <Swords className="w-4 h-4" />
                   <span className="whitespace-nowrap">{t('rivalries')}</span>
-                </Link>
-                <Link href="/draft-report" className="flex items-center space-x-1 hover:text-indigo-400 transition-colors">
-                  <Search className="w-4 h-4" />
                   <span className="whitespace-nowrap">{t('draftReport')}</span>
-                </Link>
-                <Link href="/history" className="flex items-center space-x-1 hover:text-yellow-400 transition-colors">
-                  <History className="w-4 h-4" />
                   <span className="whitespace-nowrap">{t('history')}</span>
-                </Link>
               </nav>
-              <div className="hidden md:flex items-center space-x-4">
-                <div className="flex bg-slate-800/50 rounded-lg p-1 border border-white/10 text-sm font-medium">
-                  <a href="/en" className={`px-2 py-1 rounded ${locale === 'en' ? 'bg-slate-700 text-white' : 'text-slate-400 hover:text-white'}`}>EN</a>
-                  <a href="/uk" className={`px-2 py-1 rounded ${locale === 'uk' ? 'bg-slate-700 text-white' : 'text-slate-400 hover:text-white'}`}>UK</a>
+              <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-2 bg-slate-800/50 rounded-lg p-1 border border-white/5">
+                  <Link href="/" locale="en" className={`px-2 py-1 rounded text-xs font-bold transition-colors ${locale === 'en' ? 'bg-indigo-500 text-white' : 'text-slate-400 hover:text-white'}`}>EN</Link>
+                  <Link href="/" locale="uk" className={`px-2 py-1 rounded text-xs font-bold transition-colors ${locale === 'uk' ? 'bg-indigo-500 text-white' : 'text-slate-400 hover:text-white'}`}>UK</Link>
                 </div>
                 <RefreshButton />
               </div>
             </header>
             
-            <main className="flex-grow p-4 md:p-8 max-w-7xl mx-auto w-full">
+            <main className="flex-grow p-4 md:p-8 overflow-x-hidden">
               {children}
             </main>
 
-            <footer className="py-6 text-center text-sm text-slate-500 border-t border-white/5 mt-8">
+            <footer className="glass-panel mt-auto rounded-none border-x-0 border-b-0 border-t border-white/10 py-6 text-center text-slate-500 text-sm">
               <p>{t('footer')}</p>
             </footer>
           </div>
@@ -105,5 +88,3 @@ export default async function RootLayout({
 }
 
 export const runtime = 'edge';
-
-

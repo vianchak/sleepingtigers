@@ -3,7 +3,7 @@ import { getLeagueData } from '@/lib/sleeper-api';
 import { calculateAllPlayRecord } from '@/lib/stats-engine';
 import TrueStandingsClient from '@/components/TrueStandingsClient';
 
-export const revalidate = 3600;
+
 
 export default async function TrueStandingsPage() {
   const t = await getTranslations('TrueStandings');

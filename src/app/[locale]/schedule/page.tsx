@@ -3,7 +3,7 @@ import { getSchedule } from '@/lib/sleeper-api';
 import { CalendarDays, Swords, CheckCircle2 } from 'lucide-react';
 import Image from 'next/image';
 
-export const revalidate = 3600;
+
 
 export default async function SchedulePage() {
   const t = await getTranslations('Schedule');

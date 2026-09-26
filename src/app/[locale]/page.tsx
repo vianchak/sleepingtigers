@@ -4,7 +4,7 @@ import { Award, Zap, HeartPulse, ShieldAlert, Skull, Wrench, Medal, Backpack, Re
 import Image from 'next/image';
 import { getTranslations } from 'next-intl/server';
 
-export const revalidate = 3600; // Next.js ISR
+
 
 export default async function DashboardHome() {
   const t = await getTranslations('Home');

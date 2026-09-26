@@ -2,7 +2,7 @@ import { getTranslations } from 'next-intl/server';
 import { getLeagueData } from '@/lib/sleeper-api';
 import MultiverseClient from '@/components/MultiverseClient';
 
-export const revalidate = 3600;
+
 
 export default async function MultiversePage() {
   const t = await getTranslations('Multiverse');

@@ -4,7 +4,7 @@ import { getRivalries } from '@/lib/stats-engine';
 import { Swords, Skull, Trophy, History } from 'lucide-react';
 import Image from 'next/image';
 
-export const revalidate = 3600;
+
 
 export default async function RivalriesPage() {
   const t = await getTranslations('Rivalries');

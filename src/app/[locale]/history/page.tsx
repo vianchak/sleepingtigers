@@ -3,7 +3,7 @@ import { getLeagueHistory } from '@/lib/sleeper-api';
 import { Trophy, Skull, Crown, Trash2 } from 'lucide-react';
 import Image from 'next/image';
 
-export const revalidate = 3600;
+
 
 export default async function HistoryPage() {
   const t = await getTranslations('History');

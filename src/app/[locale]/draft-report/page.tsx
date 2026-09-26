@@ -4,7 +4,7 @@ import { Search, TrendingUp, TrendingDown, ArrowRight, Award, Frown, Compass, Us
 import Link from 'next/link';
 import Image from 'next/image';
 
-export const revalidate = 3600;
+
 
 export default async function DraftReportPage() {
   const t = await getTranslations('DraftReport');
