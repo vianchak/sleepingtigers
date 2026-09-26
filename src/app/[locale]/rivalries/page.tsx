@@ -23,6 +23,7 @@ export default async function RivalriesPage({params}: {params: Promise<{locale: 
     (r.managerB.displayName.toLowerCase() === 'olegi' && r.managerA.displayName.toLowerCase() === 'fantaser')
   );
 
+  console.log('El Clasico:', elClasico);
   // Most Frequent Matchups
   const mostFrequent = [...rivalries].sort((a, b) => b.totalMatches - a.totalMatches).slice(0, 4);
 
@@ -273,3 +274,4 @@ export const runtime = 'edge';
 
 
 export const dynamic = 'force-dynamic';
+

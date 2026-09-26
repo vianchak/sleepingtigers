@@ -1,6 +1,7 @@
 import { SleeperUser, SleeperRoster, SleeperMatchup, SleeperTransaction, TeamStats, LeagueHistory, HistoricalTeam, WeeklySchedule, ScheduleMatchup, ScheduleTeam } from '@/types/sleeper';
 
 const BASE_URL = 'https://api.sleeper.app/v1';
+import pastMatchups from './past-matchups.json';
 
 async function fetchWithCache(endpoint: string) {
   const res = await fetch(`${BASE_URL}${endpoint}`, { headers: { "User-Agent": "Mozilla/5.0 (compatible; SleepingTigers/1.0)" } });
@@ -307,9 +308,9 @@ export async function getSchedule(leagueId: string): Promise<WeeklySchedule[]> {
   const schedule: WeeklySchedule[] = [];
 
   const weekPromises = [];
-  for (let week = 1; week <= 18; week++) {
-    weekPromises.push(fetchWithCache(`/league/${leagueId}/matchups/${week}`).catch(() => []));
-  }
+    for (let week = 1; week <= Math.min(17, completedWeek); week++) {
+      weekPromises.push(fetchWithCache(`/league/${leagueId}/matchups/${week}`).catch(() => []));
+    }
   
   const allMatchups = await Promise.all(weekPromises);
 
@@ -374,9 +375,9 @@ export async function getDraftReport(leagueId: string) {
 
   // Fetch all matchups to get player points
   const weekPromises = [];
-  for (let week = 1; week <= 18; week++) {
-    weekPromises.push(fetchWithCache(`/league/${leagueId}/matchups/${week}`).catch(() => []));
-  }
+    for (let week = 1; week <= Math.min(17, completedWeek); week++) {
+      weekPromises.push(fetchWithCache(`/league/${leagueId}/matchups/${week}`).catch(() => []));
+    }
   const allMatchups = await Promise.all(weekPromises);
 
   const playerPoints = new Map<string, number>();
@@ -585,18 +586,30 @@ export async function getAllTimeMatchups(currentLeagueId: string) {
       }
     }
 
-    const weekPromises = [];
-    for (let week = 1; week <= 18; week++) {
-      weekPromises.push(
-        fetchWithCache(`/league/${leagueData.league_id}/matchups/${week}`)
-          .catch(() => [])
-          .then(data => ({ week, data }))
-      );
-    }
-    const weeklyData = await Promise.all(weekPromises);
+    let weeklyData = [];
+      const pastData = (pastMatchups as any)[leagueData.league_id];
+      if (pastData) {
+        for (let week = 1; week <= 17; week++) {
+          if (pastData[week]) {
+            weeklyData.push({ week, data: pastData[week] });
+          }
+        }
+      } else {
+        const weekPromises = [];
+        const maxWeek = season === nflState.season ? Math.min(17, completedWeek) : 17;
+        for (let week = 1; week <= maxWeek; week++) {
+          weekPromises.push(
+            fetchWithCache(`/league/${leagueData.league_id}/matchups/${week}`)
+              .catch(() => [])
+              .then(data => ({ week, data }))
+          );
+        }
+        weeklyData = await Promise.all(weekPromises);
+      }
 
     for (const { week, data } of weeklyData) {
       if (!data || data.length === 0) continue;
+        // console.log(season, week);
       if (season === nflState.season && week > completedWeek) continue;
 
       // Group by matchup_id
@@ -613,7 +626,8 @@ export async function getAllTimeMatchups(currentLeagueId: string) {
           const userB = rosterMap.get(pair[1].roster_id);
           
           if (userA && userB) {
-            allMatchups.push({
+            console.log('Pushing match in', season, 'week', week, userA.displayName, 'vs', userB.displayName);
+              allMatchups.push({
               season,
               week,
               teamA: { ...userA, points: pair[0].points },
@@ -627,3 +641,4 @@ export async function getAllTimeMatchups(currentLeagueId: string) {
 
   return allMatchups;
 }
+
