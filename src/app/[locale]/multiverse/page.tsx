@@ -24,3 +24,6 @@ export default async function MultiversePage() {
   );
 }
 
+
+export const runtime = 'edge';
+

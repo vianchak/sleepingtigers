@@ -16,3 +16,6 @@ export default async function NewsletterPage() {
   );
 }
 
+
+export const runtime = 'edge';
+

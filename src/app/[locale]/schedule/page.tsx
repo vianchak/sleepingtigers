@@ -121,3 +121,6 @@ export default async function SchedulePage() {
   );
 }
 
+
+export const runtime = 'edge';
+

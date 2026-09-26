@@ -380,3 +380,6 @@ export default async function DashboardHome() {
     </div>
   );
 }
+
+export const runtime = 'edge';
+

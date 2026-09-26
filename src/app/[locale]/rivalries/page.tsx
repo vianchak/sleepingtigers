@@ -266,3 +266,6 @@ export default async function RivalriesPage() {
   );
 }
 
+
+export const runtime = 'edge';
+

@@ -130,3 +130,6 @@ function HistoryIcon() {
   );
 }
 
+
+export const runtime = 'edge';
+

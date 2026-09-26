@@ -311,3 +311,6 @@ export default async function DraftReportPage() {
   );
 }
 
+
+export const runtime = 'edge';
+
