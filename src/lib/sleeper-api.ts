@@ -286,7 +286,7 @@ export async function getSchedule(leagueId: string): Promise<WeeklySchedule[]> {
   const [users, rosters, nflState] = await Promise.all([
     getUsers(leagueId),
     getRosters(leagueId),
-    fetchWithCache('https://api.sleeper.app/v1/state/nfl').catch(() => ({ leg: 1, season_type: 'regular' }))
+    fetchWithCache('/state/nfl').catch(() => ({ leg: 1, season_type: 'regular' }))
   ]);
 
   const completedWeek = getCompletedWeek(nflState);
@@ -364,7 +364,7 @@ export async function getDraftReport(leagueId: string) {
     fetchWithCache(`/draft/${draftId}/picks`).catch(() => []),
     getUsers(leagueId),
     getRosters(leagueId),
-    fetchWithCache('https://api.sleeper.app/v1/state/nfl').catch(() => ({ leg: 1, season_type: 'regular' }))
+    fetchWithCache('/state/nfl').catch(() => ({ leg: 1, season_type: 'regular' }))
   ]);
   const completedWeek = getCompletedWeek(nflState);
   
@@ -557,7 +557,7 @@ export async function getDraftReport(leagueId: string) {
 export async function getAllTimeMatchups(currentLeagueId: string) {
   const allMatchups = [];
   let leagueIdToFetch: string | null = currentLeagueId;
-  const nflState = await fetchWithCache('https://api.sleeper.app/v1/state/nfl').catch(() => ({ leg: 1, season_type: 'regular', season: '2026' }));
+  const nflState = await fetchWithCache('/state/nfl').catch(() => ({ leg: 1, season_type: 'regular', season: '2026' }));
   const completedWeek = getCompletedWeek(nflState);
 
   while (leagueIdToFetch) {
