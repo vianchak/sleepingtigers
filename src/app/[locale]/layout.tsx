@@ -54,16 +54,42 @@ export default async function RootLayout({
                 </div>
                 <h1 className="text-lg lg:text-xl font-bold text-gradient whitespace-nowrap hidden sm:block">{t('title')}</h1>
               </Link>
-              <nav className="hidden md:flex space-x-3 lg:space-x-5 text-sm">
-                  <span className="whitespace-nowrap">{t('dashboard')}</span>
-                  <span className="whitespace-nowrap">{t('schedule')}</span>
-                  <span className="whitespace-nowrap">{t('news')}</span>
-                  <span className="whitespace-nowrap">{t('trueStandings')}</span>
-                  <span className="whitespace-nowrap">{t('multiverse')}</span>
-                  <span className="whitespace-nowrap">{t('rivalries')}</span>
-                  <span className="whitespace-nowrap">{t('draftReport')}</span>
-                  <span className="whitespace-nowrap">{t('history')}</span>
+              
+              <nav className="hidden md:flex flex-1 justify-center space-x-3 lg:space-x-4 text-xs lg:text-sm px-4 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                <Link href="/" className="flex items-center space-x-1 hover:text-blue-400 transition-colors whitespace-nowrap">
+                  <Trophy className="w-4 h-4 hidden xl:block" />
+                  <span>{t('dashboard')}</span>
+                </Link>
+                <Link href="/schedule" className="flex items-center space-x-1 hover:text-blue-400 transition-colors whitespace-nowrap">
+                  <CalendarDays className="w-4 h-4 hidden xl:block" />
+                  <span>{t('schedule')}</span>
+                </Link>
+                <Link href="/news" className="flex items-center space-x-1 hover:text-orange-400 transition-colors whitespace-nowrap">
+                  <Newspaper className="w-4 h-4 hidden xl:block" />
+                  <span>{t('news')}</span>
+                </Link>
+                <Link href="/true-standings" className="flex items-center space-x-1 hover:text-emerald-400 transition-colors whitespace-nowrap">
+                  <Activity className="w-4 h-4 hidden xl:block" />
+                  <span>{t('trueStandings')}</span>
+                </Link>
+                <Link href="/multiverse" className="flex items-center space-x-1 hover:text-purple-400 transition-colors whitespace-nowrap">
+                  <ArrowRightLeft className="w-4 h-4 hidden xl:block" />
+                  <span>{t('multiverse')}</span>
+                </Link>
+                <Link href="/rivalries" className="flex items-center space-x-1 hover:text-red-400 transition-colors whitespace-nowrap">
+                  <Swords className="w-4 h-4 hidden xl:block" />
+                  <span>{t('rivalries')}</span>
+                </Link>
+                <Link href="/draft-report" className="flex items-center space-x-1 hover:text-yellow-400 transition-colors whitespace-nowrap">
+                  <Search className="w-4 h-4 hidden xl:block" />
+                  <span>{t('draftReport')}</span>
+                </Link>
+                <Link href="/history" className="flex items-center space-x-1 hover:text-cyan-400 transition-colors whitespace-nowrap">
+                  <History className="w-4 h-4 hidden xl:block" />
+                  <span>{t('history')}</span>
+                </Link>
               </nav>
+
               <div className="flex items-center space-x-4">
                 <div className="flex items-center space-x-2 bg-slate-800/50 rounded-lg p-1 border border-white/5">
                   <Link href="/" locale="en" className={`px-2 py-1 rounded text-xs font-bold transition-colors ${locale === 'en' ? 'bg-indigo-500 text-white' : 'text-slate-400 hover:text-white'}`}>EN</Link>
@@ -73,7 +99,7 @@ export default async function RootLayout({
               </div>
             </header>
             
-            <main className="flex-grow p-4 md:p-8 overflow-x-hidden">
+            <main className="flex-grow p-4 md:p-8 max-w-7xl mx-auto w-full overflow-x-hidden">
               {children}
             </main>
 
@@ -88,3 +114,4 @@ export default async function RootLayout({
 }
 
 export const runtime = 'edge';
+
