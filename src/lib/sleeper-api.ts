@@ -3,7 +3,7 @@ import { SleeperUser, SleeperRoster, SleeperMatchup, SleeperTransaction, TeamSta
 const BASE_URL = 'https://api.sleeper.app/v1';
 
 async function fetchWithCache(endpoint: string) {
-  const res = await fetch(`${BASE_URL}${endpoint}`, { next: { revalidate: 3600 } });
+  const res = await fetch(`${BASE_URL}${endpoint}`, { headers: { "User-Agent": "Mozilla/5.0 (compatible; SleepingTigers/1.0)" } });
   if (!res.ok) {
     throw new Error(`Failed to fetch ${endpoint}: ${res.statusText}`);
   }
