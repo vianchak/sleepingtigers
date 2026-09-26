@@ -33,8 +33,7 @@ export default async function RootLayout({
     notFound();
   }
 
-  const messages = await getMessages();
-  const t = await getTranslations('Layout');
+  let messages; let t; try { messages = await getMessages(); t = await getTranslations('Layout'); } catch(e: any) { return <html><body>Error: {e.message}</body></html> }
 
   return (
     <html lang={locale}>
@@ -106,4 +105,5 @@ export default async function RootLayout({
 }
 
 export const runtime = 'edge';
+
 

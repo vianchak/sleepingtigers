@@ -13,7 +13,7 @@ export default async function DashboardHome() {
     return <div className="text-red-500">Error: NEXT_PUBLIC_SLEEPER_LEAGUE_ID is not set.</div>;
   }
 
-  const teams = await getLeagueData(leagueId);
+  let teams; try { teams = await getLeagueData(leagueId); } catch(e: any) { return <div className="text-red-500 text-center mt-20">API Error: {e.message}</div>; }
   if (!teams || teams.length === 0) {
     return <div className="text-yellow-400">Loading league data...</div>;
   }
@@ -382,4 +382,5 @@ export default async function DashboardHome() {
 }
 
 export const runtime = 'edge';
+
 
