@@ -241,6 +241,28 @@ export default function NewsletterClient({
                   ))}
                 </div>
               </div>
+              {(newsletter.nextVictim || newsletter.horoscope || newsletter.anecdote) && (
+                <div className="border-t-4 border-zinc-900 pt-8 space-y-8 mt-10">
+                  {newsletter.nextVictim && (
+                    <div className="bg-red-50 p-6 border-l-4 border-red-600">
+                      <h3 className="text-2xl font-black mb-3 text-zinc-900 uppercase tracking-wide">{t('nextVictim')}</h3>
+                      <p className="text-zinc-800 font-serif text-lg leading-relaxed">{newsletter.nextVictim}</p>
+                    </div>
+                  )}
+                  {newsletter.horoscope && (
+                    <div className="py-6 border-y-2 border-zinc-200">
+                      <h3 className="text-2xl font-black mb-3 text-zinc-900 uppercase tracking-wide">{t('horoscope')}</h3>
+                      <p className="text-zinc-800 font-serif text-lg italic leading-relaxed">{newsletter.horoscope}</p>
+                    </div>
+                  )}
+                  {newsletter.anecdote && (
+                    <div className="bg-zinc-100 p-6 rounded shadow-inner">
+                      <h3 className="text-2xl font-black mb-3 text-zinc-900 uppercase tracking-wide">{t('anecdote')}</h3>
+                      <p className="text-zinc-800 font-serif text-lg leading-relaxed">"{newsletter.anecdote}"</p>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
 
             {/* Sidebar: Awards & Rankings */}
@@ -263,6 +285,18 @@ export default function NewsletterClient({
                     <span className="font-bold text-orange-400 block text-sm uppercase tracking-wider mb-1">{t('fraudWatch')}</span> 
                     <span className="text-base">{newsletter.awards.fraudWatch}</span>
                   </div>
+                  {newsletter.awards.faabFool && (
+                    <div>
+                      <span className="font-bold text-orange-400 block text-sm uppercase tracking-wider mb-1">{t('faabFool')}</span> 
+                      <span className="text-base">{newsletter.awards.faabFool}</span>
+                    </div>
+                  )}
+                  {newsletter.awards.whatIfMachine && (
+                    <div>
+                      <span className="font-bold text-orange-400 block text-sm uppercase tracking-wider mb-1">{t('whatIfMachine')}</span> 
+                      <span className="text-base">{newsletter.awards.whatIfMachine}</span>
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -289,5 +323,7 @@ export default function NewsletterClient({
     </div>
   );
 }
+
+
 
 

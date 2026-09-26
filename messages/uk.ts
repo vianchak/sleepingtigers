@@ -190,6 +190,11 @@ export default {
     "honorRoll": "Дошка Пошани (Найбільше очок)",
     "detention": "Під Арештом (Повний Провал)",
     "fraudWatch": "Нагляд за Шахраями",
-    "powerRankings": "Рейтинг Сили"
+    "faabFool": "Клоун на Вейвері",
+    "whatIfMachine": "Машина 'А що, якби?'",
+    "powerRankings": "Рейтинг Сили",
+    "nextVictim": "Наступна Жертва",
+    "horoscope": "Гороскоп для Демотивованих",
+    "anecdote": "Анекдот Наостанок"
   }
 };

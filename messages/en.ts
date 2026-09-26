@@ -190,6 +190,11 @@ export default {
     "honorRoll": "Honor Roll (Lucky Bastard)",
     "detention": "Detention (Total Failure)",
     "fraudWatch": "Fraud Watch",
-    "powerRankings": "Power Rankings"
+    "faabFool": "FAAB Fool (Clown of the Week)",
+    "whatIfMachine": "The 'What If?' Machine",
+    "powerRankings": "Power Rankings",
+    "nextVictim": "Next Week's Most Likely Victim",
+    "horoscope": "Horoscope for the Unmotivated",
+    "anecdote": "Parting Thought"
   }
 };

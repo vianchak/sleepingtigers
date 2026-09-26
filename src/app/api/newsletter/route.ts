@@ -19,12 +19,17 @@ const NewsletterSchema = z.object({
     honorRoll: z.string(),
     detention: z.string(),
     fraudWatch: z.string(),
+    faabFool: z.string(),
+    whatIfMachine: z.string(),
   }),
   powerRankings: z.array(z.object({
     team: z.string(),
     rank: z.number(),
     blurb: z.string()
-  }))
+  })),
+  nextVictim: z.string(),
+  horoscope: z.string(),
+  anecdote: z.string(),
 });
 
 export const runtime = 'edge';
@@ -132,7 +137,12 @@ export async function POST(req: Request) {
         - Honor Roll: Give a shoutout to the highest scorer.
         - Detention: Roast the lowest scorer.
         - Fraud Watch: Identify a team with a good record but low points, or someone who won a terrible game.
+        - FAAB Fool: Roast someone's terrible waiver wire decision or bench/starter mismanagement.
+        - What If Machine: Show how a losing team could have won if they made a different choice.
     4. Power Rankings: Rank the teams based on current standings, with a snarky 1-sentence blurb for each.
+    5. Next Victim: A bold prediction about who is going to get absolutely demolished in the upcoming week.
+    6. Horoscope: A funny, completely unhelpful fantasy football horoscope for the managers.
+    7. Anecdote: A brief, bizarre, out-of-context story or quote to end the newsletter on a chaotic note.
     `;
 
     const env = process.env as any;
