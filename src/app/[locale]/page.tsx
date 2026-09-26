@@ -8,7 +8,7 @@ import { getTranslations } from 'next-intl/server';
 
 export default async function DashboardHome({params}: {params: Promise<{locale: string}>}) {
   const {locale} = await params;
-  const t = await getTranslations({locale, namespace: 'Home'});
+  let t; try { t = await getTranslations({locale, namespace: "Home"}); } catch(e: any) { return <div className="text-red-500 text-center mt-20">Translation Error: {e.message}</div>; }
   const leagueId = process.env.NEXT_PUBLIC_SLEEPER_LEAGUE_ID;
   if (!leagueId) {
     return <div className="text-red-500">Error: NEXT_PUBLIC_SLEEPER_LEAGUE_ID is not set.</div>;
@@ -383,5 +383,6 @@ export default async function DashboardHome({params}: {params: Promise<{locale: 
 }
 
 export const runtime = 'edge';
+
 
 

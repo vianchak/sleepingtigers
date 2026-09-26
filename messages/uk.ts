@@ -1,4 +1,4 @@
-{
+export default {
   "Layout": {
     "title": "Аналітика Oklahoma Rejects",
     "description": "Просунута аналітика та справжня турнірна таблиця для фентезі-ліг Sleeper.",
@@ -192,4 +192,4 @@
     "fraudWatch": "Нагляд за Шахраями",
     "powerRankings": "Рейтинг Сили"
   }
-}
+};

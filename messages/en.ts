@@ -1,4 +1,4 @@
-{
+export default {
   "Layout": {
     "title": "Oklahoma Rejects Analytics",
     "description": "Advanced analytics and true standings for Sleeper fantasy football leagues.",
@@ -192,4 +192,4 @@
     "fraudWatch": "Fraud Watch",
     "powerRankings": "Power Rankings"
   }
-}
+};
