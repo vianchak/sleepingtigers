@@ -29,6 +29,26 @@ export default function NewsletterClient({
   const [saving, setSaving] = useState(false);
   const [downloadingImage, setDownloadingImage] = useState(false);
 
+  // Fetch legacy static archives and merge with KV archives
+  useEffect(() => {
+    fetch(`/newsletters/${leagueId}/index.json`)
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data)) {
+          setArchives(prev => Array.from(new Set([...prev, ...data])).sort((a, b) => b - a));
+        }
+      })
+      .catch(() => {});
+  }, [leagueId]);
+
+  // If in readOnly mode (News page) and no newsletter is loaded, auto-load the latest one once archives are available
+  useEffect(() => {
+    if (readOnly && !newsletter && archives.length > 0) {
+      handleLoadArchive(Math.max(...archives));
+    }
+  }, [readOnly, newsletter, archives]);
+
+
   const handleGenerate = async () => {
     setLoading(true);
     setIsSaved(false);
@@ -58,7 +78,17 @@ export default function NewsletterClient({
     setLoading(true);
     setWeek(archiveWeek);
     try {
-      const data = await getArchivedNewsletter(leagueId, archiveWeek);
+      // Try KV first
+      let data = await getArchivedNewsletter(leagueId, archiveWeek);
+      
+      // Fallback to static JSON file if not in KV
+      if (!data) {
+        const res = await fetch(`/newsletters/${leagueId}/week-${archiveWeek}.json`);
+        if (res.ok) {
+          data = await res.json();
+        }
+      }
+
       if (data) {
         setNewsletter(data);
         setIsSaved(true);
