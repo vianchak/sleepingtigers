@@ -78,10 +78,16 @@ export default function NewsletterClient({
     setLoading(true);
     setWeek(archiveWeek);
     try {
-      // Try KV first
+      // Try KV first via API
       let data = null;
       try {
-        data = await getArchivedNewsletter(leagueId, archiveWeek);
+        const res = await fetch(`/api/newsletter/archive?leagueId=${leagueId}&week=${archiveWeek}`);
+        if (res.ok) {
+          const resData = await res.json();
+          if (resData.success) {
+            data = resData.data;
+          }
+        }
       } catch (err) {
         console.warn("KV fetch failed, falling back to static files", err);
       }
