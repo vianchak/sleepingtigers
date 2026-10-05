@@ -112,15 +112,21 @@ export default function NewsletterClient({
     if (!newsletter) return;
     setSaving(true);
     try {
-      const res = await saveNewsletterArchive(leagueId, week, newsletter);
-      if (res.success) {
+      const res = await fetch('/api/newsletter/save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ leagueId, week, data: newsletter })
+      });
+      const resData = await res.json();
+      
+      if (resData.success) {
         setIsSaved(true);
         if (!archives.includes(week)) {
           setArchives([...archives, week].sort((a, b) => b - a));
         }
         alert(`Week ${week} successfully published to archive!`);
       } else {
-        alert("Failed to save: " + res.error);
+        alert("Failed to save: " + resData.error);
       }
     } catch (error) {
       console.error(error);
