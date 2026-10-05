@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { saveNewsletterArchive, getArchivedNewsletter } from './storage-actions';
 import { Loader2, Flame, FlameKindling, AlertTriangle, Save, ArchiveRestore, Image as ImageIcon } from 'lucide-react';
-import html2canvas from 'html2canvas';
+import * as htmlToImage from 'html-to-image';
 import { useTranslation } from '@/lib/i18n/client';
 import { useParams } from 'next/navigation';
 
@@ -136,16 +136,14 @@ export default function NewsletterClient({
     
     setDownloadingImage(true);
     try {
-      const canvas = await html2canvas(newsletterEl, {
-        scale: 2, // High resolution
-        useCORS: true,
+      const dataUrl = await htmlToImage.toJpeg(newsletterEl, { 
+        quality: 0.95,
         backgroundColor: '#fffdfa',
+        pixelRatio: 2
       });
-      
-      const image = canvas.toDataURL('image/jpeg', 0.9);
       const link = document.createElement('a');
-      link.href = image;
       link.download = `newsletter-week-${week}.jpg`;
+      link.href = dataUrl;
       link.click();
     } catch (error) {
       console.error("Failed to download image:", error);
