@@ -203,7 +203,7 @@ export default function NewsletterClient({
             className="bg-emerald-600 text-white hover:bg-emerald-700 px-4 py-2 rounded-md font-bold uppercase tracking-wide flex items-center gap-2 transition-colors disabled:opacity-50"
           >
             {downloadingImage ? <Loader2 className="h-4 w-4 animate-spin" /> : <ImageIcon className="h-4 w-4" />}
-            {t('saveAsImage', { defaultValue: 'Save as JPG' })}
+            {t('saveAsImage')}
           </button>
           <button 
             onClick={() => window.print()}
