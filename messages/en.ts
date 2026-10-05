@@ -180,6 +180,7 @@ export default {
     "publishToArchive": "Publish to Archive",
     "published": "Published",
     "saveAsPdf": "Save as PDF",
+    "saveAsImage": "Save as JPG",
     "herald": "HERALD OF",
     "burning": "BURNING",
     "vol": "Vol. ",

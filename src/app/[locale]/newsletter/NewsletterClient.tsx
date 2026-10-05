@@ -1,8 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { saveNewsletterArchive } from './storage-actions';
-import { Loader2, Flame, FlameKindling, AlertTriangle, Save, ArchiveRestore } from 'lucide-react';
+import { saveNewsletterArchive, getArchivedNewsletter } from './storage-actions';
+import { Loader2, Flame, FlameKindling, AlertTriangle, Save, ArchiveRestore, Image as ImageIcon } from 'lucide-react';
+import html2canvas from 'html2canvas';
 import { useTranslation } from '@/lib/i18n/client';
 import { useParams } from 'next/navigation';
 
@@ -26,15 +27,7 @@ export default function NewsletterClient({
   const [archives, setArchives] = useState<number[]>(initialArchives || []);
   const [isSaved, setIsSaved] = useState(false);
   const [saving, setSaving] = useState(false);
-
-  useEffect(() => {
-    fetch(`/newsletters/${leagueId}/index.json`)
-      .then(res => res.json())
-      .then(data => {
-        if (Array.isArray(data)) setArchives(data);
-      })
-      .catch(() => {}); // ignore if file doesn't exist
-  }, [leagueId]);
+  const [downloadingImage, setDownloadingImage] = useState(false);
 
   const handleGenerate = async () => {
     setLoading(true);
@@ -65,12 +58,7 @@ export default function NewsletterClient({
     setLoading(true);
     setWeek(archiveWeek);
     try {
-      const res = await fetch(`/newsletters/${leagueId}/week-${archiveWeek}.json`);
-      if (!res.ok) {
-        alert("Archive not found!");
-        return;
-      }
-      const data = await res.json();
+      const data = await getArchivedNewsletter(leagueId, archiveWeek);
       if (data) {
         setNewsletter(data);
         setIsSaved(true);
@@ -104,6 +92,31 @@ export default function NewsletterClient({
       alert("Failed to save archive");
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleDownloadImage = async () => {
+    const newsletterEl = document.getElementById('newsletter-content');
+    if (!newsletterEl) return;
+    
+    setDownloadingImage(true);
+    try {
+      const canvas = await html2canvas(newsletterEl, {
+        scale: 2, // High resolution
+        useCORS: true,
+        backgroundColor: '#fffdfa',
+      });
+      
+      const image = canvas.toDataURL('image/jpeg', 0.9);
+      const link = document.createElement('a');
+      link.href = image;
+      link.download = `newsletter-week-${week}.jpg`;
+      link.click();
+    } catch (error) {
+      console.error("Failed to download image:", error);
+      alert("Failed to generate image.");
+    } finally {
+      setDownloadingImage(false);
     }
   };
 
@@ -185,6 +198,14 @@ export default function NewsletterClient({
             </span>
           )}
           <button 
+            onClick={handleDownloadImage}
+            disabled={downloadingImage}
+            className="bg-emerald-600 text-white hover:bg-emerald-700 px-4 py-2 rounded-md font-bold uppercase tracking-wide flex items-center gap-2 transition-colors disabled:opacity-50"
+          >
+            {downloadingImage ? <Loader2 className="h-4 w-4 animate-spin" /> : <ImageIcon className="h-4 w-4" />}
+            {t('saveAsImage', { defaultValue: 'Save as JPG' })}
+          </button>
+          <button 
             onClick={() => window.print()}
             className="bg-zinc-800 text-white hover:bg-zinc-900 px-4 py-2 rounded-md font-bold uppercase tracking-wide flex items-center gap-2 transition-colors"
           >
@@ -196,6 +217,7 @@ export default function NewsletterClient({
       {/* Generated Content */}
       {newsletter && (
         <div 
+          id="newsletter-content"
           className="bg-[#fffdfa] text-zinc-900 border-4 border-zinc-900 p-8 sm:p-12 shadow-2xl relative overflow-hidden print:shadow-none"
           style={{ WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact' }}
         >

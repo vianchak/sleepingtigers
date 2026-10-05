@@ -180,6 +180,7 @@ export default {
     "publishToArchive": "Опублікувати в Архів",
     "published": "Опубліковано",
     "saveAsPdf": "Зберегти як PDF",
+    "saveAsImage": "Зберегти як JPG",
     "herald": "Вісник",
     "burning": "Горіння",
     "vol": "Том ",
