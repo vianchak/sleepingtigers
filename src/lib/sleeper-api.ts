@@ -308,9 +308,10 @@ export async function getSchedule(leagueId: string): Promise<WeeklySchedule[]> {
   const schedule: WeeklySchedule[] = [];
 
   const weekPromises = [];
-    for (let week = 1; week <= Math.min(17, completedWeek); week++) {
-      weekPromises.push(fetchWithCache(`/league/${leagueId}/matchups/${week}`).catch(() => []));
-    }
+  // Fetch up to week 14 (standard fantasy regular season)
+  for (let week = 1; week <= 14; week++) {
+    weekPromises.push(fetchWithCache(`/league/${leagueId}/matchups/${week}`).catch(() => []));
+  }
   
   const allMatchups = await Promise.all(weekPromises);
 
@@ -334,10 +335,14 @@ export async function getSchedule(leagueId: string): Promise<WeeklySchedule[]> {
       const t1 = teams[0];
       const t2 = teams[1];
       
+      // Only show points for completed weeks, otherwise show 0 so the UI displays "VS"
+      const t1Points = week <= completedWeek ? (t1.points || 0) + (t1.custom_points || 0) : 0;
+      const t2Points = week <= completedWeek ? (t2.points || 0) + (t2.custom_points || 0) : 0;
+
       parsedMatchups.push({
         matchupId,
-        teamA: getTeamInfo(t1.roster_id, (t1.points || 0) + (t1.custom_points || 0)),
-        teamB: getTeamInfo(t2.roster_id, (t2.points || 0) + (t2.custom_points || 0)),
+        teamA: getTeamInfo(t1.roster_id, t1Points),
+        teamB: getTeamInfo(t2.roster_id, t2Points),
       });
     }
 
