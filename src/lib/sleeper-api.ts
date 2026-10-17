@@ -3,12 +3,31 @@ import { SleeperUser, SleeperRoster, SleeperMatchup, SleeperTransaction, TeamSta
 const BASE_URL = 'https://api.sleeper.app/v1';
 import pastMatchups from './past-matchups.json';
 
+const requestCache = new Map<string, { timestamp: number; promise: Promise<any> }>();
+const CACHE_TTL_MS = 60 * 1000;
+
 async function fetchWithCache(endpoint: string) {
-  const res = await fetch(`${BASE_URL}${endpoint}`, { headers: { "User-Agent": "Mozilla/5.0 (compatible; SleepingTigers/1.0)" } });
-  if (!res.ok) {
-    throw new Error(`Failed to fetch ${endpoint}: ${res.statusText}`);
+  const now = Date.now();
+  const cached = requestCache.get(endpoint);
+  if (cached && now - cached.timestamp < CACHE_TTL_MS) {
+    return cached.promise;
   }
-  return res.json();
+
+  const promise = fetch(`${BASE_URL}${endpoint}`, {
+    headers: { "User-Agent": "Mozilla/5.0 (compatible; SleepingTigers/1.0)" }
+  }).then(res => {
+    if (!res.ok) {
+      requestCache.delete(endpoint);
+      throw new Error(`Failed to fetch ${endpoint}: ${res.statusText}`);
+    }
+    return res.json();
+  }).catch(err => {
+    requestCache.delete(endpoint);
+    throw err;
+  });
+
+  requestCache.set(endpoint, { timestamp: now, promise });
+  return promise;
 }
 
 export async function getNflState(): Promise<{ week: number; season_type: string, leg?: number }> {

@@ -3,6 +3,7 @@ import { calculateBadges, calculateAllPlayRecord, calculatePowerRankings } from 
 import { Award, Zap, HeartPulse, ShieldAlert, Skull, Wrench, Medal, Backpack, RefreshCw, Trash2, AlertTriangle, TrendingUp, TrendingDown, Minus, Crown } from 'lucide-react';
 import Image from 'next/image';
 import { getScopedTranslator } from '@/lib/i18n/dictionaries';
+import ManagerDossierModal from '@/components/ManagerDossierModal';
 
 
 
@@ -245,70 +246,13 @@ export default async function DashboardHome({params}: {params: Promise<{locale: 
       </div>
 
 
-      {/* {t('officialPowerRankings')} */}
-      <div className="mt-12 mb-12">
-        <div className="flex items-center justify-between mb-6 border-b border-slate-700/50 pb-2">
-          <div className="flex items-center gap-3">
-            <TrendingUp className="w-6 h-6 text-emerald-400" />
-            <h2 className="text-2xl font-bold font-heading text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-500">
-              {t('officialPowerRankings')}
-            </h2>
-          </div>
-          <p className="text-sm text-slate-400 hidden sm:block">{t('algorithm')}</p>
-        </div>
-
-        <div className="glass-card overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm text-left">
-              <thead className="text-xs uppercase bg-slate-900/50 border-b border-slate-700">
-                <tr>
-                  <th className="px-6 py-4 font-bold text-slate-300 text-center w-16">{t('rank')}</th>
-                  <th className="px-6 py-4 font-bold text-slate-300">{t('manager')}</th>
-                  <th className="px-6 py-4 font-bold text-slate-300 text-center hidden sm:table-cell">{t('powerScore')}</th>
-                  <th className="px-6 py-4 font-bold text-slate-300 text-center hidden md:table-cell">{t('recentForm')}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {powerRankings.map((pr, idx) => (
-                  <tr key={pr.team.rosterId} className="border-b border-slate-800/50 hover:bg-slate-800/20 transition-colors">
-                    <td className="px-6 py-4 text-center">
-                      <div className={`w-8 h-8 mx-auto rounded-full flex items-center justify-center font-bold ${idx === 0 ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/50' : 'bg-slate-800 text-slate-300'}`}>
-                        {pr.rank}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-3">
-                        {pr.team.avatarUrl ? (
-                          <div className="w-10 h-10 rounded-full overflow-hidden border border-slate-600">
-                            <Image src={pr.team.avatarUrl} alt={pr.team.displayName} width={40} height={40} />
-                          </div>
-                        ) : (
-                          <div className="w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center border border-slate-600">
-                            <span className="font-bold text-xs">{pr.team.displayName.charAt(0)}</span>
-                          </div>
-                        )}
-                        <div>
-                          <p className={`font-bold text-base ${idx === 0 ? 'text-yellow-400' : 'text-slate-200'}`}>{pr.team.displayName}</p>
-                          <p className="text-xs text-slate-500 md:hidden">Score: {(pr.powerScore * 100).toFixed(0)}</p>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 text-center hidden sm:table-cell">
-                      <div className="w-full bg-slate-800 rounded-full h-2.5 max-w-xs mx-auto">
-                        <div className="bg-gradient-to-r from-emerald-500 to-cyan-500 h-2.5 rounded-full" style={{ width: `${Math.min(pr.powerScore * 100, 100)}%` }}></div>
-                      </div>
-                      <span className="text-xs text-slate-400 mt-1 block">{(pr.powerScore * 100).toFixed(1)}</span>
-                    </td>
-                    <td className="px-6 py-4 text-center hidden md:table-cell text-emerald-400 font-mono">
-                      {pr.recentForm.toFixed(1)} <span className="text-xs text-slate-500 font-sans block">{t('ptsWk')}</span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
+      {/* Official Power Rankings + Interactive Manager Dossier Modal */}
+      <ManagerDossierModal
+        powerRankings={powerRankings}
+        allPlay={allPlay}
+        badges={badges}
+        teams={teams}
+      />
 
       {/* Parasha Section */}
       <div className="mt-12">

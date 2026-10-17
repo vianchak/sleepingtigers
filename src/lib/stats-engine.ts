@@ -421,3 +421,175 @@ export function getRivalries(allTimeMatchups: import('@/types/sleeper').AllTimeM
     return diffB - diffA || b.totalMatches - a.totalMatches;
   });
 }
+
+
+export function calculateAllTimeRecords(
+  allTimeMatchups: import('@/types/sleeper').AllTimeMatchup[],
+  history: import('@/types/sleeper').LeagueHistory[]
+): import('@/types/sleeper').AllTimeRecords {
+  const managerMap = new Map<string, {
+    userId: string;
+    displayName: string;
+    avatarUrl: string | null;
+    seasons: Set<string>;
+    wins: number;
+    losses: number;
+    ties: number;
+    totalPoints: number;
+    games: number;
+    championships: string[];
+    toiletBowls: string[];
+  }>();
+
+  const singleGames: import('@/types/sleeper').SingleGameRecord[] = [];
+  const margins: import('@/types/sleeper').MatchupMarginRecord[] = [];
+
+  const ensureManager = (user: { userId: string; displayName: string; avatarUrl: string | null }) => {
+    if (!managerMap.has(user.userId)) {
+      managerMap.set(user.userId, {
+        userId: user.userId,
+        displayName: user.displayName,
+        avatarUrl: user.avatarUrl,
+        seasons: new Set(),
+        wins: 0,
+        losses: 0,
+        ties: 0,
+        totalPoints: 0,
+        games: 0,
+        championships: [],
+        toiletBowls: []
+      });
+    } else {
+      const existing = managerMap.get(user.userId)!;
+      if (user.avatarUrl) existing.avatarUrl = user.avatarUrl;
+      if (user.displayName) existing.displayName = user.displayName;
+    }
+    return managerMap.get(user.userId)!;
+  };
+
+  for (const match of allTimeMatchups) {
+    const { season, week, teamA, teamB } = match;
+    if (teamA.points <= 0 && teamB.points <= 0) continue;
+
+    const mA = ensureManager(teamA);
+    const mB = ensureManager(teamB);
+
+    mA.seasons.add(season);
+    mB.seasons.add(season);
+
+    mA.games++;
+    mB.games++;
+    mA.totalPoints += teamA.points;
+    mB.totalPoints += teamB.points;
+
+    const aWon = teamA.points > teamB.points;
+    const bWon = teamB.points > teamA.points;
+
+    if (aWon) {
+      mA.wins++;
+      mB.losses++;
+    } else if (bWon) {
+      mB.wins++;
+      mA.losses++;
+    } else {
+      mA.ties++;
+      mB.ties++;
+    }
+
+    singleGames.push({
+      season,
+      week,
+      userId: teamA.userId,
+      displayName: teamA.displayName,
+      avatarUrl: teamA.avatarUrl,
+      points: teamA.points,
+      opponentName: teamB.displayName,
+      opponentPoints: teamB.points,
+      won: aWon
+    });
+
+    singleGames.push({
+      season,
+      week,
+      userId: teamB.userId,
+      displayName: teamB.displayName,
+      avatarUrl: teamB.avatarUrl,
+      points: teamB.points,
+      opponentName: teamA.displayName,
+      opponentPoints: teamA.points,
+      won: bWon
+    });
+
+    if (teamA.points !== teamB.points) {
+      const winner = aWon ? teamA : teamB;
+      const loser = aWon ? teamB : teamA;
+      margins.push({
+        season,
+        week,
+        winnerName: winner.displayName,
+        winnerAvatar: winner.avatarUrl,
+        winnerPoints: winner.points,
+        loserName: loser.displayName,
+        loserAvatar: loser.avatarUrl,
+        loserPoints: loser.points,
+        margin: Math.abs(winner.points - loser.points)
+      });
+    }
+  }
+
+  for (const h of history) {
+    if (h.winner) {
+      const m = ensureManager(h.winner);
+      m.seasons.add(h.year);
+      if (!m.championships.includes(h.year)) m.championships.push(h.year);
+    }
+    if (h.loser) {
+      const m = ensureManager(h.loser);
+      m.seasons.add(h.year);
+      if (!m.toiletBowls.includes(h.year)) m.toiletBowls.push(h.year);
+    }
+  }
+
+  const leaderboard: import('@/types/sleeper').FranchiseStats[] = Array.from(managerMap.values())
+    .filter(m => m.games > 0)
+    .map(m => ({
+      userId: m.userId,
+      displayName: m.displayName,
+      avatarUrl: m.avatarUrl,
+      seasonsPlayed: m.seasons.size,
+      wins: m.wins,
+      losses: m.losses,
+      ties: m.ties,
+      winPct: m.games > 0 ? (m.wins + m.ties * 0.5) / m.games : 0,
+      totalPoints: m.totalPoints,
+      ppg: m.games > 0 ? m.totalPoints / m.games : 0,
+      championships: m.championships.sort(),
+      toiletBowls: m.toiletBowls.sort()
+    }))
+    .sort((a, b) => b.wins - a.wins || b.totalPoints - a.totalPoints);
+
+  const highestScores = [...singleGames]
+    .sort((a, b) => b.points - a.points)
+    .slice(0, 5);
+
+  const lowestScores = [...singleGames]
+    .filter(g => g.points > 0)
+    .sort((a, b) => a.points - b.points)
+    .slice(0, 5);
+
+  const closestGames = [...margins]
+    .sort((a, b) => a.margin - b.margin)
+    .slice(0, 5);
+
+  const biggestBlowouts = [...margins]
+    .sort((a, b) => b.margin - a.margin)
+    .slice(0, 5);
+
+  return {
+    leaderboard,
+    highestScores,
+    lowestScores,
+    closestGames,
+    biggestBlowouts
+  };
+}

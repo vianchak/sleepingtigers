@@ -200,3 +200,51 @@ export interface PowerRankingTeam {
   trueWinPct: number;
   recentForm: number;
 }
+
+
+export interface FranchiseStats {
+  userId: string;
+  displayName: string;
+  avatarUrl: string | null;
+  seasonsPlayed: number;
+  wins: number;
+  losses: number;
+  ties: number;
+  winPct: number;
+  totalPoints: number;
+  ppg: number;
+  championships: string[];
+  toiletBowls: string[];
+}
+
+export interface SingleGameRecord {
+  season: string;
+  week: number;
+  userId: string;
+  displayName: string;
+  avatarUrl: string | null;
+  points: number;
+  opponentName: string;
+  opponentPoints: number;
+  won: boolean;
+}
+
+export interface MatchupMarginRecord {
+  season: string;
+  week: number;
+  winnerName: string;
+  winnerAvatar: string | null;
+  winnerPoints: number;
+  loserName: string;
+  loserAvatar: string | null;
+  loserPoints: number;
+  margin: number;
+}
+
+export interface AllTimeRecords {
+  leaderboard: FranchiseStats[];
+  highestScores: SingleGameRecord[];
+  lowestScores: SingleGameRecord[];
+  closestGames: MatchupMarginRecord[];
+  biggestBlowouts: MatchupMarginRecord[];
+}
