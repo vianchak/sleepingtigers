@@ -95,6 +95,7 @@ export default function TrueStandingsClient({ allPlayResults, chartData }: TrueS
                     strokeWidth={2}
                     dot={{ r: 3, fill: color }}
                     activeDot={{ r: 5 }}
+                    isAnimationActive={false}
                   />
                 );
               })}

@@ -94,8 +94,8 @@ export default async function RootLayout({
 
               <div className="flex items-center space-x-4">
                 <div className="flex items-center space-x-2 bg-slate-800/50 rounded-lg p-1 border border-white/5">
-                  <a href="/en" className={`px-2 py-1 rounded text-xs font-bold transition-colors ${locale === "en" ? "bg-indigo-500 text-white" : "text-slate-400 hover:text-white"}`}>EN</a>
-                  <a href="/uk" className={`px-2 py-1 rounded text-xs font-bold transition-colors ${locale === "uk" ? "bg-indigo-500 text-white" : "text-slate-400 hover:text-white"}`}>UK</a>
+                  <Link href="/en" className={`px-2 py-1 rounded text-xs font-bold transition-colors ${locale === "en" ? "bg-indigo-500 text-white" : "text-slate-400 hover:text-white"}`}>EN</Link>
+                  <Link href="/uk" className={`px-2 py-1 rounded text-xs font-bold transition-colors ${locale === "uk" ? "bg-indigo-500 text-white" : "text-slate-400 hover:text-white"}`}>UK</Link>
                 </div>
                 <RefreshButton />
               </div>

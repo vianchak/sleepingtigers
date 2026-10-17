@@ -244,7 +244,7 @@ export default function ManagerDossierModal({
       {/* Manager Dossier Modal */}
       {selectedPR && activeDetails && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200"
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/85 backdrop-blur-xs animate-in fade-in duration-200"
           onClick={() => setSelectedRosterId(null)}
         >
           <div
@@ -374,6 +374,7 @@ export default function ManagerDossierModal({
                         fill="#06b6d4"
                         fillOpacity={0.35}
                         strokeWidth={2.5}
+                        isAnimationActive={false}
                       />
                     </RadarChart>
                   </ResponsiveContainer>

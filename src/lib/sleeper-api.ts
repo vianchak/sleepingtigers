@@ -4,7 +4,11 @@ const BASE_URL = 'https://api.sleeper.app/v1';
 import pastMatchups from './past-matchups.json';
 
 const requestCache = new Map<string, { timestamp: number; promise: Promise<any> }>();
-const CACHE_TTL_MS = 60 * 1000;
+const CACHE_TTL_MS = 10 * 60 * 1000;
+
+export function clearSleeperCache() {
+  requestCache.clear();
+}
 
 async function fetchWithCache(endpoint: string) {
   const now = Date.now();
@@ -80,10 +84,14 @@ export async function getLeagueData(leagueId: string): Promise<TeamStats[]> {
   // but Sleeper returns 0s for future weeks. Let's fetch all 14 weeks to be safe, 
   // and we can filter out empty weeks in the stats engine.
   const TOTAL_REGULAR_SEASON_WEEKS = 14;
+  const weeksToFetch = Math.min(TOTAL_REGULAR_SEASON_WEEKS, Math.max(1, completedWeek));
+  const txWeeksToFetch = Math.min(TOTAL_REGULAR_SEASON_WEEKS, completedWeek + 1);
   const matchupPromises = [];
   const transactionPromises = [];
-  for (let w = 1; w <= TOTAL_REGULAR_SEASON_WEEKS; w++) {
+  for (let w = 1; w <= weeksToFetch; w++) {
     matchupPromises.push(getMatchups(leagueId, w));
+  }
+  for (let w = 1; w <= txWeeksToFetch; w++) {
     transactionPromises.push(getTransactions(leagueId, w));
   }
   
