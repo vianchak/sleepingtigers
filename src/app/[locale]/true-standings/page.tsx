@@ -3,8 +3,6 @@ import { getLeagueData } from '@/lib/sleeper-api';
 import { calculateAllPlayRecord } from '@/lib/stats-engine';
 import TrueStandingsClient from '@/components/TrueStandingsClient';
 
-
-
 export default async function TrueStandingsPage({params}: {params: Promise<{locale: string}>}) {
   const {locale} = await params;
   const t = getScopedTranslator(locale, "TrueStandings");
@@ -20,13 +18,12 @@ export default async function TrueStandingsPage({params}: {params: Promise<{loca
 
   const allPlayResults = calculateAllPlayRecord(teams);
 
-  // Transform data for Recharts
-  // We need an array of { week: 1, TeamA: 100, TeamB: 120, ... }
   const allWeeks = Object.keys(teams[0]?.weeklyScores || {}).map(Number).sort((a, b) => a - b);
   const playedWeeks = allWeeks.filter(w => Math.max(...teams.map(t => t.weeklyScores[w] || 0)) > 0);
+  const weekPrefix = locale === 'uk' ? 'Тиж ' : 'Wk ';
 
   const chartData = playedWeeks.map(week => {
-    const dataPoint: any = { week: `Week ${week}` };
+    const dataPoint: any = { week: `${weekPrefix}${week}` };
     teams.forEach(team => {
       dataPoint[team.displayName] = team.weeklyScores[week] || 0;
     });
@@ -36,14 +33,11 @@ export default async function TrueStandingsPage({params}: {params: Promise<{loca
   return (
     <TrueStandingsClient 
       allPlayResults={allPlayResults} 
-      chartData={chartData} 
+      chartData={chartData}
+      locale={locale}
     />
   );
 }
 
-
 export const runtime = 'edge';
-
-
-
 export const dynamic = 'force-dynamic';

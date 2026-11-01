@@ -302,7 +302,7 @@ export default function ManagerDossierModal({
                 <div className="min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
                     <span className="px-2.5 py-0.5 rounded-full text-xs font-black bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">
-                      #{selectedPR.rank} POWER RANK
+                      #{selectedPR.rank} {tHome('powerScore').toUpperCase()}
                     </span>
                     <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40 flex items-center gap-1">
                       <Sparkles className="w-3 h-3 shrink-0" />
@@ -500,7 +500,7 @@ export default function ManagerDossierModal({
                       {activeDetails.badgeEntries.map((b, idx) => (
                         <div key={idx} className="bg-slate-950/70 border border-yellow-500/30 rounded-xl p-3">
                           <span className="text-xs font-bold text-yellow-400 block mb-0.5">{b.title}</span>
-                          <span className="text-xs text-slate-300 block">{b.desc}</span>
+                          <span className="text-xs text-slate-300 block">{b.reason || b.desc}</span>
                         </div>
                       ))}
                     </div>

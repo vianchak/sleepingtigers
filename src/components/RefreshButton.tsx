@@ -12,12 +12,10 @@ export function RefreshButton() {
     setIsRefreshing(true);
     try {
       await fetch('/api/revalidate', { method: 'POST' });
-      // Tell Next.js router to refresh the current page data from the server
       router.refresh();
     } catch (e) {
       console.error(e);
     } finally {
-      // Small timeout so the spin animation completes a cycle
       setTimeout(() => setIsRefreshing(false), 500);
     }
   };
@@ -26,10 +24,10 @@ export function RefreshButton() {
     <button 
       onClick={handleRefresh} 
       disabled={isRefreshing}
-      className="p-2 rounded-full hover:bg-white/10 transition-colors flex items-center justify-center text-slate-400 hover:text-white disabled:opacity-50 ml-4"
+      className="h-9 w-9 rounded-lg bg-slate-950/80 border border-white/10 hover:bg-slate-800 hover:border-white/20 transition-all flex items-center justify-center text-slate-400 hover:text-white disabled:opacity-50 cursor-pointer shrink-0"
       title="Refresh Data"
     >
-      <RefreshCw className={`w-5 h-5 ${isRefreshing ? 'animate-spin text-white' : ''}`} />
+      <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin text-cyan-400' : ''}`} />
     </button>
   );
 }

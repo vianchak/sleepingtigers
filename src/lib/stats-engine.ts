@@ -144,7 +144,7 @@ export interface Badges {
   hyroxMoment: BadgeResult | null;
 }
 
-export function calculateBadges(teams: TeamStats[]): Badges {
+export function calculateBadges(teams: TeamStats[], locale: string = 'en'): Badges {
   if (teams.length === 0) return { 
     benchWhisperer: null, 
     cardiacKid: null, 
@@ -311,18 +311,74 @@ export function calculateBadges(teams: TeamStats[]): Badges {
     }
   }
 
+  const isUk = locale === 'uk';
   return {
-    benchWhisperer: benchWhisperer ? { team: benchWhisperer, reason: `${benchWhisperer.displayName} has left ${maxBench.toFixed(1)} total points on their bench this season.` } : null,
-    cardiacKid: cardiacKid ? { team: cardiacKid, reason: `${cardiacKid.displayName} games are decided by an average of just ${minMargin.toFixed(1)} points.` } : null,
-    glassCannon: glassCannon ? { team: glassCannon, reason: `${glassCannon.displayName} has the most volatile team with a scoring standard deviation of ${maxStdDev.toFixed(1)} points.` } : null,
-    unlucky: unlucky ? { team: unlucky, reason: `${unlucky.displayName} has had ${maxFptsAgainst.toFixed(1)} points scored against them, the most in the league.` } : null,
-    tinkerer: tinkerer ? { team: tinkerer, reason: `${tinkerer.displayName} has missed out on ${maxTinkererGap.toFixed(1)} points by making the wrong start/sit decisions.` } : null,
-    participationTrophy: participationTrophy ? { team: participationTrophy, reason: `${participationTrophy.displayName} somehow won a game by scoring only ${lowestWinningScore.toFixed(1)} points against ${participationOpponent}.` } : null,
-    backpack: backpack ? { team: backpack, reason: `${backpack.displayName} relies heavily on a single player who scored ${(maxBackpack * 100).toFixed(1)}% of their total points.` } : null,
-    churnAndBurn: churnAndBurn ? { team: churnAndBurn, reason: `${churnAndBurn.displayName} has made ${maxMoves} roster moves (trades and waivers) so far.` } : null,
-    bestBallChampion: bestBallChampion ? { team: bestBallChampion, reason: `${bestBallChampion.displayName} has the highest max potential points (${maxPpts.toFixed(1)}). They'd be unstoppable if they set the right lineup.` } : null,
-    oneHitWonder: oneHitWonder ? { team: oneHitWonder, reason: `${oneHitWonder.displayName} had a massive week of ${oneHitWonderMax.toFixed(1)}, but averages a measly ${oneHitWonderAvg.toFixed(1)}.` } : null,
-    hyroxMoment: hyroxMoment ? { team: hyroxMoment, reason: `${hyroxMoment.displayName} left ${hyroxMaxBenchWin.toFixed(1)} points on the bench and completely crapped the bed, but still beat ${hyroxOpponent}. A win is a win!` } : null
+    benchWhisperer: benchWhisperer ? {
+      team: benchWhisperer,
+      reason: isUk
+        ? `${benchWhisperer.displayName} залишив сумарно ${maxBench.toFixed(1)} очок на лавці запасних цього сезону.`
+        : `${benchWhisperer.displayName} has left ${maxBench.toFixed(1)} total points on their bench this season.`
+    } : null,
+    cardiacKid: cardiacKid ? {
+      team: cardiacKid,
+      reason: isUk
+        ? `Матчі ${cardiacKid.displayName} вирішуються в середньому лише з різницею ${minMargin.toFixed(1)} очок.`
+        : `${cardiacKid.displayName} games are decided by an average of just ${minMargin.toFixed(1)} points.`
+    } : null,
+    glassCannon: glassCannon ? {
+      team: glassCannon,
+      reason: isUk
+        ? `${glassCannon.displayName} має найбільш нестабільну команду зі стандартним відхиленням ${maxStdDev.toFixed(1)} очок.`
+        : `${glassCannon.displayName} has the most volatile team with a scoring standard deviation of ${maxStdDev.toFixed(1)} points.`
+    } : null,
+    unlucky: unlucky ? {
+      team: unlucky,
+      reason: isUk
+        ? `Проти ${unlucky.displayName} набрали ${maxFptsAgainst.toFixed(1)} очок — найбільше у лізі.`
+        : `${unlucky.displayName} has had ${maxFptsAgainst.toFixed(1)} points scored against them, the most in the league.`
+    } : null,
+    tinkerer: tinkerer ? {
+      team: tinkerer,
+      reason: isUk
+        ? `${tinkerer.displayName} втратив ${maxTinkererGap.toFixed(1)} потенційних очок через помилки зі стартовим складом.`
+        : `${tinkerer.displayName} has missed out on ${maxTinkererGap.toFixed(1)} points by making the wrong start/sit decisions.`
+    } : null,
+    participationTrophy: participationTrophy ? {
+      team: participationTrophy,
+      reason: isUk
+        ? `${participationTrophy.displayName} примудрився виграти матч, набравши лише ${lowestWinningScore.toFixed(1)} очок проти ${participationOpponent}.`
+        : `${participationTrophy.displayName} somehow won a game by scoring only ${lowestWinningScore.toFixed(1)} points against ${participationOpponent}.`
+    } : null,
+    backpack: backpack ? {
+      team: backpack,
+      reason: isUk
+        ? `Один гравець приніс ${(maxBackpack * 100).toFixed(1)}% від усіх очок команди ${backpack.displayName}.`
+        : `${backpack.displayName} relies heavily on a single player who scored ${(maxBackpack * 100).toFixed(1)}% of their total points.`
+    } : null,
+    churnAndBurn: churnAndBurn ? {
+      team: churnAndBurn,
+      reason: isUk
+        ? `${churnAndBurn.displayName} вже здійснив ${maxMoves} транзакцій (трейдів та вейверів) за сезон.`
+        : `${churnAndBurn.displayName} has made ${maxMoves} roster moves (trades and waivers) so far.`
+    } : null,
+    bestBallChampion: bestBallChampion ? {
+      team: bestBallChampion,
+      reason: isUk
+        ? `${bestBallChampion.displayName} має найбільше потенційних очок (${maxPpts.toFixed(1)}). Був би непереможним з оптимальним складом.`
+        : `${bestBallChampion.displayName} has the highest max potential points (${maxPpts.toFixed(1)}). They'd be unstoppable if they set the right lineup.`
+    } : null,
+    oneHitWonder: oneHitWonder ? {
+      team: oneHitWonder,
+      reason: isUk
+        ? `${oneHitWonder.displayName} видав один потужний тиждень на ${oneHitWonderMax.toFixed(1)}, але в середньому набирає лише ${oneHitWonderAvg.toFixed(1)}.`
+        : `${oneHitWonder.displayName} had a massive week of ${oneHitWonderMax.toFixed(1)}, but averages a measly ${oneHitWonderAvg.toFixed(1)}.`
+    } : null,
+    hyroxMoment: hyroxMoment ? {
+      team: hyroxMoment,
+      reason: isUk
+        ? `${hyroxMoment.displayName} залишив ${hyroxMaxBenchWin.toFixed(1)} очок на лавці, але все одно обіграв ${hyroxOpponent}!`
+        : `${hyroxMoment.displayName} left ${hyroxMaxBenchWin.toFixed(1)} points on the bench and completely crapped the bed, but still beat ${hyroxOpponent}. A win is a win!`
+    } : null
   };
 }
 

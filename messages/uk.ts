@@ -153,7 +153,9 @@ export default {
     "title": "Розклад Сезону",
     "description": "Щотижневі матч-апи та результати поточного сезону.",
     "week": "Тиждень ",
-    "vs": "VS"
+    "vs": "VS",
+    "allWeeks": "Всі Тижні",
+    "completed": "ЗАВЕРШЕНО"
   },
   "TrueStandings": {
     "loading": "Завантаження даних ліги..."

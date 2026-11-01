@@ -153,7 +153,9 @@ export default {
     "title": "Season Schedule",
     "description": "Week-by-week matchups and results for the current season.",
     "week": "Week ",
-    "vs": "VS"
+    "vs": "VS",
+    "allWeeks": "All Weeks",
+    "completed": "FINAL"
   },
   "TrueStandings": {
     "loading": "Loading league data..."
