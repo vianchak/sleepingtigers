@@ -3,26 +3,28 @@ import { getAllTimeMatchups } from '@/lib/sleeper-api';
 import { getRivalries } from '@/lib/stats-engine';
 import { Swords, Skull, Trophy, History, Flame } from 'lucide-react';
 import Image from 'next/image';
+import { getSiteConfig } from '@/lib/site-config';
+import LeagueNotConfigured from '@/components/LeagueNotConfigured';
 
 export default async function RivalriesPage({params}: {params: Promise<{locale: string}>}) {
   const {locale} = await params;
   const t = getScopedTranslator(locale, 'Rivalries');
-  const leagueId = process.env.NEXT_PUBLIC_SLEEPER_LEAGUE_ID;
+  const { leagueId } = await getSiteConfig();
   if (!leagueId) {
-    return <div className="text-red-500">Error: NEXT_PUBLIC_SLEEPER_LEAGUE_ID is not set.</div>;
+    return <LeagueNotConfigured locale={locale} />;
   }
 
   const allTimeMatchups = await getAllTimeMatchups(leagueId);
   const rivalries = getRivalries(allTimeMatchups);
 
-  // El Clasico (Olegi vs Fantaser)
+  // Most Frequent Matchups
+  const mostFrequent = [...rivalries].sort((a, b) => b.totalMatches - a.totalMatches).slice(0, 4);
+
+  // El Clasico (Olegi vs Fantaser, or fallback to top all-time rivalry for any other league)
   const elClasico = rivalries.find(r => 
     (r.managerA.displayName.toLowerCase() === 'olegi' && r.managerB.displayName.toLowerCase() === 'fantaser') ||
     (r.managerB.displayName.toLowerCase() === 'olegi' && r.managerA.displayName.toLowerCase() === 'fantaser')
-  );
-
-  // Most Frequent Matchups
-  const mostFrequent = [...rivalries].sort((a, b) => b.totalMatches - a.totalMatches).slice(0, 4);
+  ) || mostFrequent[0];
 
   // Kryptonite sweeps
   const sweeps = rivalries.filter(r => (r.winsA >= 2 && r.winsB === 0) || (r.winsB >= 2 && r.winsA === 0)).sort((a, b) => Math.max(b.winsA, b.winsB) - Math.max(a.winsA, a.winsB));

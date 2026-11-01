@@ -3,15 +3,15 @@ import { getDraftReport } from '@/lib/sleeper-api';
 import { Search, TrendingUp, TrendingDown, ArrowRight, Award, Frown, Compass, UserPlus, History } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
-
-
+import { getSiteConfig } from '@/lib/site-config';
+import LeagueNotConfigured from '@/components/LeagueNotConfigured';
 
 export default async function DraftReportPage({params}: {params: Promise<{locale: string}>}) {
   const {locale} = await params;
   const t = getScopedTranslator(locale, 'DraftReport');
-  const leagueId = process.env.NEXT_PUBLIC_SLEEPER_LEAGUE_ID;
+  const { leagueId } = await getSiteConfig();
   if (!leagueId) {
-    return <div className="text-red-500">Error: NEXT_PUBLIC_SLEEPER_LEAGUE_ID is not set.</div>;
+    return <LeagueNotConfigured locale={locale} />;
   }
 
   const { steal, bust, managerGrades, biggestRegret, positionalReach, waiverHero, redraftBoard } = await getDraftReport(leagueId);

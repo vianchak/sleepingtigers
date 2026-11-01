@@ -4,20 +4,23 @@ import { Award, Zap, HeartPulse, ShieldAlert, Skull, Wrench, Medal, Backpack, Re
 import Image from 'next/image';
 import { getScopedTranslator } from '@/lib/i18n/dictionaries';
 import ManagerDossierModal from '@/components/ManagerDossierModal';
+import { getSiteConfig } from '@/lib/site-config';
+import LeagueNotConfigured from '@/components/LeagueNotConfigured';
 
 export default async function DashboardHome({params}: {params: Promise<{locale: string}>}) {
   const {locale} = await params;
   const t = getScopedTranslator(locale, "Home");
-  const leagueId = process.env.NEXT_PUBLIC_SLEEPER_LEAGUE_ID;
+  const config = await getSiteConfig();
+  const leagueId = config.leagueId;
   if (!leagueId) {
-    return <div className="text-red-500">Error: NEXT_PUBLIC_SLEEPER_LEAGUE_ID is not set.</div>;
+    return <LeagueNotConfigured locale={locale} />;
   }
 
   let teams;
   try {
     teams = await getLeagueData(leagueId);
   } catch(e: any) {
-    return <div className="text-red-500 text-center mt-20">API Error: {e.message}</div>;
+    return <LeagueNotConfigured locale={locale} error={`API Error: ${e.message}`} />;
   }
   if (!teams || teams.length === 0) {
     return <div className="text-yellow-400">Loading league data...</div>;

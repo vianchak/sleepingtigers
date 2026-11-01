@@ -3,14 +3,16 @@ import { getLeagueHistory, getAllTimeMatchups } from '@/lib/sleeper-api';
 import { calculateAllTimeRecords } from '@/lib/stats-engine';
 import { Trophy, Skull, Crown, Trash2, Flame, HeartCrack, Bomb, Medal, History as HistoryLucide } from 'lucide-react';
 import Image from 'next/image';
+import { getSiteConfig } from '@/lib/site-config';
+import LeagueNotConfigured from '@/components/LeagueNotConfigured';
 
 export default async function HistoryPage({params}: {params: Promise<{locale: string}>}) {
   const {locale} = await params;
   const t = getScopedTranslator(locale, 'History');
   const isUk = locale === 'uk';
-  const leagueId = process.env.NEXT_PUBLIC_SLEEPER_LEAGUE_ID;
+  const { leagueId } = await getSiteConfig();
   if (!leagueId) {
-    return <div className="text-red-500">Error: NEXT_PUBLIC_SLEEPER_LEAGUE_ID is not set.</div>;
+    return <LeagueNotConfigured locale={locale} />;
   }
 
   const [history, allTimeMatchups] = await Promise.all([

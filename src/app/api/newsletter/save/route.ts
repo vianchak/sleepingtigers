@@ -1,21 +1,52 @@
 import { NextResponse } from 'next/server';
-import { getRequestContext } from '@cloudflare/next-on-pages';
+import { isAdminAuthenticated } from '@/lib/admin-auth';
+import {
+  saveNewsletterArchive,
+  deleteNewsletterArchive,
+  getArchivedNewsletter,
+  getNewsletterArchives,
+} from '@/app/[locale]/newsletter/storage-actions';
 
 export const runtime = 'edge';
 
-function getKV() {
+export async function GET(req: Request) {
   try {
-    const env = getRequestContext().env as any;
-    if (env && env.NEWSLETTERS) {
-      return env.NEWSLETTERS;
+    const { searchParams } = new URL(req.url);
+    const leagueId = searchParams.get('leagueId');
+    const week = searchParams.get('week');
+
+    if (!leagueId) {
+      return NextResponse.json({ success: false, error: 'Missing leagueId' }, { status: 400 });
     }
-  } catch (e) {
+
+    if (!week) {
+      const archives = await getNewsletterArchives(leagueId);
+      return NextResponse.json({ success: true, archives });
+    }
+
+    const data = await getArchivedNewsletter(leagueId, Number(week));
+    if (data) {
+      return NextResponse.json({ success: true, data });
+    }
+    return NextResponse.json({ success: false, error: 'Not found' }, { status: 404 });
+  } catch (error: any) {
+    return NextResponse.json(
+      { success: false, error: error.message || String(error) },
+      { status: 500 }
+    );
   }
-  return null;
 }
 
 export async function POST(req: Request) {
   try {
+    const authed = await isAdminAuthenticated();
+    if (!authed) {
+      return NextResponse.json(
+        { success: false, error: 'Unauthorized: Admin login required to publish newsletters.' },
+        { status: 401 }
+      );
+    }
+
     const body = await req.json();
     const { leagueId, week, data } = body;
 
@@ -23,27 +54,51 @@ export async function POST(req: Request) {
       return NextResponse.json({ success: false, error: 'Missing required fields' }, { status: 400 });
     }
 
-    const kv = getKV();
-    if (!kv) {
-      return NextResponse.json({ success: false, error: 'KV not available in this environment. Are you running in Cloudflare or with setupDevPlatform?' }, { status: 500 });
+    const res = await saveNewsletterArchive(String(leagueId), Number(week), data);
+    if (!res.success) {
+      return NextResponse.json(
+        { success: false, error: res.error || 'Failed to save archive' },
+        { status: 500 }
+      );
     }
 
-    const key = `newsletter:${leagueId}:week:${week}`;
-    await kv.put(key, JSON.stringify(data));
-    
-    // Update index
-    const indexKey = `newsletter:${leagueId}:index`;
-    const indexStr = await kv.get(indexKey);
-    let indexData = indexStr ? JSON.parse(indexStr) : [];
-    if (!indexData.includes(week)) {
-      indexData.push(week);
-      indexData.sort((a: number, b: number) => b - a);
-      await kv.put(indexKey, JSON.stringify(indexData));
-    }
-
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ success: true, backend: res.backend });
   } catch (error: any) {
-    console.error("Failed to save newsletter:", error);
-    return NextResponse.json({ success: false, error: error.message || String(error) }, { status: 500 });
+    console.error('Failed to save newsletter:', error);
+    return NextResponse.json(
+      { success: false, error: error.message || String(error) },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(req: Request) {
+  try {
+    const authed = await isAdminAuthenticated();
+    if (!authed) {
+      return NextResponse.json(
+        { success: false, error: 'Unauthorized: Admin login required.' },
+        { status: 401 }
+      );
+    }
+
+    const { searchParams } = new URL(req.url);
+    const leagueId = searchParams.get('leagueId');
+    const week = searchParams.get('week');
+
+    if (!leagueId || !week) {
+      return NextResponse.json(
+        { success: false, error: 'Missing leagueId or week' },
+        { status: 400 }
+      );
+    }
+
+    const res = await deleteNewsletterArchive(leagueId, Number(week));
+    return NextResponse.json(res);
+  } catch (error: any) {
+    return NextResponse.json(
+      { success: false, error: error.message || String(error) },
+      { status: 500 }
+    );
   }
 }

@@ -2,13 +2,15 @@ import { getScopedTranslator } from '@/lib/i18n/dictionaries';
 import { getLeagueData } from '@/lib/sleeper-api';
 import { calculateAllPlayRecord } from '@/lib/stats-engine';
 import TrueStandingsClient from '@/components/TrueStandingsClient';
+import { getSiteConfig } from '@/lib/site-config';
+import LeagueNotConfigured from '@/components/LeagueNotConfigured';
 
 export default async function TrueStandingsPage({params}: {params: Promise<{locale: string}>}) {
   const {locale} = await params;
   const t = getScopedTranslator(locale, "TrueStandings");
-  const leagueId = process.env.NEXT_PUBLIC_SLEEPER_LEAGUE_ID;
+  const { leagueId } = await getSiteConfig();
   if (!leagueId) {
-    return <div className="text-red-500">Error: NEXT_PUBLIC_SLEEPER_LEAGUE_ID is not set.</div>;
+    return <LeagueNotConfigured locale={locale} />;
   }
 
   const teams = await getLeagueData(leagueId);

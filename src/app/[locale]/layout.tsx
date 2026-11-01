@@ -4,6 +4,7 @@ import '../globals.css';
 import NavbarClient from '@/components/NavbarClient';
 import { getDictionary, getScopedTranslator } from '@/lib/i18n/dictionaries';
 import { TranslationProvider } from '@/lib/i18n/client';
+import { getSiteConfig } from '@/lib/site-config';
 import { notFound } from 'next/navigation';
 
 const locales = ['en', 'uk'];
@@ -26,18 +27,19 @@ const jetbrainsMono = JetBrains_Mono({
   display: 'swap',
 });
 
-export async function generateMetadata({params}: {params: Promise<{locale: string}>}) {
+export async function generateMetadata({params}: {params: Promise<{locale: string}>}): Promise<Metadata> {
   const {locale} = await params;
   try {
     const t = getScopedTranslator(locale, 'Layout');
+    const config = await getSiteConfig();
     return {
-      title: t('title'),
+      title: config.leagueName || t('title'),
       description: t('description'),
     };
   } catch(e) {
     return {
-      title: 'Error',
-      description: 'Error'
+      title: 'Sleeper Fantasy Analytics',
+      description: 'Fantasy football analytics dashboard'
     };
   }
 }
@@ -57,9 +59,10 @@ export default async function RootLayout({
 
   const messages = getDictionary(locale);
   const t = getScopedTranslator(locale, 'Layout');
+  const config = await getSiteConfig();
 
   const navLabels = {
-    title: t('title'),
+    title: config.leagueName || t('title'),
     dashboard: t('dashboard'),
     schedule: t('schedule'),
     news: t('news'),
@@ -75,7 +78,11 @@ export default async function RootLayout({
       <body className="text-slate-100 antialiased selection:bg-cyan-500/30 selection:text-cyan-200">
         <TranslationProvider messages={messages}>
           <div className="flex flex-col min-h-screen">
-            <NavbarClient locale={locale} labels={navLabels} />
+            <NavbarClient
+              locale={locale}
+              labels={navLabels}
+              newsletterEnabled={config.newsletterEnabled}
+            />
 
             <main className="flex-grow p-4 sm:p-6 md:p-8 max-w-7xl mx-auto w-full overflow-x-hidden">
               {children}

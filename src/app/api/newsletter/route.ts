@@ -2,19 +2,23 @@ import { NextResponse } from 'next/server';
 import { generateObject } from 'ai';
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import { z } from 'zod';
-import { getLeagueData, getMatchups, getUsers, getRosters } from '@/lib/sleeper-api';
+import { getSiteConfig, DEFAULT_NEWSLETTER_PERSONA } from '@/lib/site-config';
+import { isAdminAuthenticated } from '@/lib/admin-auth';
+import { buildWeeklyNewsletterTelemetry } from '@/lib/newsletter-telemetry';
 
 const NewsletterSchema = z.object({
   leadStory: z.object({
     headline: z.string(),
     content: z.string(),
   }),
-  matchups: z.array(z.object({
-    teamA: z.string(),
-    teamB: z.string(),
-    scoreText: z.string(),
-    recap: z.string(),
-  })),
+  matchups: z.array(
+    z.object({
+      teamA: z.string(),
+      teamB: z.string(),
+      scoreText: z.string(),
+      recap: z.string(),
+    })
+  ),
   awards: z.object({
     honorRoll: z.string(),
     detention: z.string(),
@@ -22,146 +26,359 @@ const NewsletterSchema = z.object({
     faabFool: z.string(),
     whatIfMachine: z.string(),
   }),
-  powerRankings: z.array(z.object({
-    team: z.string(),
-    rank: z.number(),
-    blurb: z.string()
-  })),
+  powerRankings: z.array(
+    z.object({
+      team: z.string(),
+      rank: z.number(),
+      blurb: z.string(),
+    })
+  ),
   nextVictim: z.string(),
   horoscope: z.string(),
   anecdote: z.string(),
 });
 
+const JSON_STRUCTURE_GUIDE = `{
+  "leadStory": { "headline": "string", "content": "string" },
+  "matchups": [{ "teamA": "string", "teamB": "string", "scoreText": "Team A 120.5 - 90.2 Team B", "recap": "string" }],
+  "awards": {
+    "honorRoll": "string",
+    "detention": "string",
+    "fraudWatch": "string",
+    "faabFool": "string",
+    "whatIfMachine": "string"
+  },
+  "powerRankings": [{ "team": "string", "rank": 1, "blurb": "string" }],
+  "nextVictim": "string",
+  "horoscope": "string",
+  "anecdote": "string"
+}`;
+
 export const runtime = 'edge';
+
+function extractJsonObject(text: string): any {
+  const trimmed = text.trim();
+  const fenced = trimmed.match(/```(?:json)?\s*([\s\S]*?)```/i);
+  const candidate = fenced ? fenced[1].trim() : trimmed;
+  const firstBrace = candidate.indexOf('{');
+  const lastBrace = candidate.lastIndexOf('}');
+  if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
+    return JSON.parse(candidate.slice(firstBrace, lastBrace + 1));
+  }
+  return JSON.parse(candidate);
+}
+
+// Public GET endpoint to fetch deterministic weekly telemetry (for hydrating legacy archives)
+export async function GET(req: Request) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const config = await getSiteConfig();
+    const leagueId = searchParams.get('leagueId') || config.leagueId;
+    const week = Number(searchParams.get('week'));
+
+    if (!leagueId || !week) {
+      return NextResponse.json({ success: false, error: 'Missing leagueId or week' }, { status: 400 });
+    }
+
+    const meta = await buildWeeklyNewsletterTelemetry(leagueId, week);
+    return NextResponse.json({ success: true, meta });
+  } catch (error: any) {
+    return NextResponse.json(
+      { success: false, error: error.message || String(error) },
+      { status: 500 }
+    );
+  }
+}
 
 export async function POST(req: Request) {
   try {
-    const { leagueId, week, locale } = await req.json();
+    const authed = await isAdminAuthenticated();
+    if (!authed) {
+      return NextResponse.json(
+        { error: 'Unauthorized: Please sign in as Admin to generate newsletters.' },
+        { status: 401 }
+      );
+    }
+
+    const body = await req.json();
+    const config = await getSiteConfig();
+
+    const leagueId = body.leagueId || config.leagueId;
+    const week = Number(body.week);
+    const locale = body.locale || 'en';
+    const commissionerNotes = typeof body.commissionerNotes === 'string' ? body.commissionerNotes.trim() : '';
+    const regenerateSection = typeof body.regenerateSection === 'string' ? body.regenerateSection : '';
 
     if (!leagueId || !week) {
       return NextResponse.json({ error: 'Missing leagueId or week' }, { status: 400 });
     }
 
-    // 1. Gather Context
-    const [leagueData, matchups, users, rosters] = await Promise.all([
-      getLeagueData(leagueId),
-      getMatchups(leagueId, week),
-      getUsers(leagueId),
-      getRosters(leagueId)
-    ]);
-    
-    const userMap = new Map();
-    for (const u of users) userMap.set(u.user_id, u.display_name);
-    
-    const rosterMap = new Map();
-    for (const r of rosters) {
-      const managerName = r.owner_id ? userMap.get(r.owner_id) : `Team ${r.roster_id}`;
-      rosterMap.set(r.roster_id, managerName);
+    if (!config.newsletterEnabled) {
+      return NextResponse.json(
+        { error: 'Newsletter feature is currently disabled in Admin settings.' },
+        { status: 403 }
+      );
     }
 
-    const matchupGroups = new Map();
-    for (const match of matchups) {
-       if (!matchupGroups.has(match.matchup_id)) {
-         matchupGroups.set(match.matchup_id, []);
-       }
-       matchupGroups.get(match.matchup_id).push(match);
+    const apiKey = config.llmApiKey;
+    if (!apiKey) {
+      return NextResponse.json(
+        {
+          error: `LLM API Key is not configured for provider "${config.llmProvider}". Please set it in the Admin Dashboard or environment variables.`,
+        },
+        { status: 400 }
+      );
     }
-    
-    const matchupsList = [];
-    let highestScorer = { team: '', points: -1 };
-    let lowestScorer = { team: '', points: 9999 };
-    let biggestBlowout = { diff: -1, winner: '', loser: '' };
-    
-    for (const [matchupId, teams] of Array.from(matchupGroups.entries())) {
-      if (teams.length !== 2) continue;
-      
-      const t1 = teams[0];
-      const t2 = teams[1];
-      
-      const t1Name = rosterMap.get(t1.roster_id);
-      const t2Name = rosterMap.get(t2.roster_id);
-      
-      const p1 = (t1.points || 0) + (t1.custom_points || 0);
-      const p2 = (t2.points || 0) + (t2.custom_points || 0);
 
-      matchupsList.push({ teamA: t1Name, teamB: t2Name, scoreA: p1, scoreB: p2 });
+    // 1. Gather comprehensive Week-accurate Telemetry
+    const meta = await buildWeeklyNewsletterTelemetry(leagueId, week);
 
-      if (p1 > highestScorer.points) highestScorer = { team: t1Name, points: p1 };
-      if (p2 > highestScorer.points) highestScorer = { team: t2Name, points: p2 };
-      
-      if (p1 < lowestScorer.points) lowestScorer = { team: t1Name, points: p1 };
-      if (p2 < lowestScorer.points) lowestScorer = { team: t2Name, points: p2 };
+    const promptContext = {
+      week: meta.week,
+      pulse: {
+        highestScorer: {
+          team: meta.pulse.highestScorer.team,
+          points: meta.pulse.highestScorer.points,
+          opponent: meta.pulse.highestScorer.opponent,
+        },
+        lowestScorer: {
+          team: meta.pulse.lowestScorer.team,
+          points: meta.pulse.lowestScorer.points,
+          opponent: meta.pulse.lowestScorer.opponent,
+        },
+        biggestBlowout: {
+          winner: meta.pulse.biggestBlowout.winner,
+          loser: meta.pulse.biggestBlowout.loser,
+          score: `${meta.pulse.biggestBlowout.winnerPoints} - ${meta.pulse.biggestBlowout.loserPoints}`,
+          margin: meta.pulse.biggestBlowout.margin,
+        },
+        closestGame: {
+          winner: meta.pulse.closestGame.winner,
+          loser: meta.pulse.closestGame.loser,
+          score: `${meta.pulse.closestGame.winnerPoints} - ${meta.pulse.closestGame.loserPoints}`,
+          margin: meta.pulse.closestGame.margin,
+        },
+        benchKing: {
+          team: meta.pulse.benchKing.team,
+          benchPointsLeftOnTable: meta.pulse.benchKing.benchPoints,
+          topBenchPlayer: meta.pulse.benchKing.topBenchPlayer
+            ? `${meta.pulse.benchKing.topBenchPlayer.name} (${meta.pulse.benchKing.topBenchPlayer.points} pts)`
+            : null,
+        },
+      },
+      matchups: meta.matchups.map((m) => ({
+        teamA: m.teamA,
+        teamARecord: m.teamARecord,
+        scoreA: m.scoreA,
+        benchPointsA: m.benchPointsA,
+        mvpStarterA: m.mvpStarterA?.isNamed ? `${m.mvpStarterA.name} (${m.mvpStarterA.points} pts)` : null,
+        worstStarterA: m.worstStarterA?.isNamed ? `${m.worstStarterA.name} (${m.worstStarterA.points} pts)` : null,
+        bestBenchA: m.bestBenchA?.isNamed ? `${m.bestBenchA.name} (${m.bestBenchA.points} pts)` : null,
+        teamB: m.teamB,
+        teamBRecord: m.teamBRecord,
+        scoreB: m.scoreB,
+        benchPointsB: m.benchPointsB,
+        mvpStarterB: m.mvpStarterB?.isNamed ? `${m.mvpStarterB.name} (${m.mvpStarterB.points} pts)` : null,
+        worstStarterB: m.worstStarterB?.isNamed ? `${m.worstStarterB.name} (${m.worstStarterB.points} pts)` : null,
+        bestBenchB: m.bestBenchB?.isNamed ? `${m.bestBenchB.name} (${m.bestBenchB.points} pts)` : null,
+        winner: m.winner,
+        loser: m.loser,
+        margin: m.margin,
+        whatIfFlip: m.whatIfFlip,
+      })),
+      standingsAsOfWeek: meta.standings.map((s) => ({
+        rank: s.standingsRank,
+        rankChangeFromLastWeek:
+          s.rankDelta > 0 ? `+${s.rankDelta}` : s.rankDelta < 0 ? `${s.rankDelta}` : '0',
+        team: s.team,
+        record: s.record,
+        allPlayRecord: s.allPlayRecord,
+        streak: s.streak,
+        totalFpts: s.fpts,
+        weekScore: s.weekScore,
+        weekBenchPoints: s.weekBenchPoints,
+      })),
+      waiverAndTradeActivity: meta.transactions.map((t) => t.summary),
+      nextWeekUpcomingMatchups: meta.nextWeekMatchups.map(
+        (n) => `${n.teamA} (${n.teamARecord}, ${n.teamAFpts} PF) vs ${n.teamB} (${n.teamBRecord}, ${n.teamBFpts} PF)`
+      ),
+    };
 
-      const diff = Math.abs(p1 - p2);
-      const winner = p1 > p2 ? t1Name : t2Name;
-      const loser = p1 > p2 ? t2Name : t1Name;
-      
-      if (diff > biggestBlowout.diff) biggestBlowout = { diff, winner, loser };
-    }
-    
-    const currentStandings = [...leagueData].sort((a, b) => b.fpts - a.fpts).map((t, i) => ({
-      team: t.displayName,
-      fpts: t.fpts,
-      wins: t.wins,
-      losses: t.losses
-    }));
+    const statsContext = JSON.stringify(promptContext, null, 2);
 
-    const statsContext = JSON.stringify({
-      week,
-      matchups: matchupsList,
-      highestScorer,
-      lowestScorer,
-      biggestBlowout,
-      currentStandings
-    }, null, 2);
+    const languageInstruction =
+      locale === 'uk'
+        ? 'You MUST write the ENTIRE newsletter in Ukrainian. The tone should still be deeply cynical, witty, and frustrated, using natural Ukrainian sports/fantasy idioms and humor.'
+        : 'Write the newsletter in English.';
 
-    const languageInstruction = locale === 'uk' 
-      ? "You MUST write the ENTIRE newsletter in Ukrainian. The tone should still be deeply cynical, witty, and frustrated, using appropriate Ukrainian slang or idioms for sports frustration." 
-      : "Write the newsletter in English.";
+    const personaInstruction = config.newsletterPersona?.trim() || DEFAULT_NEWSLETTER_PERSONA;
+
+    const commissionerBlock = commissionerNotes
+      ? `\nCOMMISSIONER'S INSIDER NOTES & WEEKLY STORYLINES (MUST weave these facts/jokes naturally into the Lead Story or relevant sections):\n"""\n${commissionerNotes}\n"""\n`
+      : '';
+
+    const rerollInstruction = regenerateSection
+      ? `\nSPECIAL INSTRUCTION: The editor requested a fresh, sharper, funnier rewrite specifically for the "${regenerateSection}" section. Give it a brand-new angle and punchier jokes!\n`
+      : '';
 
     const prompt = `
-    You are a witty, slightly cynical, and deeply frustrated fantasy football beat writer.
-    Write a weekly recap based on the following stats for Week ${week}.
-    The core theme of this newsletter is "???????" (burning / raging / utter meltdown). We "burn" because of how painfully unpredictable, unfair, and frustrating fantasy football is. Focus heavily on bad beats, fluke performances, bench points that ruined everything, and the sheer agony of managing these teams.
-    Keep it humorous, engaging, and absolutely ruthless. Embrace the chaos and the "???????".
-    
-    ${languageInstruction}
+${personaInstruction}
+${commissionerBlock}
+${rerollInstruction}
 
-    Stats Context:
-    ${statsContext}
+Write a weekly recap based strictly on the following verified telemetry for Week ${week}.
+${languageInstruction}
 
-    Generate the following sections:
-    1. Lead Story: A dramatic narrative about the biggest event this week.
-    2. Matchups: A short, punchy recap for every single matchup in the list. ScoreText should be formatted like "Team A 120.5 - 90.2 Team B".
-    3. Awards: 
-        - Honor Roll: Give a shoutout to the highest scorer.
-        - Detention: Roast the lowest scorer.
-        - Fraud Watch: Identify a team with a good record but low points, or someone who won a terrible game.
-        - FAAB Fool: Roast someone's terrible waiver wire decision or bench/starter mismanagement.
-        - What If Machine: Show how a losing team could have won if they made a different choice.
-    4. Power Rankings: Rank the teams based on current standings, with a snarky 1-sentence blurb for each.
-    5. Next Victim: A bold prediction about who is going to get absolutely demolished in the upcoming week.
-    6. Horoscope: A funny, completely unhelpful fantasy football horoscope for the managers.
-    7. Anecdote: A brief, bizarre, out-of-context story or quote to end the newsletter on a chaotic note.
-    `;
+CRITICAL ACCURACY RULES (NO HALLUCINATIONS):
+- Only cite real manager names, scores, records, streaks, player names, bench points, and transactions present in the Stats Context below. Do NOT invent fake player names or fake waiver pickups.
+- Keep "matchups" in the exact same order as provided in Stats Context, with "teamA" and "teamB" matching the exact manager display names.
 
-    const env = process.env as any;
-    const apiKey = env.GOOGLE_GENERATIVE_AI_API_KEY || '';
-    
-    if (!apiKey) {
-      return NextResponse.json({ error: 'API Key is missing on the server! process.env is empty.' }, { status: 400 });
+Stats Context:
+${statsContext}
+
+Generate the following sections:
+1. Lead Story: A dramatic, multi-paragraph front-page narrative covering the biggest storyline of Week ${week} (e.g., the biggest blowout, nail-biter, top scorer, or standings shakeup).
+2. Matchups: A punchy, entertaining recap for every single matchup in the list. Reference actual MVP starters, dud starters, or bench blunders where provided. ScoreText MUST be formatted as "Team A 120.5 - 90.2 Team B".
+3. Awards:
+    - Honor Roll: Shoutout to the highest scorer (${meta.pulse.highestScorer.team} with ${meta.pulse.highestScorer.points} pts) and their top performers.
+    - Detention: Roast the lowest scorer (${meta.pulse.lowestScorer.team} with ${meta.pulse.lowestScorer.points} pts) and their worst starter duds.
+    - Fraud Watch: Call out a team whose actual record is inflated compared to their All-Play record / points scored, or someone who won an ugly low-scoring game.
+    - FAAB Fool: Roast a real transaction from "waiverAndTradeActivity" (especially wasted FAAB or dropping someone who scored points) OR roast the "benchKing" (${meta.pulse.benchKing.team} leaving ${meta.pulse.benchKing.benchPoints} pts on the bench) if no waiver moves occurred.
+    - What If Machine: Use the verified "whatIfFlip" lineup blunder from the matchups if one exists; otherwise highlight the most painful bench vs. starter decision from the week.
+4. Power Rankings: Rank all teams 1 to ${meta.standings.length} based on "standingsAsOfWeek", referencing their streak, rank movement, or points trend in a snarky 1-2 sentence blurb.
+5. Next Victim: Pick a real upcoming Week ${week + 1} matchup from "nextWeekUpcomingMatchups" and make a bold, ruthless prediction about who is getting demolished.
+6. Horoscope: A funny, fatalistic fantasy football horoscope for the league managers.
+7. Anecdote: A brief, chaotic parting thought or press-conference-style quote to close the issue.
+`;
+
+    const provider = config.llmProvider || 'google';
+    const rawModel =
+      config.llmModel ||
+      (provider === 'google'
+        ? 'gemini-3.8-flash'
+        : provider === 'openai'
+        ? 'gpt-4o-mini'
+        : provider === 'anthropic'
+        ? 'claude-3-5-sonnet-latest'
+        : 'openai/gpt-4o-mini');
+    const modelName =
+      provider === 'google' && (rawModel === 'gemini-2.5-flash' || rawModel === 'gemini-2.0-flash')
+        ? 'gemini-3.8-flash'
+        : rawModel;
+
+    if (provider === 'google') {
+      const googleProvider = createGoogleGenerativeAI({
+        apiKey,
+        ...(config.llmBaseUrl ? { baseURL: config.llmBaseUrl } : {}),
+      });
+
+      const { object } = await generateObject({
+        model: googleProvider(modelName),
+        schema: NewsletterSchema,
+        prompt,
+      });
+
+      return NextResponse.json({
+        ...object,
+        ...(commissionerNotes ? { commissionerNotes } : {}),
+        meta,
+      });
     }
 
-    const googleProvider = createGoogleGenerativeAI({ apiKey });
+    if (provider === 'openai' || provider === 'openrouter') {
+      const defaultBaseUrl =
+        provider === 'openrouter'
+          ? 'https://openrouter.ai/api/v1'
+          : 'https://api.openai.com/v1';
+      const baseUrl = (config.llmBaseUrl || defaultBaseUrl).replace(/\/+$/, '');
 
-    const { object } = await generateObject({
-      model: googleProvider('gemini-3.8-flash'),
-      schema: NewsletterSchema,
-      prompt,
-    });
+      const res = await fetch(`${baseUrl}/chat/completions`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${apiKey}`,
+        },
+        body: JSON.stringify({
+          model: modelName,
+          response_format: { type: 'json_object' },
+          messages: [
+            {
+              role: 'system',
+              content: `You are a fantasy football newsletter generator. Respond ONLY with a valid JSON object matching this exact structure:\n${JSON_STRUCTURE_GUIDE}`,
+            },
+            {
+              role: 'user',
+              content: prompt,
+            },
+          ],
+        }),
+      });
 
-    return NextResponse.json(object);
+      if (!res.ok) {
+        const errText = await res.text();
+        throw new Error(`${provider.toUpperCase()} API Error (${res.status}): ${errText}`);
+      }
+
+      const completion = await res.json();
+      const rawContent = completion?.choices?.[0]?.message?.content;
+      if (!rawContent) {
+        throw new Error('Empty response from LLM provider');
+      }
+
+      const parsed = NewsletterSchema.parse(extractJsonObject(rawContent));
+      return NextResponse.json({
+        ...parsed,
+        ...(commissionerNotes ? { commissionerNotes } : {}),
+        meta,
+      });
+    }
+
+    if (provider === 'anthropic') {
+      const baseUrl = (config.llmBaseUrl || 'https://api.anthropic.com/v1').replace(/\/+$/, '');
+      const res = await fetch(`${baseUrl}/messages`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': apiKey,
+          'anthropic-version': '2023-06-01',
+        },
+        body: JSON.stringify({
+          model: modelName,
+          max_tokens: 4096,
+          system: `You are a fantasy football newsletter generator. Respond ONLY with a valid JSON object matching this exact structure (no markdown commentary):\n${JSON_STRUCTURE_GUIDE}`,
+          messages: [
+            {
+              role: 'user',
+              content: prompt,
+            },
+          ],
+        }),
+      });
+
+      if (!res.ok) {
+        const errText = await res.text();
+        throw new Error(`Anthropic API Error (${res.status}): ${errText}`);
+      }
+
+      const data = await res.json();
+      const rawText = data?.content?.[0]?.text;
+      if (!rawText) {
+        throw new Error('Empty response from Anthropic API');
+      }
+
+      const parsed = NewsletterSchema.parse(extractJsonObject(rawText));
+      return NextResponse.json({
+        ...parsed,
+        ...(commissionerNotes ? { commissionerNotes } : {}),
+        meta,
+      });
+    }
+
+    return NextResponse.json({ error: `Unsupported LLM provider: ${provider}` }, { status: 400 });
   } catch (error: any) {
-    return NextResponse.json({ error: `Server Error: ${error.message || String(error)}` }, { status: 500 });
+    return NextResponse.json(
+      { error: `Server Error: ${error.message || String(error)}` },
+      { status: 500 }
+    );
   }
 }

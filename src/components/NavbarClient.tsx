@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Trophy, Activity, ArrowRightLeft, History, CalendarDays, Swords, Search, Newspaper } from 'lucide-react';
+import { Trophy, Activity, ArrowRightLeft, History, CalendarDays, Swords, Search, Newspaper, Settings } from 'lucide-react';
 import { RefreshButton } from '@/components/RefreshButton';
 
 interface NavLabels {
@@ -19,10 +19,12 @@ interface NavLabels {
 
 export default function NavbarClient({
   locale,
-  labels
+  labels,
+  newsletterEnabled = true,
 }: {
   locale: string;
   labels: NavLabels;
+  newsletterEnabled?: boolean;
 }) {
   const pathname = usePathname() || `/${locale}`;
 
@@ -36,21 +38,25 @@ export default function NavbarClient({
     return `/${targetLocale}`;
   };
 
-  const navItems = [
-    { href: `/${locale}`, label: labels.dashboard, icon: Trophy, exact: true, activeColor: 'text-emerald-300 bg-emerald-500/15 border-emerald-500/40 shadow-[0_0_12px_rgba(16,185,129,0.2)]' },
-    { href: `/${locale}/schedule`, label: labels.schedule, icon: CalendarDays, exact: false, activeColor: 'text-blue-300 bg-blue-500/15 border-blue-500/40 shadow-[0_0_12px_rgba(59,130,246,0.2)]' },
-    { href: `/${locale}/news`, label: labels.news, icon: Newspaper, exact: false, activeColor: 'text-orange-300 bg-orange-500/15 border-orange-500/40 shadow-[0_0_12px_rgba(249,115,22,0.2)]' },
-    { href: `/${locale}/true-standings`, label: labels.trueStandings, icon: Activity, exact: false, activeColor: 'text-cyan-300 bg-cyan-500/15 border-cyan-500/40 shadow-[0_0_12px_rgba(6,182,212,0.2)]' },
-    { href: `/${locale}/multiverse`, label: labels.multiverse, icon: ArrowRightLeft, exact: false, activeColor: 'text-purple-300 bg-purple-500/15 border-purple-500/40 shadow-[0_0_12px_rgba(168,85,247,0.2)]' },
-    { href: `/${locale}/rivalries`, label: labels.rivalries, icon: Swords, exact: false, activeColor: 'text-rose-300 bg-rose-500/15 border-rose-500/40 shadow-[0_0_12px_rgba(244,63,94,0.2)]' },
-    { href: `/${locale}/draft-report`, label: labels.draftReport, icon: Search, exact: false, activeColor: 'text-amber-300 bg-amber-500/15 border-amber-500/40 shadow-[0_0_12px_rgba(245,158,11,0.2)]' },
-    { href: `/${locale}/history`, label: labels.history, icon: History, exact: false, activeColor: 'text-yellow-300 bg-yellow-500/15 border-yellow-500/40 shadow-[0_0_12px_rgba(234,179,8,0.2)]' },
+  const allNavItems = [
+    { href: `/${locale}`, label: labels.dashboard, icon: Trophy, exact: true, show: true, activeColor: 'text-emerald-300 bg-emerald-500/15 border-emerald-500/40 shadow-[0_0_12px_rgba(16,185,129,0.2)]' },
+    { href: `/${locale}/schedule`, label: labels.schedule, icon: CalendarDays, exact: false, show: true, activeColor: 'text-blue-300 bg-blue-500/15 border-blue-500/40 shadow-[0_0_12px_rgba(59,130,246,0.2)]' },
+    { href: `/${locale}/news`, label: labels.news, icon: Newspaper, exact: false, show: newsletterEnabled, activeColor: 'text-orange-300 bg-orange-500/15 border-orange-500/40 shadow-[0_0_12px_rgba(249,115,22,0.2)]' },
+    { href: `/${locale}/true-standings`, label: labels.trueStandings, icon: Activity, exact: false, show: true, activeColor: 'text-cyan-300 bg-cyan-500/15 border-cyan-500/40 shadow-[0_0_12px_rgba(6,182,212,0.2)]' },
+    { href: `/${locale}/multiverse`, label: labels.multiverse, icon: ArrowRightLeft, exact: false, show: true, activeColor: 'text-purple-300 bg-purple-500/15 border-purple-500/40 shadow-[0_0_12px_rgba(168,85,247,0.2)]' },
+    { href: `/${locale}/rivalries`, label: labels.rivalries, icon: Swords, exact: false, show: true, activeColor: 'text-rose-300 bg-rose-500/15 border-rose-500/40 shadow-[0_0_12px_rgba(244,63,94,0.2)]' },
+    { href: `/${locale}/draft-report`, label: labels.draftReport, icon: Search, exact: false, show: true, activeColor: 'text-amber-300 bg-amber-500/15 border-amber-500/40 shadow-[0_0_12px_rgba(245,158,11,0.2)]' },
+    { href: `/${locale}/history`, label: labels.history, icon: History, exact: false, show: true, activeColor: 'text-yellow-300 bg-yellow-500/15 border-yellow-500/40 shadow-[0_0_12px_rgba(234,179,8,0.2)]' },
   ];
+
+  const navItems = allNavItems.filter((item) => item.show);
 
   const isActive = (href: string, exact: boolean) => {
     if (exact) return pathname === href || pathname === `${href}/`;
     return pathname.startsWith(href);
   };
+
+  const isAdminActive = pathname.startsWith(`/${locale}/admin`) || pathname.startsWith(`/${locale}/newsletter`);
 
   return (
     <header className="glass-panel sticky top-0 z-40 rounded-none border-t-0 border-x-0 border-b border-white/10">
@@ -92,9 +98,20 @@ export default function NavbarClient({
           })}
         </nav>
 
-        {/* Right: Refresh Button + EN/UK Switcher (Far Right, Vertically Aligned) */}
+        {/* Right: Refresh Button + Admin Settings + EN/UK Switcher */}
         <div className="flex items-center gap-2 shrink-0">
           <RefreshButton />
+          <Link
+            href={`/${locale}/admin`}
+            title={locale === 'uk' ? 'Налаштування Адміна' : 'Admin Settings'}
+            className={`h-9 w-9 flex items-center justify-center rounded-lg border transition-all ${
+              isAdminActive
+                ? 'bg-cyan-500/20 border-cyan-500/50 text-cyan-300 shadow-[0_0_12px_rgba(6,182,212,0.25)]'
+                : 'bg-slate-950/80 border-white/10 text-slate-400 hover:text-white hover:border-white/20'
+            }`}
+          >
+            <Settings className="w-4 h-4" />
+          </Link>
           <div className="h-9 flex items-center bg-slate-950/80 rounded-lg p-1 border border-white/10">
             <Link
               href={getLocalizedPath('en')}

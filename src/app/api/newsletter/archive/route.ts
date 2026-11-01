@@ -1,18 +1,7 @@
 import { NextResponse } from 'next/server';
-import { getRequestContext } from '@cloudflare/next-on-pages';
+import { getArchivedNewsletter } from '@/app/[locale]/newsletter/storage-actions';
 
 export const runtime = 'edge';
-
-function getKV() {
-  try {
-    const env = getRequestContext().env as any;
-    if (env && env.NEWSLETTERS) {
-      return env.NEWSLETTERS;
-    }
-  } catch (e) {
-  }
-  return null;
-}
 
 export async function GET(req: Request) {
   try {
@@ -24,16 +13,9 @@ export async function GET(req: Request) {
       return NextResponse.json({ success: false, error: 'Missing leagueId or week' }, { status: 400 });
     }
 
-    const kv = getKV();
-    if (!kv) {
-      return NextResponse.json({ success: false, error: 'KV not available.' }, { status: 500 });
-    }
-
-    const key = `newsletter:${leagueId}:week:${week}`;
-    const content = await kv.get(key);
-    
-    if (content) {
-      return NextResponse.json({ success: true, data: JSON.parse(content) });
+    const data = await getArchivedNewsletter(leagueId, Number(week));
+    if (data) {
+      return NextResponse.json({ success: true, data });
     } else {
       return NextResponse.json({ success: false, error: 'Not found' }, { status: 404 });
     }
