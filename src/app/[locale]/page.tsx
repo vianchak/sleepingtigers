@@ -53,7 +53,7 @@ export default async function DashboardHome({params}: {params: Promise<{locale: 
       pastelIcon: 'bg-sky-200/10 text-sky-200 border-sky-200/25',
       pastelTag: 'text-sky-200 border-sky-200/30',
       extraStat: badges.benchWhisperer
-        ? `${Math.max(0, badges.benchWhisperer.team.ppts - badges.benchWhisperer.team.fpts).toFixed(1)} ${locale === 'uk' ? 'На лавці' : 'Bench PTS'}`
+        ? `${Math.max(0, badges.benchWhisperer.team.ppts - badges.benchWhisperer.team.fpts).toFixed(1)} PTS`
         : undefined,
     },
     {
@@ -385,11 +385,11 @@ export default async function DashboardHome({params}: {params: Promise<{locale: 
                 <div>
                   {/* Top Ledger Index Row */}
                   <div className="flex items-center justify-between gap-2 pb-2.5 mb-3 border-b border-dashed border-white/10">
-                    <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-zinc-400">
+                    <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-zinc-400 truncate">
                       {b.code} // {b.stamp}
                     </span>
                     {b.extraStat && (
-                      <span className={`text-[11px] font-mono font-bold px-2 py-0.5 rounded bg-[#111318] border ${b.pastelTag}`}>
+                      <span className={`text-[11px] font-mono font-bold px-2 py-0.5 rounded bg-[#111318] border whitespace-nowrap shrink-0 ${b.pastelTag}`}>
                         {b.extraStat}
                       </span>
                     )}
