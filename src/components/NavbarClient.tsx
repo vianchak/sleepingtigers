@@ -2,7 +2,18 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Trophy, Activity, ArrowRightLeft, History, CalendarDays, Swords, Search, Newspaper, Settings } from 'lucide-react';
+import {
+  Trophy,
+  Activity,
+  ArrowRightLeft,
+  History,
+  CalendarDays,
+  Swords,
+  Search,
+  Newspaper,
+  Settings,
+  Receipt,
+} from 'lucide-react';
 import { RefreshButton } from '@/components/RefreshButton';
 
 interface NavLabels {
@@ -39,14 +50,14 @@ export default function NavbarClient({
   };
 
   const allNavItems = [
-    { href: `/${locale}`, label: labels.dashboard, icon: Trophy, exact: true, show: true, activeColor: 'text-emerald-300 bg-emerald-500/15 border-emerald-500/40 shadow-[0_0_12px_rgba(16,185,129,0.2)]' },
-    { href: `/${locale}/schedule`, label: labels.schedule, icon: CalendarDays, exact: false, show: true, activeColor: 'text-blue-300 bg-blue-500/15 border-blue-500/40 shadow-[0_0_12px_rgba(59,130,246,0.2)]' },
-    { href: `/${locale}/news`, label: labels.news, icon: Newspaper, exact: false, show: newsletterEnabled, activeColor: 'text-orange-300 bg-orange-500/15 border-orange-500/40 shadow-[0_0_12px_rgba(249,115,22,0.2)]' },
-    { href: `/${locale}/true-standings`, label: labels.trueStandings, icon: Activity, exact: false, show: true, activeColor: 'text-cyan-300 bg-cyan-500/15 border-cyan-500/40 shadow-[0_0_12px_rgba(6,182,212,0.2)]' },
-    { href: `/${locale}/multiverse`, label: labels.multiverse, icon: ArrowRightLeft, exact: false, show: true, activeColor: 'text-purple-300 bg-purple-500/15 border-purple-500/40 shadow-[0_0_12px_rgba(168,85,247,0.2)]' },
-    { href: `/${locale}/rivalries`, label: labels.rivalries, icon: Swords, exact: false, show: true, activeColor: 'text-rose-300 bg-rose-500/15 border-rose-500/40 shadow-[0_0_12px_rgba(244,63,94,0.2)]' },
-    { href: `/${locale}/draft-report`, label: labels.draftReport, icon: Search, exact: false, show: true, activeColor: 'text-amber-300 bg-amber-500/15 border-amber-500/40 shadow-[0_0_12px_rgba(245,158,11,0.2)]' },
-    { href: `/${locale}/history`, label: labels.history, icon: History, exact: false, show: true, activeColor: 'text-yellow-300 bg-yellow-500/15 border-yellow-500/40 shadow-[0_0_12px_rgba(234,179,8,0.2)]' },
+    { code: '01', href: `/${locale}`, label: labels.dashboard, icon: Trophy, exact: true, show: true },
+    { code: '02', href: `/${locale}/schedule`, label: labels.schedule, icon: CalendarDays, exact: false, show: true },
+    { code: '03', href: `/${locale}/news`, label: labels.news, icon: Newspaper, exact: false, show: newsletterEnabled },
+    { code: '04', href: `/${locale}/true-standings`, label: labels.trueStandings, icon: Activity, exact: false, show: true },
+    { code: '05', href: `/${locale}/multiverse`, label: labels.multiverse, icon: ArrowRightLeft, exact: false, show: true },
+    { code: '06', href: `/${locale}/rivalries`, label: labels.rivalries, icon: Swords, exact: false, show: true },
+    { code: '07', href: `/${locale}/draft-report`, label: labels.draftReport, icon: Search, exact: false, show: true },
+    { code: '08', href: `/${locale}/history`, label: labels.history, icon: History, exact: false, show: true },
   ];
 
   const navItems = allNavItems.filter((item) => item.show);
@@ -59,39 +70,41 @@ export default function NavbarClient({
   const isAdminActive = pathname.startsWith(`/${locale}/admin`) || pathname.startsWith(`/${locale}/newsletter`);
 
   return (
-    <header className="glass-panel sticky top-0 z-40 rounded-none border-t-0 border-x-0 border-b border-white/10">
-      <div className="w-full max-w-[1600px] mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-3">
+    <header className="sticky top-0 z-40 w-full bg-[#090a0c]/95 backdrop-blur-md border-b border-white/12">
+      <div className="w-full max-w-[1600px] mx-auto px-3 sm:px-6 h-16 flex items-center justify-between gap-3">
         {/* Left: Brand Logo */}
         <Link href={`/${locale}`} className="flex items-center gap-2.5 group shrink-0">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-500 via-teal-400 to-cyan-400 flex items-center justify-center shadow-[0_0_18px_rgba(52,211,153,0.35)] group-hover:scale-105 transition-transform">
-            <Trophy className="w-5 h-5 text-slate-950 stroke-[2.5]" />
+          <div className="w-9 h-9 rounded-lg bg-[#c8ff00] flex items-center justify-center shadow-[0_0_20px_rgba(200,255,0,0.3)] group-hover:scale-105 transition-transform">
+            <Receipt className="w-5 h-5 text-[#090a0c] stroke-[2.5]" />
           </div>
-          <div className="hidden 2xl:block">
-            <h1 className="text-sm font-extrabold font-heading tracking-tight text-white group-hover:text-cyan-300 transition-colors leading-none whitespace-nowrap">
+          <div className="hidden xl:block">
+            <h1 className="text-sm font-black font-heading uppercase tracking-tight text-[#f4f1ea] group-hover:text-[#c8ff00] transition-colors leading-none whitespace-nowrap">
               {labels.title}
             </h1>
-            <span className="text-[9px] uppercase tracking-widest text-emerald-400/80 font-mono font-bold block mt-0.5">
-              {locale === 'uk' ? 'АНАЛІТИКА SLEEPER' : 'SLEEPER ANALYTICS'}
+            <span className="text-[10px] uppercase tracking-widest text-[#c8ff00] font-mono font-bold flex items-center gap-1 mt-0.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#c8ff00] inline-block" />
+              {locale === 'uk' ? 'АУДИТ ЛІГИ // LIVE' : 'LEAGUE AUDIT // LIVE'}
             </span>
           </div>
         </Link>
 
-        {/* Center: Single-Line Horizontal Menu */}
-        <nav className="hidden md:flex items-center flex-nowrap gap-1 bg-slate-950/80 p-1 rounded-xl border border-white/10">
+        {/* Center: Sportsbook Ledger Menu */}
+        <nav className="hidden md:flex items-center flex-nowrap gap-1 bg-[#111318] p-1 rounded-xl border border-white/10 min-w-0 overflow-x-auto no-scrollbar">
           {navItems.map((item) => {
             const active = isActive(item.href, item.exact);
-            const Icon = item.icon;
             return (
               <Link
                 key={item.href}
                 href={item.href}
-                className={`h-8 flex items-center gap-1.5 px-2.5 xl:px-3 rounded-lg text-xs xl:text-[13px] font-semibold whitespace-nowrap transition-all border ${
+                className={`h-8 flex items-center gap-1.5 px-2.5 xl:px-3 rounded-lg text-xs font-mono font-bold uppercase tracking-wide whitespace-nowrap transition-all shrink-0 ${
                   active
-                    ? item.activeColor
-                    : 'border-transparent text-slate-400 hover:text-slate-100 hover:bg-slate-800/60'
+                    ? 'bg-[#c8ff00] text-[#090a0c] shadow-[0_0_16px_rgba(200,255,0,0.28)]'
+                    : 'text-[#f4f1ea]/65 hover:text-[#f4f1ea] hover:bg-white/5'
                 }`}
               >
-                <Icon className="w-3.5 h-3.5 shrink-0 hidden xl:block" />
+                <span className={`text-[10px] hidden 2xl:inline ${active ? 'text-[#090a0c]/70' : 'text-[#c8ff00]/70'}`}>
+                  {item.code}
+                </span>
                 <span>{item.label}</span>
               </Link>
             );
@@ -106,19 +119,19 @@ export default function NavbarClient({
             title={locale === 'uk' ? 'Налаштування Адміна' : 'Admin Settings'}
             className={`h-9 w-9 flex items-center justify-center rounded-lg border transition-all ${
               isAdminActive
-                ? 'bg-cyan-500/20 border-cyan-500/50 text-cyan-300 shadow-[0_0_12px_rgba(6,182,212,0.25)]'
-                : 'bg-slate-950/80 border-white/10 text-slate-400 hover:text-white hover:border-white/20'
+                ? 'bg-[#c8ff00]/20 border-[#c8ff00]/60 text-[#c8ff00] shadow-[0_0_12px_rgba(200,255,0,0.25)]'
+                : 'bg-[#111318] border-white/10 text-white/60 hover:text-white hover:border-white/25'
             }`}
           >
             <Settings className="w-4 h-4" />
           </Link>
-          <div className="h-9 flex items-center bg-slate-950/80 rounded-lg p-1 border border-white/10">
+          <div className="h-9 flex items-center bg-[#111318] rounded-lg p-1 border border-white/10 font-mono">
             <Link
               href={getLocalizedPath('en')}
               className={`h-7 px-2.5 flex items-center justify-center rounded-md text-xs font-bold leading-none transition-all ${
                 locale === 'en'
-                  ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-slate-950 shadow-sm'
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-[#c8ff00] text-[#090a0c] shadow-sm'
+                  : 'text-white/55 hover:text-white'
               }`}
             >
               EN
@@ -127,8 +140,8 @@ export default function NavbarClient({
               href={getLocalizedPath('uk')}
               className={`h-7 px-2.5 flex items-center justify-center rounded-md text-xs font-bold leading-none transition-all ${
                 locale === 'uk'
-                  ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-slate-950 shadow-sm'
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-[#c8ff00] text-[#090a0c] shadow-sm'
+                  : 'text-white/55 hover:text-white'
               }`}
             >
               UK
@@ -138,21 +151,20 @@ export default function NavbarClient({
       </div>
 
       {/* Mobile Navigation Bar (< md) */}
-      <nav className="md:hidden flex items-center gap-1.5 px-3 pb-2.5 overflow-x-auto no-scrollbar border-t border-white/5 pt-2">
+      <nav className="md:hidden flex items-center gap-1.5 px-3 pb-2.5 overflow-x-auto no-scrollbar border-t border-white/10 pt-2 font-mono">
         {navItems.map((item) => {
           const active = isActive(item.href, item.exact);
-          const Icon = item.icon;
           return (
             <Link
               key={item.href}
               href={item.href}
-              className={`h-8 flex items-center gap-1.5 px-2.5 rounded-lg text-xs font-bold whitespace-nowrap border transition-all shrink-0 ${
+              className={`h-8 flex items-center gap-1.5 px-2.5 rounded-lg text-xs font-bold uppercase whitespace-nowrap border transition-all shrink-0 ${
                 active
-                  ? item.activeColor
-                  : 'border-slate-800 bg-slate-900/60 text-slate-400'
+                  ? 'bg-[#c8ff00] text-[#090a0c] border-[#c8ff00]'
+                  : 'border-white/10 bg-[#111318] text-white/65'
               }`}
             >
-              <Icon className="w-3.5 h-3.5 shrink-0" />
+              <span className="text-[10px] opacity-60">{item.code}</span>
               <span>{item.label}</span>
             </Link>
           );

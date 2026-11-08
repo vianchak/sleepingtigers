@@ -159,14 +159,16 @@ export default function ManagerDossierModal({
 
   return (
     <div className="mt-12 mb-12">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 border-b border-slate-700/50 pb-3 gap-2">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 border-b border-white/10 pb-3 gap-2">
         <div className="flex items-center gap-3">
-          <TrendingUp className="w-6 h-6 text-emerald-400" />
-          <h2 className="text-2xl font-bold font-heading text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-500">
+          <span className="px-2 py-0.5 rounded bg-[#c8ff00] text-[#090a0c] font-mono text-xs font-extrabold">
+            03
+          </span>
+          <h2 className="text-2xl font-extrabold font-heading uppercase tracking-tight text-white">
             {tHome('officialPowerRankings')}
           </h2>
         </div>
-        <div className="flex items-center gap-2 text-xs text-cyan-400 bg-cyan-500/10 border border-cyan-500/20 px-3 py-1.5 rounded-full">
+        <div className="flex items-center gap-2 text-xs font-mono text-[#c8ff00] bg-[#c8ff00]/10 border border-[#c8ff00]/30 px-3 py-1 rounded">
           <RadarIcon className="w-3.5 h-3.5 animate-pulse" />
           <span>{tDossier('clickHint')}</span>
         </div>
@@ -175,13 +177,13 @@ export default function ManagerDossierModal({
       <div className="glass-card overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm text-left">
-            <thead className="text-xs uppercase bg-slate-900/50 border-b border-slate-700">
+            <thead className="text-[11px] font-mono uppercase tracking-wider bg-[#090a0c] border-b border-white/10">
               <tr>
-                <th className="px-6 py-4 font-bold text-slate-300 text-center w-16">{tHome('rank')}</th>
-                <th className="px-6 py-4 font-bold text-slate-300">{tHome('manager')}</th>
-                <th className="px-6 py-4 font-bold text-slate-300 text-center hidden sm:table-cell">{tHome('powerScore')}</th>
-                <th className="px-6 py-4 font-bold text-slate-300 text-center hidden md:table-cell">{tHome('recentForm')}</th>
-                <th className="px-6 py-4 font-bold text-slate-300 text-right w-28"></th>
+                <th className="px-6 py-3.5 font-bold text-zinc-400 text-center w-16">{tHome('rank')}</th>
+                <th className="px-6 py-3.5 font-bold text-zinc-400">{tHome('manager')}</th>
+                <th className="px-6 py-3.5 font-bold text-zinc-400 text-center hidden sm:table-cell">{tHome('powerScore')}</th>
+                <th className="px-6 py-3.5 font-bold text-zinc-400 text-center hidden md:table-cell">{tHome('recentForm')}</th>
+                <th className="px-6 py-3.5 font-bold text-zinc-400 text-right w-28"></th>
               </tr>
             </thead>
             <tbody>
@@ -189,45 +191,45 @@ export default function ManagerDossierModal({
                 <tr
                   key={pr.team.rosterId}
                   onClick={() => setSelectedRosterId(pr.team.rosterId)}
-                  className="border-b border-slate-800/50 hover:bg-slate-800/40 transition-colors cursor-pointer group"
+                  className="border-b border-white/5 hover:bg-white/[0.03] transition-colors cursor-pointer group"
                 >
-                  <td className="px-6 py-4 text-center">
-                    <div className={`w-8 h-8 mx-auto rounded-full flex items-center justify-center font-bold ${idx === 0 ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/50' : 'bg-slate-800 text-slate-300'}`}>
+                  <td className="px-6 py-4 text-center font-mono">
+                    <div className={`w-7 h-7 mx-auto rounded flex items-center justify-center font-bold text-xs ${idx === 0 ? 'bg-[#c8ff00] text-[#090a0c]' : 'bg-[#090a0c] text-zinc-300 border border-white/10'}`}>
                       {pr.rank}
                     </div>
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
                       {pr.team.avatarUrl ? (
-                        <div className="w-10 h-10 rounded-full overflow-hidden border border-slate-600 group-hover:border-cyan-400 transition-colors">
+                        <div className="w-10 h-10 rounded-lg overflow-hidden border border-white/15 group-hover:border-[#c8ff00] transition-colors">
                           <Image src={pr.team.avatarUrl} alt={pr.team.displayName} width={40} height={40} />
                         </div>
                       ) : (
-                        <div className="w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center border border-slate-600 group-hover:border-cyan-400 transition-colors">
-                          <span className="font-bold text-xs">{pr.team.displayName.charAt(0)}</span>
+                        <div className="w-10 h-10 rounded-lg bg-[#090a0c] flex items-center justify-center border border-white/15 group-hover:border-[#c8ff00] transition-colors">
+                          <span className="font-bold font-mono text-xs text-[#c8ff00]">{pr.team.displayName.charAt(0)}</span>
                         </div>
                       )}
                       <div>
-                        <p className={`font-bold text-base group-hover:text-cyan-300 transition-colors ${idx === 0 ? 'text-yellow-400' : 'text-slate-200'}`}>
+                        <p className={`font-heading font-bold text-base uppercase tracking-tight group-hover:text-[#c8ff00] transition-colors ${idx === 0 ? 'text-[#c8ff00]' : 'text-zinc-100'}`}>
                           {pr.team.displayName}
                         </p>
-                        <p className="text-xs text-slate-500 md:hidden">Score: {pr.powerScore.toFixed(1)}</p>
+                        <p className="text-xs font-mono text-zinc-500 md:hidden">Score: {pr.powerScore.toFixed(1)}</p>
                       </div>
                     </div>
                   </td>
-                  <td className="px-6 py-4 text-center hidden sm:table-cell">
-                    <div className="w-full bg-slate-800 rounded-full h-2.5 max-w-xs mx-auto">
-                      <div className="bg-gradient-to-r from-emerald-500 to-cyan-500 h-2.5 rounded-full" style={{ width: `${Math.min(pr.powerScore, 100)}%` }}></div>
+                  <td className="px-6 py-4 text-center hidden sm:table-cell font-mono">
+                    <div className="w-full bg-[#090a0c] border border-white/10 rounded-sm h-2 max-w-xs mx-auto overflow-hidden">
+                      <div className="bg-[#c8ff00] h-full" style={{ width: `${Math.min(pr.powerScore, 100)}%` }}></div>
                     </div>
-                    <span className="text-xs text-slate-400 mt-1 block">{pr.powerScore.toFixed(1)}</span>
+                    <span className="text-xs text-zinc-400 mt-1 block">{pr.powerScore.toFixed(1)}</span>
                   </td>
-                  <td className="px-6 py-4 text-center hidden md:table-cell text-emerald-400 font-mono">
-                    {pr.recentForm.toFixed(1)} <span className="text-xs text-slate-500 font-sans block">{tHome('ptsWk')}</span>
+                  <td className="px-6 py-4 text-center hidden md:table-cell text-[#c8ff00] font-mono font-bold">
+                    {pr.recentForm.toFixed(1)} <span className="text-[10px] text-zinc-500 font-mono block uppercase">{tHome('ptsWk')}</span>
                   </td>
                   <td className="px-6 py-4 text-right">
                     <button
                       type="button"
-                      className="inline-flex items-center gap-1 text-xs font-semibold px-3 py-1.5 rounded-lg bg-slate-800/80 group-hover:bg-cyan-500/20 text-slate-300 group-hover:text-cyan-300 border border-slate-700 group-hover:border-cyan-500/40 transition-all"
+                      className="inline-flex items-center gap-1 text-xs font-mono font-bold uppercase tracking-wider px-3 py-1.5 rounded bg-[#090a0c] group-hover:bg-[#c8ff00] text-zinc-300 group-hover:text-[#090a0c] border border-white/15 group-hover:border-[#c8ff00] transition-all"
                     >
                       <RadarIcon className="w-3.5 h-3.5" />
                       <span className="hidden sm:inline">{tDossier('viewDossier')}</span>

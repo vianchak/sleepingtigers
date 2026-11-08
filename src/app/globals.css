@@ -7,14 +7,17 @@
 }
 
 :root {
-  --background: #090d16;
-  --foreground: #f8fafc;
+  --background: #090a0c;
+  --foreground: #f4f1ea;
+  --volt: #c8ff00;
+  --thermal-cream: #f4f1ea;
+  --audit-red: #ff3b30;
 }
 
-/* Global Sleek Dark Scrollbars */
+/* Global Sleek Carbon Scrollbars */
 * {
   scrollbar-width: thin;
-  scrollbar-color: #334155 transparent;
+  scrollbar-color: #272a30 transparent;
 }
 
 ::-webkit-scrollbar {
@@ -27,12 +30,12 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(51, 65, 85, 0.8);
+  background: rgba(200, 255, 0, 0.25);
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(71, 85, 105, 1);
+  background: rgba(200, 255, 0, 0.5);
 }
 
 body {
@@ -41,10 +44,9 @@ body {
   font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
   min-height: 100vh;
   position: relative;
-  selection-background-color: rgba(56, 189, 248, 0.3);
 }
 
-/* Static GPU-promoted background layer with subtle broadcast grid */
+/* Static GPU-promoted Matte Carbon background with subtle sportsbook ledger grid */
 body::before {
   content: "";
   position: fixed;
@@ -52,13 +54,12 @@ body::before {
   z-index: -1;
   pointer-events: none;
   background-color: var(--background);
-  background-image: 
-    linear-gradient(to right, rgba(255, 255, 255, 0.018) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.018) 1px, transparent 1px),
-    radial-gradient(at 0% 0%, hsla(222, 47%, 11%, 1) 0, transparent 55%), 
-    radial-gradient(at 50% -10%, hsla(217, 65%, 22%, 0.28) 0, transparent 55%), 
-    radial-gradient(at 100% 0%, hsla(160, 60%, 18%, 0.18) 0, transparent 50%);
-  background-size: 48px 48px, 48px 48px, 100% 100%, 100% 100%, 100% 100%;
+  background-image:
+    linear-gradient(to right, rgba(244, 241, 234, 0.024) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(244, 241, 234, 0.024) 1px, transparent 1px),
+    radial-gradient(at 15% -5%, rgba(200, 255, 0, 0.08) 0, transparent 45%),
+    radial-gradient(at 85% 0%, rgba(255, 59, 48, 0.06) 0, transparent 45%);
+  background-size: 40px 40px, 40px 40px, 100% 100%, 100% 100%;
   transform: translateZ(0);
 }
 
@@ -68,34 +69,64 @@ body::before {
 
 @layer utilities {
   .glass-panel {
-    background: linear-gradient(180deg, rgba(30, 41, 59, 0.78) 0%, rgba(15, 23, 42, 0.88) 100%);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.09);
-    border-radius: 1rem;
-    box-shadow:
-      inset 0 1px 0 0 rgba(255, 255, 255, 0.1),
-      0 20px 25px -5px rgba(0, 0, 0, 0.35),
-      0 8px 10px -6px rgba(0, 0, 0, 0.25);
-  }
-  .glass-card {
-    background: linear-gradient(180deg, rgba(30, 41, 59, 0.72) 0%, rgba(15, 23, 42, 0.82) 100%);
-    border: 1px solid rgba(255, 255, 255, 0.07);
+    background: linear-gradient(180deg, #12141a 0%, #0c0e12 100%);
+    border: 1px solid rgba(244, 241, 234, 0.11);
     border-radius: 0.875rem;
     box-shadow:
       inset 0 1px 0 0 rgba(255, 255, 255, 0.07),
-      0 10px 15px -3px rgba(0, 0, 0, 0.25),
-      0 4px 6px -2px rgba(0, 0, 0, 0.15);
+      0 20px 30px -10px rgba(0, 0, 0, 0.65);
+  }
+
+  .glass-card {
+    background: linear-gradient(180deg, #13151b 0%, #0d0f14 100%);
+    border: 1px solid rgba(244, 241, 234, 0.09);
+    border-radius: 0.75rem;
+    box-shadow:
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.05),
+      0 10px 20px -5px rgba(0, 0, 0, 0.45);
     transition: background-color 150ms ease-out, border-color 150ms ease-out, transform 150ms ease-out;
   }
+
   .glass-card:hover {
-    background: linear-gradient(180deg, rgba(38, 52, 74, 0.8) 0%, rgba(22, 32, 54, 0.88) 100%);
-    border-color: rgba(255, 255, 255, 0.14);
+    background: linear-gradient(180deg, #171a22 0%, #10131a 100%);
+    border-color: rgba(200, 255, 0, 0.35);
   }
+
   .text-gradient {
     background-clip: text;
     -webkit-background-clip: text;
     color: transparent;
-    background-image: linear-gradient(135deg, #38bdf8 0%, #34d399 50%, #a78bfa 100%);
+    background-image: linear-gradient(135deg, #c8ff00 0%, #f4f1ea 60%, #ff6b4a 100%);
+  }
+
+  /* Physical Thermal Receipt Paper Card */
+  .receipt-paper {
+    background-color: #f4f1ea;
+    color: #111317;
+    box-shadow:
+      0 25px 50px -12px rgba(0, 0, 0, 0.75),
+      0 0 0 1px rgba(0, 0, 0, 0.08);
+  }
+
+  /* Serrated zig-zag top edge */
+  .receipt-zigzag-top {
+    background-image:
+      linear-gradient(135deg, #090a0c 50%, transparent 50%),
+      linear-gradient(225deg, #090a0c 50%, transparent 50%);
+    background-position: top left, top left;
+    background-size: 12px 12px;
+    background-repeat: repeat-x;
+  }
+
+  /* Angled Rubber-Stamp Verdict Badge */
+  .stamp-verdict {
+    transform: rotate(-4deg);
+    border: 2px solid currentColor;
+    font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 800;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
   }
 }
 

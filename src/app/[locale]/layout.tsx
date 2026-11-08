@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Inter, Rubik, JetBrains_Mono } from 'next/font/google';
+import { Space_Grotesk, IBM_Plex_Sans, IBM_Plex_Mono } from 'next/font/google';
 import '../globals.css';
 import NavbarClient from '@/components/NavbarClient';
 import { getDictionary, getScopedTranslator } from '@/lib/i18n/dictionaries';
@@ -9,20 +9,23 @@ import { notFound } from 'next/navigation';
 
 const locales = ['en', 'uk'];
 
-const inter = Inter({
+const ibmPlexSans = IBM_Plex_Sans({
   subsets: ['latin', 'cyrillic'],
+  weight: ['400', '500', '600', '700'],
   variable: '--font-inter',
   display: 'swap',
 });
 
-const rubik = Rubik({
-  subsets: ['latin', 'cyrillic'],
+const spaceGrotesk = Space_Grotesk({
+  subsets: ['latin'],
+  weight: ['600', '700'],
   variable: '--font-rubik',
   display: 'swap',
 });
 
-const jetbrainsMono = JetBrains_Mono({
+const ibmPlexMono = IBM_Plex_Mono({
   subsets: ['latin', 'cyrillic'],
+  weight: ['400', '500', '600', '700'],
   variable: '--font-jetbrains-mono',
   display: 'swap',
 });
@@ -74,8 +77,8 @@ export default async function RootLayout({
   };
 
   return (
-    <html lang={locale} className={`${inter.variable} ${rubik.variable} ${jetbrainsMono.variable}`}>
-      <body className="text-slate-100 antialiased selection:bg-cyan-500/30 selection:text-cyan-200">
+    <html lang={locale} className={`${ibmPlexSans.variable} ${spaceGrotesk.variable} ${ibmPlexMono.variable}`}>
+      <body className="text-[#f4f1ea] antialiased selection:bg-[#c8ff00] selection:text-[#090a0c]">
         <TranslationProvider messages={messages}>
           <div className="flex flex-col min-h-screen">
             <NavbarClient
@@ -88,8 +91,14 @@ export default async function RootLayout({
               {children}
             </main>
 
-            <footer className="glass-panel mt-16 rounded-none border-x-0 border-b-0 border-t border-white/10 py-6 text-center text-slate-500 text-xs sm:text-sm">
-              <p>{t('footer')}</p>
+            <footer className="mt-16 border-t border-white/10 bg-[#07080a] py-6 text-center text-white/45 text-xs font-mono uppercase tracking-widest">
+              <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-[#c8ff00] inline-block animate-pulse" />
+                  <span className="text-white/70 font-bold">OFFICIAL FANTASY AUDIT LEDGER</span>
+                </div>
+                <p>{t('footer')}</p>
+              </div>
             </footer>
           </div>
         </TranslationProvider>
