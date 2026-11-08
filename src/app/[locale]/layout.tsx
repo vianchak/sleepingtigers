@@ -12,21 +12,21 @@ const locales = ['en', 'uk'];
 const ibmPlexSans = IBM_Plex_Sans({
   subsets: ['latin', 'cyrillic'],
   weight: ['400', '500', '600', '700'],
-  variable: '--font-inter',
+  variable: '--font-sans',
   display: 'swap',
 });
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
-  weight: ['600', '700'],
-  variable: '--font-rubik',
+  weight: ['500', '600', '700'],
+  variable: '--font-heading',
   display: 'swap',
 });
 
 const ibmPlexMono = IBM_Plex_Mono({
   subsets: ['latin', 'cyrillic'],
   weight: ['400', '500', '600', '700'],
-  variable: '--font-jetbrains-mono',
+  variable: '--font-mono',
   display: 'swap',
 });
 

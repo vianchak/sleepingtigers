@@ -215,10 +215,10 @@ export default async function DashboardHome({params}: {params: Promise<{locale: 
       <section className="glass-panel p-6 sm:p-8 relative overflow-hidden">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
 
-          {/* Left 7 Columns: #1 Seed + 3 League Pulse Stat Pods */}
-          <div className="lg:col-span-7 flex flex-col justify-between space-y-6">
+          {/* Left 7 Columns: #1 Seed Spotlight */}
+          <div className="lg:col-span-7 flex flex-col justify-center">
             <div>
-              <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-amber-200/10 text-amber-200 border border-amber-200/30 font-mono text-[11px] uppercase tracking-widest font-bold mb-3">
+              <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-amber-200/10 text-amber-200 border border-amber-200/30 font-mono text-[11px] uppercase tracking-widest font-bold mb-4">
                 <Crown className="w-3.5 h-3.5" />
                 <span>01 // {t('currentLeader')}</span>
               </div>
@@ -246,7 +246,7 @@ export default async function DashboardHome({params}: {params: Promise<{locale: 
                 </div>
 
                 <div>
-                  <h2 className="text-3xl sm:text-5xl font-bold font-heading text-white uppercase tracking-tight leading-none">
+                  <h2 className="text-3xl sm:text-4xl font-bold font-heading text-white uppercase tracking-tight leading-none">
                     {leader.displayName}
                   </h2>
                   <p className="text-xs font-mono text-zinc-400 mt-2 uppercase tracking-wider">
@@ -272,63 +272,6 @@ export default async function DashboardHome({params}: {params: Promise<{locale: 
                   </div>
                 </div>
               </div>
-            </div>
-
-            {/* 3 Pastel Ledger Pulse Pods */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-5 border-t border-dashed border-white/10">
-              {topScorer && (
-                <div className="bg-[#111318]/90 border border-amber-200/20 rounded-xl p-3.5 flex flex-col justify-between">
-                  <div className="flex items-center justify-between text-[10px] font-mono font-bold uppercase tracking-wider text-amber-200 mb-1">
-                    <span className="flex items-center gap-1">
-                      <Flame className="w-3.5 h-3.5 shrink-0" />
-                      {t('pf')} #1
-                    </span>
-                    <span className="text-zinc-500">PTS</span>
-                  </div>
-                  <p className="font-heading font-bold text-white text-base truncate uppercase">
-                    {topScorer.displayName}
-                  </p>
-                  <p className="font-mono text-xs text-zinc-400 mt-0.5">
-                    {topScorer.fpts.toFixed(1)} {t('pf')}
-                  </p>
-                </div>
-              )}
-
-              {allPlayLeader && (
-                <div className="bg-[#111318]/90 border border-sky-200/20 rounded-xl p-3.5 flex flex-col justify-between">
-                  <div className="flex items-center justify-between text-[10px] font-mono font-bold uppercase tracking-wider text-sky-200 mb-1">
-                    <span className="flex items-center gap-1">
-                      <Activity className="w-3.5 h-3.5 shrink-0" />
-                      {locale === 'uk' ? 'Всі-З-Усіма #1' : 'All-Play #1'}
-                    </span>
-                    <span className="text-zinc-500">TRUE</span>
-                  </div>
-                  <p className="font-heading font-bold text-white text-base truncate uppercase">
-                    {allPlayLeader.team.displayName}
-                  </p>
-                  <p className="font-mono text-xs text-zinc-400 mt-0.5">
-                    {allPlayLeader.wins}-{allPlayLeader.losses} ({(allPlayLeader.winPercentage * 100).toFixed(0)}%)
-                  </p>
-                </div>
-              )}
-
-              {parashaResident && (
-                <div className="bg-[#111318]/90 border border-rose-300/25 rounded-xl p-3.5 flex flex-col justify-between">
-                  <div className="flex items-center justify-between text-[10px] font-mono font-bold uppercase tracking-wider text-rose-300 mb-1">
-                    <span className="flex items-center gap-1">
-                      <Trash2 className="w-3.5 h-3.5 shrink-0" />
-                      {t('parasha')}
-                    </span>
-                    <span>BOT</span>
-                  </div>
-                  <p className="font-heading font-bold text-white text-base truncate uppercase">
-                    {parashaResident.team.displayName}
-                  </p>
-                  <p className="font-mono text-xs text-rose-300/90 mt-0.5">
-                    {(parashaResident.winPercentage * 100).toFixed(0)}% {t('wr')}
-                  </p>
-                </div>
-              )}
             </div>
           </div>
 
