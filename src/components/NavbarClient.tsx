@@ -73,37 +73,34 @@ export default function NavbarClient({
     <header className="sticky top-0 z-50 bg-[#111318]/92 backdrop-blur-xl border-b border-white/10">
       <div className="max-w-7xl mx-auto px-3 sm:px-6 h-16 flex items-center justify-between gap-2">
         {/* Left: Brand Identity */}
-        <Link href={`/${locale}`} className="flex items-center gap-2.5 shrink-0 group">
+        <Link href={`/${locale}`} className="flex items-center gap-2 shrink-0 group">
           <div className="w-8 h-8 rounded-lg bg-emerald-200/15 border border-emerald-200/35 text-emerald-200 flex items-center justify-center group-hover:bg-emerald-200/25 transition-colors">
             <Receipt className="w-4 h-4 stroke-[2.2]" />
           </div>
           <div className="hidden lg:flex flex-col">
-            <span className="text-[9px] font-mono uppercase tracking-[0.16em] text-emerald-200/90 font-semibold leading-none mb-1">
+            <span className="text-[9px] font-mono uppercase tracking-[0.14em] text-emerald-200/90 font-semibold leading-none mb-0.5">
               LEAGUE AUDIT
             </span>
-            <h1 className="text-xs xl:text-[13px] font-bold font-heading tracking-wide uppercase text-zinc-100 leading-none whitespace-nowrap">
+            <h1 className="text-xs font-bold font-heading tracking-wide uppercase text-zinc-100 leading-none whitespace-nowrap">
               {labels.title}
             </h1>
           </div>
         </Link>
 
         {/* Center: Pastel Ledger Menu */}
-        <nav className="hidden md:flex items-center flex-nowrap gap-0.5 xl:gap-1 bg-[#171a21] p-1 rounded-xl border border-white/10 min-w-0 overflow-x-auto no-scrollbar">
+        <nav className="hidden md:flex items-center flex-nowrap gap-0.5 bg-[#171a21] p-1 rounded-xl border border-white/10 min-w-0">
           {navItems.map((item) => {
             const active = isActive(item.href, item.exact);
             return (
               <Link
                 key={item.href}
                 href={item.href}
-                className={`h-8 flex items-center gap-1 px-2 xl:px-2.5 rounded-lg text-[11px] font-mono font-bold uppercase tracking-tight whitespace-nowrap transition-all shrink-0 border ${
+                className={`h-8 flex items-center px-2 lg:px-2.5 rounded-lg text-[11px] font-mono font-semibold uppercase tracking-normal whitespace-nowrap transition-all shrink-0 border ${
                   active
                     ? item.pastel
                     : 'border-transparent text-zinc-400 hover:text-zinc-100 hover:bg-white/5'
                 }`}
               >
-                <span className={`text-[9px] hidden 2xl:inline ${active ? 'opacity-90' : 'text-zinc-500'}`}>
-                  {item.code}
-                </span>
                 <span>{item.label}</span>
               </Link>
             );

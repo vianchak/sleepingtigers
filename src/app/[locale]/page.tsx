@@ -215,8 +215,8 @@ export default async function DashboardHome({params}: {params: Promise<{locale: 
       <section className="glass-panel p-6 sm:p-8 relative overflow-hidden">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
 
-          {/* Left 7 Columns: #1 Seed Spotlight */}
-          <div className="lg:col-span-7 flex flex-col justify-center">
+          {/* Left 7 Columns: #1 Seed Spotlight + Playoff Contenders Ledger */}
+          <div className="lg:col-span-7 flex flex-col justify-between space-y-6">
             <div>
               <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-amber-200/10 text-amber-200 border border-amber-200/30 font-mono text-[11px] uppercase tracking-widest font-bold mb-4">
                 <Crown className="w-3.5 h-3.5" />
@@ -273,6 +273,68 @@ export default async function DashboardHome({params}: {params: Promise<{locale: 
                 </div>
               </div>
             </div>
+
+            {/* Playoff Contenders Chase (Seeds #2 - #4) */}
+            {sortedTeams.length > 1 && (
+              <div className="pt-5 border-t border-dashed border-white/10">
+                <div className="flex items-center justify-between text-[10px] font-mono font-bold uppercase tracking-widest text-zinc-400 mb-3">
+                  <span>
+                    {locale === 'uk' ? 'ГОНКА ЗА ПЛЕЙ-ОФ // ПОСІВИ #2–#4' : 'PLAYOFF PICTURE CHASE // SEEDS #2–#4'}
+                  </span>
+                  <span className="text-emerald-200/80">
+                    {locale === 'uk' ? 'ТОП-4 ЗОНА' : 'TOP-4 CUTLINE'}
+                  </span>
+                </div>
+                <div className="space-y-2">
+                  {sortedTeams.slice(1, 4).map((contender, idx) => {
+                    const seed = idx + 2;
+                    const gamesBack = leader.wins - contender.wins;
+                    return (
+                      <div
+                        key={contender.rosterId}
+                        className="bg-[#111318]/90 border border-white/10 rounded-xl px-3.5 py-2.5 flex items-center justify-between gap-3"
+                      >
+                        <div className="flex items-center gap-3 min-w-0">
+                          <span className="w-6 h-6 rounded-md bg-white/5 border border-white/10 font-mono text-xs font-bold text-zinc-300 flex items-center justify-center shrink-0">
+                            #{seed}
+                          </span>
+                          {contender.avatarUrl ? (
+                            <Image
+                              src={contender.avatarUrl}
+                              alt={contender.displayName}
+                              width={28}
+                              height={28}
+                              className="rounded-lg border border-white/15 shrink-0"
+                            />
+                          ) : (
+                            <div className="w-7 h-7 rounded-lg bg-[#171a21] border border-white/15 flex items-center justify-center shrink-0">
+                              <span className="text-[10px] font-mono font-bold text-zinc-300">
+                                {contender.displayName.slice(0, 2).toUpperCase()}
+                              </span>
+                            </div>
+                          )}
+                          <span className="font-heading font-bold text-sm text-zinc-100 uppercase truncate">
+                            {contender.displayName}
+                          </span>
+                        </div>
+
+                        <div className="flex items-center gap-2.5 shrink-0 font-mono text-xs">
+                          <span className="text-zinc-400 hidden sm:inline">
+                            {contender.fpts.toFixed(1)} PF
+                          </span>
+                          <span className="px-2 py-0.5 rounded bg-white/5 border border-white/10 text-emerald-200 font-bold">
+                            {contender.wins}-{contender.losses}
+                          </span>
+                          <span className="text-[11px] text-zinc-500 w-12 text-right">
+                            {gamesBack > 0 ? `-${gamesBack} GB` : 'TIED'}
+                          </span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Right 5 Columns: Tactile Thermal Paper Receipt Card */}
