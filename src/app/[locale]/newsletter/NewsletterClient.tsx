@@ -465,30 +465,26 @@ export default function NewsletterClient({
   return (
     <div className="space-y-6 max-w-6xl mx-auto pb-16">
       {/* Studio / Reader Top Command Bar */}
-      <div className="glass-panel p-5 sm:p-6 border border-orange-500/30 relative overflow-hidden print:hidden">
-        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-500 via-orange-500 to-amber-400" />
-
+      <div className="glass-panel p-6 sm:p-8 border border-white/10 relative overflow-hidden print:hidden">
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-5">
           <div className="flex items-start gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-orange-500/20 to-red-600/20 border border-orange-500/40 flex items-center justify-center text-orange-400 shrink-0 shadow-[0_0_25px_rgba(249,115,22,0.2)]">
-              <Flame className="h-6 w-6 text-orange-400 fill-orange-500/40" />
+            <div className="w-12 h-12 rounded-xl bg-amber-200/15 border border-amber-200/35 flex items-center justify-center text-amber-200 shrink-0">
+              <Flame className="h-6 w-6 text-amber-200" />
             </div>
             <div>
-              <div className="flex items-center gap-2.5 flex-wrap">
-                <h1 className="text-2xl sm:text-3xl font-black font-heading text-white uppercase tracking-tight">
-                  {customTitle || t('title')}
-                </h1>
-                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase tracking-widest bg-orange-500/15 text-orange-300 border border-orange-500/30">
+              <div className="inline-flex items-center gap-2 text-[10px] font-mono font-bold uppercase tracking-widest text-amber-200 mb-1">
+                <span>
                   {readOnly
-                    ? isUk
-                      ? 'Читацький Зал'
-                      : 'Press Archive'
-                    : isUk
-                    ? 'AI Редакція'
-                    : 'AI Editorial Studio'}
+                    ? 'SECTION 08 // OFFICIAL LEAGUE PRESS ARCHIVE'
+                    : 'SECTION AI // EDITORIAL STUDIO & GAZETTE GENERATOR'}
                 </span>
               </div>
-              <p className="text-slate-400 text-xs sm:text-sm mt-1">
+              <div className="flex items-center gap-2.5 flex-wrap">
+                <h1 className="text-2xl sm:text-3xl font-bold font-heading text-white uppercase tracking-tight">
+                  {customTitle || t('title')}
+                </h1>
+              </div>
+              <p className="text-zinc-400 text-xs sm:text-sm mt-1">
                 {customSubtitle || t('subtitle')}
               </p>
             </div>
@@ -498,7 +494,7 @@ export default function NewsletterClient({
             {readOnly && isAdmin && (
               <Link
                 href={`/${locale}/newsletter`}
-                className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 text-slate-950 hover:opacity-95 font-bold text-xs uppercase tracking-wider flex items-center gap-2 transition-all shadow-lg shadow-orange-500/10"
+                className="px-4 py-2 rounded-lg bg-amber-200 hover:bg-amber-100 text-zinc-900 font-mono font-bold text-xs uppercase tracking-wider flex items-center gap-2 transition-all"
               >
                 <FlameKindling className="h-4 w-4" />
                 <span>{isUk ? 'Студія Генерації' : 'Editorial Studio'}</span>
@@ -510,16 +506,16 @@ export default function NewsletterClient({
                 <button
                   type="button"
                   onClick={() => setShowNotesDrawer((v) => !v)}
-                  className={`px-3.5 py-2.5 rounded-xl border text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 transition-all ${
+                  className={`px-3.5 py-2 rounded-lg border text-xs font-mono font-bold uppercase tracking-wider flex items-center gap-1.5 transition-all ${
                     showNotesDrawer || commissionerNotes.trim()
-                      ? 'bg-amber-500/15 border-amber-500/40 text-amber-300'
-                      : 'bg-slate-900/90 border-white/10 text-slate-300 hover:text-white hover:border-white/20'
+                      ? 'bg-amber-200/15 border-amber-200/40 text-amber-200'
+                      : 'bg-[#111318] border-white/10 text-zinc-300 hover:text-white hover:border-white/20'
                   }`}
                 >
-                  <MessageSquarePlus className="h-4 w-4 text-amber-400" />
+                  <MessageSquarePlus className="h-4 w-4 text-amber-200" />
                   <span>{isUk ? 'Інсайди Тижня' : 'Insider Tea'}</span>
                   {commissionerNotes.trim() && (
-                    <span className="w-2 h-2 rounded-full bg-amber-400" />
+                    <span className="w-2 h-2 rounded-full bg-amber-200" />
                   )}
                   {showNotesDrawer ? (
                     <ChevronUp className="h-3.5 w-3.5" />
@@ -530,15 +526,15 @@ export default function NewsletterClient({
 
                 <Link
                   href={`/${locale}/admin`}
-                  className="px-3.5 py-2.5 rounded-xl bg-slate-900/90 border border-white/10 text-slate-300 hover:text-white hover:border-white/20 font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 transition-colors"
+                  className="px-3.5 py-2 rounded-lg bg-[#111318] border border-white/10 text-zinc-300 hover:text-white hover:border-white/20 font-mono font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 transition-colors"
                 >
-                  <Settings className="h-4 w-4 text-cyan-400" />
+                  <Settings className="h-4 w-4 text-emerald-200" />
                   <span>{isUk ? 'AI Налаштування' : 'AI Settings'}</span>
                 </Link>
 
                 <div className="flex items-center">
                   <select
-                    className="px-3.5 py-2.5 rounded-xl border border-orange-500/40 bg-slate-950 text-orange-300 font-bold text-xs uppercase tracking-wider focus:outline-none focus:border-orange-400 cursor-pointer"
+                    className="px-3.5 py-2 rounded-lg border border-amber-200/35 bg-[#111318] text-amber-200 font-mono font-bold text-xs uppercase tracking-wider focus:outline-none focus:border-amber-200 cursor-pointer"
                     value={week}
                     onChange={(e) => setWeek(Number(e.target.value))}
                   >
@@ -554,7 +550,7 @@ export default function NewsletterClient({
                 <button
                   onClick={handleGenerate}
                   disabled={loading}
-                  className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-orange-500 via-red-500 to-amber-500 text-slate-950 font-black text-xs uppercase tracking-wider flex items-center gap-2 disabled:opacity-50 hover:opacity-95 transition-all shadow-[0_0_20px_rgba(249,115,22,0.3)] cursor-pointer"
+                  className="px-4 py-2 rounded-lg bg-amber-200 hover:bg-amber-100 text-zinc-900 font-mono font-bold text-xs uppercase tracking-wider flex items-center gap-2 disabled:opacity-50 transition-all cursor-pointer"
                 >
                   {loading ? (
                     <Loader2 className="h-4 w-4 animate-spin" />
@@ -570,13 +566,13 @@ export default function NewsletterClient({
 
         {/* Collapsible Commissioner's Weekly Storylines Drawer */}
         {!readOnly && showNotesDrawer && (
-          <div className="mt-5 pt-5 border-t border-white/10 space-y-2.5 animate-in fade-in duration-200">
+          <div className="mt-5 pt-5 border-t border-dashed border-white/10 space-y-2.5 animate-in fade-in duration-200">
             <div className="flex items-center justify-between">
-              <label className="text-xs font-bold uppercase tracking-wider text-amber-300 flex items-center gap-2">
+              <label className="text-xs font-mono font-bold uppercase tracking-wider text-amber-200 flex items-center gap-2">
                 <Sparkles className="w-3.5 h-3.5" />
                 {t('commissionerNotesTitle')}
               </label>
-              <span className="text-[11px] text-slate-400">
+              <span className="text-[11px] font-mono text-zinc-400">
                 {isUk
                   ? 'Буде вплетено в сюжет при генерації та показано в блоці Комісіонера'
                   : 'Injected into the AI prompt & displayed in the Commissioner Desk callout'}
@@ -595,7 +591,7 @@ export default function NewsletterClient({
                 }
               }}
               placeholder={t('commissionerNotesPlaceholder')}
-              className="w-full p-3.5 rounded-xl bg-slate-950/90 border border-amber-500/30 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-amber-400 text-xs sm:text-sm leading-relaxed"
+              className="w-full p-3.5 rounded-xl bg-[#111318] border border-amber-200/30 text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-amber-200 text-xs sm:text-sm leading-relaxed"
             />
           </div>
         )}
@@ -604,8 +600,8 @@ export default function NewsletterClient({
       {/* Archives Edition Selector Bar */}
       {archives.length > 0 ? (
         <div className="glass-panel px-4 py-3 border border-white/10 flex flex-wrap items-center gap-2 print:hidden">
-          <div className="text-slate-400 font-bold text-xs px-2.5 py-1 uppercase tracking-wider flex items-center gap-2 border-r border-white/10 mr-1">
-            <ArchiveRestore className="w-4 h-4 text-orange-400" />
+          <div className="text-zinc-400 font-mono font-bold text-xs px-2.5 py-1 uppercase tracking-wider flex items-center gap-2 border-r border-white/10 mr-1">
+            <ArchiveRestore className="w-4 h-4 text-amber-200" />
             <span>{t('editions')}</span>
           </div>
           {[...archives]
@@ -616,10 +612,10 @@ export default function NewsletterClient({
                 <button
                   key={w}
                   onClick={() => handleLoadArchive(w)}
-                  className={`px-3.5 py-1.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all cursor-pointer ${
+                  className={`px-3.5 py-1.5 rounded-lg font-mono font-bold text-xs uppercase tracking-wider transition-all cursor-pointer border ${
                     isActive
-                      ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-slate-950 shadow-[0_0_15px_rgba(249,115,22,0.35)] scale-105'
-                      : 'bg-slate-900/80 text-slate-300 hover:bg-slate-800 hover:text-white border border-white/10'
+                      ? 'bg-amber-200/15 text-amber-200 border-amber-200/40'
+                      : 'bg-[#111318] text-zinc-400 hover:text-white border-white/5'
                   }`}
                 >
                   {t('week')}
@@ -630,19 +626,19 @@ export default function NewsletterClient({
         </div>
       ) : readOnly ? (
         <div className="glass-panel p-10 text-center space-y-4">
-          <Flame className="w-10 h-10 text-orange-400 mx-auto" />
-          <h3 className="text-xl font-bold text-white">
+          <Flame className="w-10 h-10 text-amber-200 mx-auto" />
+          <h3 className="text-xl font-bold font-heading uppercase text-white">
             {isUk ? 'Випусків ще немає' : 'No Newsletter Editions Published Yet'}
           </h3>
-          <p className="text-slate-400 text-sm max-w-md mx-auto">
+          <p className="text-zinc-400 text-sm max-w-md mx-auto">
             {isUk
-              ? 'Адміністратор ліги ще не опублікував жодного випуску газети за цей сезон.'
+              ? 'Адміністратор ліги ще не опублікував жодного випусків газети за цей сезон.'
               : 'The league administrator has not published any weekly newsletter editions for this league yet.'}
           </p>
           {isAdmin && (
             <Link
               href={`/${locale}/newsletter`}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-orange-600 text-white font-bold text-xs uppercase tracking-wider"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-amber-200 text-zinc-900 font-mono font-bold text-xs uppercase tracking-wider"
             >
               <FlameKindling className="w-4 h-4" />
               <span>
@@ -657,14 +653,14 @@ export default function NewsletterClient({
       {newsletter && (
         <div className="glass-panel p-3.5 border border-white/10 flex flex-wrap items-center justify-between gap-3 print:hidden">
           {/* Theme Toggle */}
-          <div className="flex items-center gap-1.5 bg-slate-950/90 p-1 rounded-xl border border-white/10">
+          <div className="flex items-center gap-1.5 bg-[#111318] p-1 rounded-xl border border-white/10">
             <button
               type="button"
               onClick={() => setTheme('paper')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-mono font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
                 isPaper
-                  ? 'bg-amber-100 text-zinc-900 shadow-sm'
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-[#f4f1ea] text-zinc-900 shadow-xs'
+                  : 'text-zinc-400 hover:text-white'
               }`}
             >
               <Newspaper className="w-3.5 h-3.5" />
@@ -673,10 +669,10 @@ export default function NewsletterClient({
             <button
               type="button"
               onClick={() => setTheme('broadcast')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-mono font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
                 !isPaper
-                  ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-sm'
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-emerald-200/15 text-emerald-200 border border-emerald-200/35'
+                  : 'text-zinc-400 hover:text-white'
               }`}
             >
               <Tv className="w-3.5 h-3.5" />
@@ -690,10 +686,10 @@ export default function NewsletterClient({
               <button
                 type="button"
                 onClick={() => setEditMode((v) => !v)}
-                className={`px-3.5 py-2 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 border transition-all cursor-pointer ${
+                className={`px-3.5 py-2 rounded-lg text-xs font-mono font-bold uppercase tracking-wider flex items-center gap-1.5 border transition-all cursor-pointer ${
                   editMode
-                    ? 'bg-amber-500 text-slate-950 border-amber-400 shadow-[0_0_15px_rgba(245,158,11,0.3)]'
-                    : 'bg-slate-900 text-slate-200 border-white/15 hover:border-amber-400/50 hover:text-amber-300'
+                    ? 'bg-amber-200 text-zinc-900 border-amber-200'
+                    : 'bg-[#111318] text-zinc-200 border-white/15 hover:border-amber-200/50 hover:text-amber-200'
                 }`}
               >
                 {editMode ? (
@@ -714,7 +710,7 @@ export default function NewsletterClient({
               <button
                 onClick={handlePublish}
                 disabled={saving}
-                className="bg-gradient-to-r from-cyan-500 to-blue-500 text-slate-950 hover:opacity-95 px-4 py-2 rounded-xl font-black text-xs uppercase tracking-wider flex items-center gap-1.5 transition-all disabled:opacity-50 cursor-pointer shadow-lg shadow-cyan-500/15"
+                className="bg-sky-200 hover:bg-sky-100 text-zinc-900 px-4 py-2 rounded-lg font-mono font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 transition-all disabled:opacity-50 cursor-pointer"
               >
                 {saving ? (
                   <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -723,7 +719,7 @@ export default function NewsletterClient({
                 )}
                 <span>{t('publishToArchive')}</span>
                 {hasUnsavedEdits && (
-                  <span className="ml-1 px-1.5 py-0.2 rounded bg-slate-950/30 text-[10px]">
+                  <span className="ml-1 px-1.5 py-0.2 rounded bg-zinc-900/20 text-[10px]">
                     •
                   </span>
                 )}
@@ -731,7 +727,7 @@ export default function NewsletterClient({
             )}
 
             {!readOnly && isSaved && !hasUnsavedEdits && (
-              <span className="bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 px-3.5 py-2 rounded-xl font-bold text-xs uppercase tracking-wider flex items-center gap-1.5">
+              <span className="bg-emerald-200/15 border border-emerald-200/30 text-emerald-200 px-3.5 py-2 rounded-lg font-mono font-bold text-xs uppercase tracking-wider flex items-center gap-1.5">
                 <Check className="w-3.5 h-3.5" />
                 <span>{t('published')}</span>
               </span>
@@ -740,7 +736,7 @@ export default function NewsletterClient({
             <button
               onClick={handleDownloadImage}
               disabled={downloadingImage}
-              className="bg-emerald-600/90 hover:bg-emerald-500 text-white px-3.5 py-2 rounded-xl font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 transition-colors disabled:opacity-50 cursor-pointer"
+              className="bg-emerald-200 hover:bg-emerald-100 text-zinc-900 px-3.5 py-2 rounded-lg font-mono font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 transition-colors disabled:opacity-50 cursor-pointer"
             >
               {downloadingImage ? (
                 <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -752,7 +748,7 @@ export default function NewsletterClient({
 
             <button
               onClick={() => window.print()}
-              className="bg-slate-800 hover:bg-slate-700 border border-white/10 text-slate-200 px-3.5 py-2 rounded-xl font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 transition-colors cursor-pointer"
+              className="bg-[#111318] hover:bg-white/10 border border-white/10 text-zinc-200 px-3.5 py-2 rounded-lg font-mono font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 transition-colors cursor-pointer"
             >
               <Printer className="h-3.5 w-3.5" />
               <span>{t('saveAsPdf')}</span>

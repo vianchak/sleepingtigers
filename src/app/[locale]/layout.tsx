@@ -78,7 +78,7 @@ export default async function RootLayout({
 
   return (
     <html lang={locale} className={`${ibmPlexSans.variable} ${spaceGrotesk.variable} ${ibmPlexMono.variable}`}>
-      <body className="text-[#f4f1ea] antialiased selection:bg-[#c8ff00] selection:text-[#090a0c]">
+      <body className="text-zinc-100 antialiased selection:bg-emerald-200/30 selection:text-emerald-100">
         <TranslationProvider messages={messages}>
           <div className="flex flex-col min-h-screen">
             <NavbarClient
@@ -91,11 +91,11 @@ export default async function RootLayout({
               {children}
             </main>
 
-            <footer className="mt-16 border-t border-white/10 bg-[#07080a] py-6 text-center text-white/45 text-xs font-mono uppercase tracking-widest">
+            <footer className="mt-16 border-t border-white/10 bg-[#111318]/90 py-6 text-center text-zinc-500 text-xs font-mono uppercase tracking-widest">
               <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
                 <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-[#c8ff00] inline-block animate-pulse" />
-                  <span className="text-white/70 font-bold">OFFICIAL FANTASY AUDIT LEDGER</span>
+                  <span className="w-2 h-2 rounded-full bg-emerald-300 inline-block animate-pulse" />
+                  <span className="text-zinc-300 font-bold">OFFICIAL FANTASY AUDIT LEDGER</span>
                 </div>
                 <p>{t('footer')}</p>
               </div>

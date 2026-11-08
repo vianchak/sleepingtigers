@@ -161,14 +161,14 @@ export default function ManagerDossierModal({
     <div className="mt-12 mb-12">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 border-b border-white/10 pb-3 gap-2">
         <div className="flex items-center gap-3">
-          <span className="px-2 py-0.5 rounded bg-[#c8ff00] text-[#090a0c] font-mono text-xs font-extrabold">
+          <span className="px-2.5 py-0.5 rounded-md bg-emerald-200/15 text-emerald-200 border border-emerald-200/30 font-mono text-xs font-bold">
             03
           </span>
-          <h2 className="text-2xl font-extrabold font-heading uppercase tracking-tight text-white">
+          <h2 className="text-2xl font-bold font-heading uppercase tracking-tight text-white">
             {tHome('officialPowerRankings')}
           </h2>
         </div>
-        <div className="flex items-center gap-2 text-xs font-mono text-[#c8ff00] bg-[#c8ff00]/10 border border-[#c8ff00]/30 px-3 py-1 rounded">
+        <div className="flex items-center gap-2 text-xs font-mono text-emerald-200 bg-emerald-200/10 border border-emerald-200/25 px-3 py-1 rounded-md">
           <RadarIcon className="w-3.5 h-3.5 animate-pulse" />
           <span>{tDossier('clickHint')}</span>
         </div>
@@ -177,7 +177,7 @@ export default function ManagerDossierModal({
       <div className="glass-card overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm text-left">
-            <thead className="text-[11px] font-mono uppercase tracking-wider bg-[#090a0c] border-b border-white/10">
+            <thead className="text-[11px] font-mono uppercase tracking-wider bg-[#111318] border-b border-white/10">
               <tr>
                 <th className="px-6 py-3.5 font-bold text-zinc-400 text-center w-16">{tHome('rank')}</th>
                 <th className="px-6 py-3.5 font-bold text-zinc-400">{tHome('manager')}</th>
@@ -194,23 +194,23 @@ export default function ManagerDossierModal({
                   className="border-b border-white/5 hover:bg-white/[0.03] transition-colors cursor-pointer group"
                 >
                   <td className="px-6 py-4 text-center font-mono">
-                    <div className={`w-7 h-7 mx-auto rounded flex items-center justify-center font-bold text-xs ${idx === 0 ? 'bg-[#c8ff00] text-[#090a0c]' : 'bg-[#090a0c] text-zinc-300 border border-white/10'}`}>
+                    <div className={`w-7 h-7 mx-auto rounded-md flex items-center justify-center font-bold text-xs ${idx === 0 ? 'bg-amber-200/20 text-amber-200 border border-amber-200/40' : 'bg-[#111318] text-zinc-300 border border-white/10'}`}>
                       {pr.rank}
                     </div>
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
                       {pr.team.avatarUrl ? (
-                        <div className="w-10 h-10 rounded-lg overflow-hidden border border-white/15 group-hover:border-[#c8ff00] transition-colors">
+                        <div className="w-10 h-10 rounded-lg overflow-hidden border border-white/15 group-hover:border-emerald-200/60 transition-colors">
                           <Image src={pr.team.avatarUrl} alt={pr.team.displayName} width={40} height={40} />
                         </div>
                       ) : (
-                        <div className="w-10 h-10 rounded-lg bg-[#090a0c] flex items-center justify-center border border-white/15 group-hover:border-[#c8ff00] transition-colors">
-                          <span className="font-bold font-mono text-xs text-[#c8ff00]">{pr.team.displayName.charAt(0)}</span>
+                        <div className="w-10 h-10 rounded-lg bg-[#111318] flex items-center justify-center border border-white/15 group-hover:border-emerald-200/60 transition-colors">
+                          <span className="font-bold font-mono text-xs text-emerald-200">{pr.team.displayName.charAt(0)}</span>
                         </div>
                       )}
                       <div>
-                        <p className={`font-heading font-bold text-base uppercase tracking-tight group-hover:text-[#c8ff00] transition-colors ${idx === 0 ? 'text-[#c8ff00]' : 'text-zinc-100'}`}>
+                        <p className={`font-heading font-bold text-base uppercase tracking-tight group-hover:text-emerald-200 transition-colors ${idx === 0 ? 'text-amber-200' : 'text-zinc-100'}`}>
                           {pr.team.displayName}
                         </p>
                         <p className="text-xs font-mono text-zinc-500 md:hidden">Score: {pr.powerScore.toFixed(1)}</p>
@@ -218,18 +218,18 @@ export default function ManagerDossierModal({
                     </div>
                   </td>
                   <td className="px-6 py-4 text-center hidden sm:table-cell font-mono">
-                    <div className="w-full bg-[#090a0c] border border-white/10 rounded-sm h-2 max-w-xs mx-auto overflow-hidden">
-                      <div className="bg-[#c8ff00] h-full" style={{ width: `${Math.min(pr.powerScore, 100)}%` }}></div>
+                    <div className="w-full bg-[#111318] border border-white/10 rounded-full h-2 max-w-xs mx-auto overflow-hidden">
+                      <div className="bg-gradient-to-r from-emerald-300 to-sky-300 h-full rounded-full" style={{ width: `${Math.min(pr.powerScore, 100)}%` }}></div>
                     </div>
                     <span className="text-xs text-zinc-400 mt-1 block">{pr.powerScore.toFixed(1)}</span>
                   </td>
-                  <td className="px-6 py-4 text-center hidden md:table-cell text-[#c8ff00] font-mono font-bold">
+                  <td className="px-6 py-4 text-center hidden md:table-cell text-emerald-200 font-mono font-bold">
                     {pr.recentForm.toFixed(1)} <span className="text-[10px] text-zinc-500 font-mono block uppercase">{tHome('ptsWk')}</span>
                   </td>
                   <td className="px-6 py-4 text-right">
                     <button
                       type="button"
-                      className="inline-flex items-center gap-1 text-xs font-mono font-bold uppercase tracking-wider px-3 py-1.5 rounded bg-[#090a0c] group-hover:bg-[#c8ff00] text-zinc-300 group-hover:text-[#090a0c] border border-white/15 group-hover:border-[#c8ff00] transition-all"
+                      className="inline-flex items-center gap-1 text-xs font-mono font-bold uppercase tracking-wider px-3 py-1.5 rounded-md bg-[#111318] group-hover:bg-emerald-200/15 text-zinc-300 group-hover:text-emerald-200 border border-white/15 group-hover:border-emerald-200/40 transition-all"
                     >
                       <RadarIcon className="w-3.5 h-3.5" />
                       <span className="hidden sm:inline">{tDossier('viewDossier')}</span>
@@ -246,25 +246,25 @@ export default function ManagerDossierModal({
       {/* Manager Dossier Modal */}
       {selectedPR && activeDetails && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/85 backdrop-blur-xs animate-in fade-in duration-200"
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-[#111318]/85 backdrop-blur-xs animate-in fade-in duration-200"
           onClick={() => setSelectedRosterId(null)}
         >
           <div
-            className="glass-card w-full max-w-5xl max-h-[92vh] overflow-y-auto [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-slate-700 [&::-webkit-scrollbar-thumb]:rounded-full border border-cyan-500/30 shadow-[0_0_50px_rgba(6,182,212,0.15)] bg-slate-900/95 p-5 sm:p-7 relative"
+            className="glass-card w-full max-w-5xl max-h-[92vh] overflow-y-auto [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-zinc-700 [&::-webkit-scrollbar-thumb]:rounded-full border border-emerald-200/25 shadow-2xl bg-[#171a21]/98 p-5 sm:p-7 relative"
             onClick={e => e.stopPropagation()}
           >
             {/* Close Button */}
             <button
               type="button"
               onClick={() => setSelectedRosterId(null)}
-              className="absolute top-4 right-4 p-2 rounded-lg bg-slate-800/90 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors z-10"
+              className="absolute top-4 right-4 p-2 rounded-lg bg-[#111318] hover:bg-white/10 text-zinc-400 hover:text-white border border-white/10 transition-colors z-10"
               aria-label={tDossier('close')}
             >
               <X className="w-5 h-5" />
             </button>
 
-            {/* Quick Manager Switcher (Wrapped cleanly, no ugly horizontal scrollbar) */}
-            <div className="flex items-center flex-wrap gap-1.5 pr-12 pb-4 mb-6 border-b border-slate-800">
+            {/* Quick Manager Switcher */}
+            <div className="flex items-center flex-wrap gap-1.5 pr-12 pb-4 mb-6 border-b border-dashed border-white/10">
               {powerRankings.map(pr => {
                 const isSelected = pr.team.rosterId === selectedPR.team.rosterId;
                 return (
@@ -272,10 +272,10 @@ export default function ManagerDossierModal({
                     key={pr.team.rosterId}
                     type="button"
                     onClick={() => setSelectedRosterId(pr.team.rosterId)}
-                    className={`px-2.5 py-1 rounded-full text-xs font-bold whitespace-nowrap transition-all flex items-center gap-1 ${
+                    className={`px-2.5 py-1 rounded-md text-xs font-mono font-bold whitespace-nowrap transition-all flex items-center gap-1 border ${
                       isSelected
-                        ? 'bg-cyan-500 text-slate-950 shadow-[0_0_15px_rgba(6,182,212,0.4)]'
-                        : 'bg-slate-800/70 text-slate-400 hover:text-white hover:bg-slate-800'
+                        ? 'bg-emerald-200/15 text-emerald-200 border-emerald-200/40'
+                        : 'bg-[#111318] text-zinc-400 border-white/5 hover:text-white hover:border-white/15'
                     }`}
                   >
                     <span>#{pr.rank}</span>
@@ -294,33 +294,33 @@ export default function ManagerDossierModal({
                     alt={selectedPR.team.displayName}
                     width={68}
                     height={68}
-                    className="rounded-full border-2 border-cyan-400 shadow-lg shrink-0"
+                    className="rounded-xl border-2 border-emerald-200/60 shadow-lg shrink-0"
                   />
                 ) : (
-                  <div className="w-16 h-16 rounded-full bg-slate-800 border-2 border-cyan-400 flex items-center justify-center font-bold text-xl shrink-0">
+                  <div className="w-16 h-16 rounded-xl bg-[#111318] border-2 border-emerald-200/60 flex items-center justify-center font-bold text-xl shrink-0">
                     {selectedPR.team.displayName.substring(0, 2).toUpperCase()}
                   </div>
                 )}
                 <div className="min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="px-2.5 py-0.5 rounded-full text-xs font-black bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">
+                    <span className="px-2.5 py-0.5 rounded-md text-xs font-mono font-bold bg-emerald-200/15 text-emerald-200 border border-emerald-200/30">
                       #{selectedPR.rank} {tHome('powerScore').toUpperCase()}
                     </span>
-                    <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40 flex items-center gap-1">
+                    <span className="px-2.5 py-0.5 rounded-md text-xs font-mono font-bold bg-amber-200/15 text-amber-200 border border-amber-200/30 flex items-center gap-1">
                       <Sparkles className="w-3 h-3 shrink-0" />
                       <span>{activeDetails.archetype}</span>
                     </span>
                   </div>
-                  <h3 className="text-2xl sm:text-3xl font-bold text-white mt-1 truncate">{selectedPR.team.displayName}</h3>
+                  <h3 className="text-2xl sm:text-3xl font-bold font-heading uppercase tracking-tight text-white mt-1 truncate">{selectedPR.team.displayName}</h3>
                 </div>
               </div>
 
-              <div className={`px-4 py-2.5 rounded-xl border text-xs font-bold flex flex-col sm:items-end justify-center shrink-0 ${
+              <div className={`px-4 py-2.5 rounded-xl border text-xs font-mono font-bold flex flex-col sm:items-end justify-center shrink-0 ${
                 activeDetails.luckDelta >= 0.1
-                  ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300'
+                  ? 'bg-emerald-200/10 border-emerald-200/30 text-emerald-200'
                   : activeDetails.luckDelta <= -0.1
-                  ? 'bg-rose-500/10 border-rose-500/30 text-rose-300'
-                  : 'bg-slate-800/70 border-slate-700 text-slate-300'
+                  ? 'bg-rose-200/10 border-rose-200/30 text-rose-200'
+                  : 'bg-[#111318] border-white/10 text-zinc-300'
               }`}>
                 <span>
                   {activeDetails.luckDelta >= 0.1
@@ -338,9 +338,9 @@ export default function ManagerDossierModal({
             {/* Main 2-Column Content */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
               {/* Left Column: 5-Axis Radar Chart */}
-              <div className="lg:col-span-5 bg-slate-950/60 border border-slate-800 rounded-2xl p-4 flex flex-col items-center justify-between">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1 flex items-center gap-1.5">
-                  <RadarIcon className="w-4 h-4 text-cyan-400" />
+              <div className="lg:col-span-5 bg-[#111318] border border-white/10 rounded-xl p-4 flex flex-col items-center justify-between">
+                <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-zinc-400 mb-1 flex items-center gap-1.5">
+                  <RadarIcon className="w-4 h-4 text-emerald-200" />
                   {tDossier('skillRadar')}
                 </h4>
 
@@ -353,41 +353,41 @@ export default function ManagerDossierModal({
                       margin={{ top: 12, right: 40, bottom: 12, left: 40 }}
                       data={activeDetails.radarData}
                     >
-                      <PolarGrid stroke="#334155" />
+                      <PolarGrid stroke="#27272a" />
                       <PolarAngleAxis
                         dataKey="axis"
                         axisLine={false}
                         tickLine={false}
-                        tick={{ fill: '#cbd5e1', fontSize: 11, fontWeight: 600 }}
+                        tick={{ fill: '#d4d4d8', fontSize: 11, fontWeight: 600 }}
                       />
                       <PolarRadiusAxis angle={90} domain={[0, 100]} tick={false} axisLine={false} />
                       <Tooltip
                         contentStyle={{
-                          backgroundColor: '#0f172a',
-                          border: '1px solid #334155',
+                          backgroundColor: '#111318',
+                          border: '1px solid rgba(167, 243, 208, 0.3)',
                           borderRadius: '0.5rem',
-                          color: '#f8fafc'
+                          color: '#f4f4f5'
                         }}
                       />
                       <Radar
                         name={selectedPR.team.displayName}
                         dataKey="value"
-                        stroke="#22d3ee"
-                        fill="#06b6d4"
-                        fillOpacity={0.35}
-                        strokeWidth={2.5}
+                        stroke="#a7f3d0"
+                        fill="#6ee7b7"
+                        fillOpacity={0.28}
+                        strokeWidth={2}
                         isAnimationActive={false}
                       />
                     </RadarChart>
                   </ResponsiveContainer>
                 </div>
 
-                {/* Full-text Radar Stat Pills (No truncation) */}
-                <div className="flex flex-wrap justify-center gap-2 w-full mt-2 pt-3 border-t border-slate-800/80">
+                {/* Full-text Radar Stat Pills */}
+                <div className="flex flex-wrap justify-center gap-2 w-full mt-2 pt-3 border-t border-dashed border-white/10">
                   {activeDetails.radarData.map(stat => (
-                    <div key={stat.axis} className="bg-slate-900/90 border border-slate-800 rounded-lg px-2.5 py-1.5 flex items-center gap-2">
-                      <span className="text-xs text-slate-300 font-medium whitespace-nowrap">{stat.axis}</span>
-                      <span className="font-mono font-bold text-xs text-cyan-300 bg-cyan-500/15 px-1.5 py-0.5 rounded">{stat.value}</span>
+                    <div key={stat.axis} className="bg-[#171a21] border border-white/10 rounded-md px-2.5 py-1.5 flex items-center gap-2">
+                      <span className="text-xs text-zinc-300 font-medium whitespace-nowrap">{stat.axis}</span>
+                      <span className="font-mono font-bold text-xs text-emerald-200 bg-emerald-200/10 px-1.5 py-0.5 rounded">{stat.value}</span>
                     </div>
                   ))}
                 </div>
@@ -396,65 +396,65 @@ export default function ManagerDossierModal({
               {/* Right Column: Season Analytics & Badges */}
               <div className="lg:col-span-7 flex flex-col justify-between space-y-5">
                 <div>
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">
+                  <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-zinc-400 mb-3">
                     {tDossier('seasonProfile')}
                   </h4>
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                    <div className="bg-slate-950/60 border border-slate-800 rounded-xl p-3">
-                      <span className="text-xs text-slate-400 block">{tDossier('actualRecord')}</span>
+                    <div className="bg-[#111318] border border-white/10 rounded-xl p-3">
+                      <span className="text-xs text-zinc-400 block">{tDossier('actualRecord')}</span>
                       <span className="font-mono font-bold text-lg text-white">
                         {selectedPR.team.wins}-{selectedPR.team.losses}{selectedPR.team.ties > 0 ? `-${selectedPR.team.ties}` : ''}
                       </span>
-                      <span className="text-[11px] text-slate-500 block">{selectedPR.team.fpts.toFixed(1)} PF</span>
+                      <span className="text-[11px] font-mono text-zinc-500 block">{selectedPR.team.fpts.toFixed(1)} PF</span>
                     </div>
 
-                    <div className="bg-slate-950/60 border border-slate-800 rounded-xl p-3">
-                      <span className="text-xs text-slate-400 block">{tDossier('trueRecord')}</span>
-                      <span className="font-mono font-bold text-lg text-cyan-400">
+                    <div className="bg-[#111318] border border-white/10 rounded-xl p-3">
+                      <span className="text-xs text-zinc-400 block">{tDossier('trueRecord')}</span>
+                      <span className="font-mono font-bold text-lg text-sky-200">
                         {selectedAllPlay ? `${selectedAllPlay.wins}-${selectedAllPlay.losses}` : 'N/A'}
                       </span>
-                      <span className="text-[11px] text-slate-500 block">
+                      <span className="text-[11px] font-mono text-zinc-500 block">
                         {(activeDetails.trueWinPct * 100).toFixed(1)}% Win Rate
                       </span>
                     </div>
 
-                    <div className="bg-slate-950/60 border border-slate-800 rounded-xl p-3">
-                      <span className="text-xs text-slate-400 block">{tDossier('lineupEfficiency')}</span>
-                      <span className="font-mono font-bold text-lg text-emerald-400">
+                    <div className="bg-[#111318] border border-white/10 rounded-xl p-3">
+                      <span className="text-xs text-zinc-400 block">{tDossier('lineupEfficiency')}</span>
+                      <span className="font-mono font-bold text-lg text-emerald-200">
                         {(activeDetails.lineupEfficiency * 100).toFixed(1)}%
                       </span>
-                      <span className="text-[11px] text-slate-500 block">
+                      <span className="text-[11px] font-mono text-zinc-500 block">
                         {activeDetails.totalBenchPoints.toFixed(1)} {tDossier('pointsOnBench')}
                       </span>
                     </div>
 
-                    <div className="bg-slate-950/60 border border-slate-800 rounded-xl p-3">
-                      <span className="text-xs text-slate-400 block">{tDossier('seasonHigh')}</span>
-                      <span className="font-mono font-bold text-lg text-amber-400">
+                    <div className="bg-[#111318] border border-white/10 rounded-xl p-3">
+                      <span className="text-xs text-zinc-400 block">{tDossier('seasonHigh')}</span>
+                      <span className="font-mono font-bold text-lg text-amber-200">
                         {activeDetails.seasonHigh.toFixed(2)}
                       </span>
                     </div>
 
-                    <div className="bg-slate-950/60 border border-slate-800 rounded-xl p-3">
-                      <span className="text-xs text-slate-400 block">{tDossier('seasonLow')}</span>
-                      <span className="font-mono font-bold text-lg text-rose-400">
+                    <div className="bg-[#111318] border border-white/10 rounded-xl p-3">
+                      <span className="text-xs text-zinc-400 block">{tDossier('seasonLow')}</span>
+                      <span className="font-mono font-bold text-lg text-rose-200">
                         {activeDetails.seasonLow.toFixed(2)}
                       </span>
                     </div>
 
-                    <div className="bg-slate-950/60 border border-slate-800 rounded-xl p-3">
-                      <span className="text-xs text-slate-400 block">{tHome('recentForm')}</span>
-                      <span className="font-mono font-bold text-lg text-indigo-400">
+                    <div className="bg-[#111318] border border-white/10 rounded-xl p-3">
+                      <span className="text-xs text-zinc-400 block">{tHome('recentForm')}</span>
+                      <span className="font-mono font-bold text-lg text-violet-200">
                         {selectedPR.recentForm.toFixed(1)}
                       </span>
-                      <span className="text-[11px] text-slate-500 block">{tHome('ptsWk')}</span>
+                      <span className="text-[11px] font-mono text-zinc-500 block">{tHome('ptsWk')}</span>
                     </div>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div className="bg-emerald-950/20 border border-emerald-500/20 rounded-xl p-3.5">
-                    <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-400 mb-1">
+                  <div className="bg-[#111318] border border-emerald-200/20 rounded-xl p-3.5">
+                    <div className="flex items-center gap-1.5 text-xs font-mono font-bold text-emerald-200 mb-1">
                       <Flame className="w-3.5 h-3.5 shrink-0" />
                       <span>{tDossier('bestWin')}</span>
                     </div>
@@ -463,17 +463,17 @@ export default function ManagerDossierModal({
                         <p className="font-bold text-sm text-white">
                           +{activeDetails.bestWin.margin.toFixed(2)} vs {activeDetails.bestWin.oppName}
                         </p>
-                        <p className="text-xs text-slate-400 font-mono">
+                        <p className="text-xs text-zinc-400 font-mono">
                           {activeDetails.bestWin.myScore.toFixed(1)} - {activeDetails.bestWin.oppScore.toFixed(1)}
                         </p>
                       </div>
                     ) : (
-                      <p className="text-xs text-slate-500">—</p>
+                      <p className="text-xs text-zinc-500">—</p>
                     )}
                   </div>
 
-                  <div className="bg-rose-950/20 border border-rose-500/20 rounded-xl p-3.5">
-                    <div className="flex items-center gap-1.5 text-xs font-bold text-rose-400 mb-1">
+                  <div className="bg-[#111318] border border-rose-200/20 rounded-xl p-3.5">
+                    <div className="flex items-center gap-1.5 text-xs font-mono font-bold text-rose-200 mb-1">
                       <Skull className="w-3.5 h-3.5 shrink-0" />
                       <span>{tDossier('worstLoss')}</span>
                     </div>
@@ -482,32 +482,32 @@ export default function ManagerDossierModal({
                         <p className="font-bold text-sm text-white">
                           -{activeDetails.worstLoss.margin.toFixed(2)} vs {activeDetails.worstLoss.oppName}
                         </p>
-                        <p className="text-xs text-slate-400 font-mono">
+                        <p className="text-xs text-zinc-400 font-mono">
                           {activeDetails.worstLoss.myScore.toFixed(1)} - {activeDetails.worstLoss.oppScore.toFixed(1)}
                         </p>
                       </div>
                     ) : (
-                      <p className="text-xs text-slate-500">—</p>
+                      <p className="text-xs text-zinc-500">—</p>
                     )}
                   </div>
                 </div>
 
                 <div>
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2.5 flex items-center gap-1.5">
-                    <Award className="w-4 h-4 text-yellow-400" />
+                  <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-zinc-400 mb-2.5 flex items-center gap-1.5">
+                    <Award className="w-4 h-4 text-amber-200" />
                     {tDossier('badgesEarned')}
                   </h4>
                   {activeDetails.badgeEntries.length > 0 ? (
                     <div className="space-y-2">
                       {activeDetails.badgeEntries.map((b, idx) => (
-                        <div key={idx} className="bg-slate-950/70 border border-yellow-500/30 rounded-xl p-3">
-                          <span className="text-xs font-bold text-yellow-400 block mb-0.5">{b.title}</span>
-                          <span className="text-xs text-slate-300 block">{b.reason || b.desc}</span>
+                        <div key={idx} className="bg-[#111318] border border-amber-200/25 rounded-xl p-3">
+                          <span className="text-xs font-bold text-amber-200 block mb-0.5">{b.title}</span>
+                          <span className="text-xs text-zinc-300 block">{b.reason || b.desc}</span>
                         </div>
                       ))}
                     </div>
                   ) : (
-                    <div className="bg-slate-950/40 border border-slate-800 rounded-xl p-3 text-xs text-slate-500">
+                    <div className="bg-[#111318] border border-white/10 rounded-xl p-3 text-xs text-zinc-500">
                       {tDossier('noBadges')}
                     </div>
                   )}

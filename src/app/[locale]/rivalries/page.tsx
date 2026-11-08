@@ -43,60 +43,65 @@ export default async function RivalriesPage({params}: {params: Promise<{locale: 
 
   return (
     <div className="space-y-12 animate-in fade-in duration-500 max-w-6xl mx-auto">
-      {/* Broadcast Header */}
-      <div className="text-center space-y-3">
-        <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-rose-500/15 border border-rose-500/30 text-rose-400 shadow-[0_0_25px_rgba(244,63,94,0.25)]">
-          <Swords className="w-7 h-7" />
+      {/* Pastel Ledger Header */}
+      <div className="glass-panel p-6 sm:p-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-white/10">
+        <div className="flex items-start gap-4">
+          <div className="w-12 h-12 rounded-xl bg-rose-200/15 border border-rose-200/35 text-rose-200 flex items-center justify-center shrink-0">
+            <Swords className="w-6 h-6" />
+          </div>
+          <div>
+            <div className="inline-flex items-center gap-2 text-[10px] font-mono font-bold uppercase tracking-widest text-rose-200 mb-1">
+              <span>SECTION 05 // HEAD-TO-HEAD GRUDGE LEDGER</span>
+            </div>
+            <h1 className="text-2xl sm:text-3xl font-bold font-heading uppercase tracking-tight text-white">{t('title')}</h1>
+            <p className="text-zinc-400 text-xs sm:text-sm mt-1">
+              {t('description')}
+            </p>
+          </div>
         </div>
-        <h1 className="text-3xl sm:text-4xl font-extrabold font-heading text-gradient">{t('title')}</h1>
-        <div className="inline-flex items-center gap-2 bg-slate-900/90 px-3.5 py-1 rounded-full border border-white/10">
-          <History className="w-3.5 h-3.5 text-emerald-400" />
-          <span className="text-xs font-mono font-bold text-slate-300">{t('allTimeData')}{firstSeason}{t('allTimeDataEnd')}</span>
+        <div className="inline-flex items-center gap-2 bg-[#111318] px-3.5 py-1.5 rounded-lg border border-white/10 shrink-0">
+          <History className="w-3.5 h-3.5 text-emerald-200" />
+          <span className="text-xs font-mono font-bold text-zinc-300">{t('allTimeData')}{firstSeason}{t('allTimeDataEnd')}</span>
         </div>
-        <p className="text-slate-400 text-sm sm:text-base max-w-2xl mx-auto">
-          {t('description')}
-        </p>
       </div>
 
       {/* El Clasico Main Event */}
       {elClasico && (
         <section>
-          <div className="glass-panel p-6 sm:p-8 border border-yellow-500/35 shadow-[0_0_35px_rgba(234,179,8,0.12)] relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-yellow-500 via-amber-400 to-rose-500"></div>
-
+          <div className="glass-panel p-6 sm:p-8 border border-amber-200/30 relative overflow-hidden">
             <div className="flex items-center justify-center gap-3 mb-8">
-              <div className="h-px w-12 bg-gradient-to-r from-transparent to-yellow-500"></div>
-              <span className="px-3 py-1 rounded-full text-xs font-extrabold font-heading text-yellow-400 bg-yellow-500/15 border border-yellow-500/30 tracking-widest uppercase">
-                {t('elClasico')}
+              <div className="h-px w-12 bg-amber-200/40"></div>
+              <span className="px-3 py-1 rounded-md text-xs font-bold font-mono text-amber-200 bg-amber-200/10 border border-amber-200/30 tracking-widest uppercase">
+                01 // {t('elClasico')}
               </span>
-              <div className="h-px w-12 bg-gradient-to-l from-transparent to-yellow-500"></div>
+              <div className="h-px w-12 bg-amber-200/40"></div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 items-center gap-6 max-w-3xl mx-auto">
               {/* Manager A */}
               <div className="flex flex-col items-center text-center">
                 {elClasico.managerA.avatarUrl ? (
-                  <Image src={elClasico.managerA.avatarUrl} alt={elClasico.managerA.displayName} width={88} height={88} className="rounded-2xl border-2 border-yellow-400 shadow-xl mb-3" />
+                  <Image src={elClasico.managerA.avatarUrl} alt={elClasico.managerA.displayName} width={84} height={84} className="rounded-2xl border-2 border-amber-200/60 shadow-lg mb-3" />
                 ) : (
-                  <div className="w-22 h-22 rounded-2xl bg-slate-800 border-2 border-yellow-400 flex items-center justify-center mb-3 shadow-xl">
-                    <span className="font-bold text-xl">{elClasico.managerA.displayName.substring(0, 2).toUpperCase()}</span>
+                  <div className="w-21 h-21 rounded-2xl bg-[#111318] border-2 border-amber-200/60 flex items-center justify-center mb-3">
+                    <span className="font-bold text-xl text-amber-200">{elClasico.managerA.displayName.substring(0, 2).toUpperCase()}</span>
                   </div>
                 )}
-                <span className="text-xl font-bold font-heading text-white">{elClasico.managerA.displayName}</span>
-                <span className="text-5xl font-black text-yellow-400 mt-1 font-mono">{elClasico.winsA}</span>
+                <span className="text-xl font-bold font-heading uppercase text-white">{elClasico.managerA.displayName}</span>
+                <span className="text-5xl font-bold text-amber-200 mt-1 font-mono">{elClasico.winsA}</span>
               </div>
 
               {/* Center Tug-of-War */}
               <div className="flex flex-col items-center px-4">
-                <span className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">{t('totalMatches')}</span>
-                <span className="text-3xl font-black text-white font-mono mb-3">{elClasico.totalMatches}</span>
-                <div className="w-full h-3 bg-slate-800 rounded-full overflow-hidden flex border border-white/10">
+                <span className="text-xs font-mono font-bold text-zinc-400 uppercase tracking-widest mb-1">{t('totalMatches')}</span>
+                <span className="text-3xl font-bold text-white font-mono mb-3">{elClasico.totalMatches}</span>
+                <div className="w-full h-3 bg-[#111318] rounded-full overflow-hidden flex border border-white/10">
                   <div
-                    className="bg-gradient-to-r from-yellow-500 to-amber-400 h-full"
+                    className="bg-amber-200 h-full"
                     style={{ width: `${elClasico.totalMatches > 0 ? (elClasico.winsA / elClasico.totalMatches) * 100 : 50}%` }}
                   />
                   <div
-                    className="bg-gradient-to-r from-rose-500 to-pink-500 h-full"
+                    className="bg-rose-300 h-full"
                     style={{ width: `${elClasico.totalMatches > 0 ? (elClasico.winsB / elClasico.totalMatches) * 100 : 50}%` }}
                   />
                 </div>
@@ -105,14 +110,14 @@ export default async function RivalriesPage({params}: {params: Promise<{locale: 
               {/* Manager B */}
               <div className="flex flex-col items-center text-center">
                 {elClasico.managerB.avatarUrl ? (
-                  <Image src={elClasico.managerB.avatarUrl} alt={elClasico.managerB.displayName} width={88} height={88} className="rounded-2xl border-2 border-rose-400 shadow-xl mb-3" />
+                  <Image src={elClasico.managerB.avatarUrl} alt={elClasico.managerB.displayName} width={84} height={84} className="rounded-2xl border-2 border-rose-200/60 shadow-lg mb-3" />
                 ) : (
-                  <div className="w-22 h-22 rounded-2xl bg-slate-800 border-2 border-rose-400 flex items-center justify-center mb-3 shadow-xl">
-                    <span className="font-bold text-xl">{elClasico.managerB.displayName.substring(0, 2).toUpperCase()}</span>
+                  <div className="w-21 h-21 rounded-2xl bg-[#111318] border-2 border-rose-200/60 flex items-center justify-center mb-3">
+                    <span className="font-bold text-xl text-rose-200">{elClasico.managerB.displayName.substring(0, 2).toUpperCase()}</span>
                   </div>
                 )}
-                <span className="text-xl font-bold font-heading text-white">{elClasico.managerB.displayName}</span>
-                <span className="text-5xl font-black text-rose-400 mt-1 font-mono">{elClasico.winsB}</span>
+                <span className="text-xl font-bold font-heading uppercase text-white">{elClasico.managerB.displayName}</span>
+                <span className="text-5xl font-bold text-rose-200 mt-1 font-mono">{elClasico.winsB}</span>
               </div>
             </div>
           </div>
@@ -122,31 +127,32 @@ export default async function RivalriesPage({params}: {params: Promise<{locale: 
       {/* Most Frequent Matchups */}
       {mostFrequent.length > 0 && (
         <section>
-          <div className="flex items-center gap-3 mb-6 border-b border-slate-800 pb-3">
-            <Flame className="w-6 h-6 text-indigo-400" />
-            <h2 className="text-2xl font-extrabold font-heading text-white">{t('mostFrequent')}</h2>
+          <div className="flex items-center gap-3 mb-6 border-b border-white/10 pb-3">
+            <span className="px-2.5 py-0.5 rounded-md bg-indigo-200/15 text-indigo-200 border border-indigo-200/30 font-mono text-xs font-bold">
+              02
+            </span>
+            <h2 className="text-2xl font-bold font-heading uppercase text-white">{t('mostFrequent')}</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
             {mostFrequent.map((r, idx) => (
               <div key={idx} className="glass-card p-5 relative overflow-hidden flex flex-col justify-between gap-3">
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-500 to-cyan-400"></div>
                 <div className="flex items-center justify-between">
                   <div className="flex flex-col items-center w-2/5">
-                    <span className="font-bold text-slate-200 truncate w-full text-center text-sm">{r.managerA.displayName}</span>
-                    <span className={`text-2xl font-black mt-1 font-mono ${r.winsA > r.winsB ? 'text-emerald-400' : r.winsA < r.winsB ? 'text-rose-400' : 'text-slate-300'}`}>{r.winsA}</span>
+                    <span className="font-heading font-bold uppercase text-zinc-200 truncate w-full text-center text-sm">{r.managerA.displayName}</span>
+                    <span className={`text-2xl font-bold mt-1 font-mono ${r.winsA > r.winsB ? 'text-emerald-200' : r.winsA < r.winsB ? 'text-rose-200' : 'text-zinc-300'}`}>{r.winsA}</span>
                   </div>
                   <div className="flex flex-col items-center px-2">
-                    <span className="text-[10px] uppercase tracking-widest text-slate-500 font-bold">{t('games')}</span>
-                    <span className="font-bold text-base text-indigo-300 font-mono">{r.totalMatches}</span>
+                    <span className="text-[10px] font-mono uppercase tracking-widest text-zinc-500 font-bold">{t('games')}</span>
+                    <span className="font-bold text-base text-indigo-200 font-mono">{r.totalMatches}</span>
                   </div>
                   <div className="flex flex-col items-center w-2/5">
-                    <span className="font-bold text-slate-200 truncate w-full text-center text-sm">{r.managerB.displayName}</span>
-                    <span className={`text-2xl font-black mt-1 font-mono ${r.winsB > r.winsA ? 'text-emerald-400' : r.winsB < r.winsA ? 'text-rose-400' : 'text-slate-300'}`}>{r.winsB}</span>
+                    <span className="font-heading font-bold uppercase text-zinc-200 truncate w-full text-center text-sm">{r.managerB.displayName}</span>
+                    <span className={`text-2xl font-bold mt-1 font-mono ${r.winsB > r.winsA ? 'text-emerald-200' : r.winsB < r.winsA ? 'text-rose-200' : 'text-zinc-300'}`}>{r.winsB}</span>
                   </div>
                 </div>
-                <div className="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden flex">
-                  <div className="bg-emerald-400 h-full" style={{ width: `${r.totalMatches > 0 ? (r.winsA / r.totalMatches) * 100 : 50}%` }} />
-                  <div className="bg-indigo-400 h-full" style={{ width: `${r.totalMatches > 0 ? (r.winsB / r.totalMatches) * 100 : 50}%` }} />
+                <div className="w-full h-1.5 bg-[#111318] rounded-full overflow-hidden flex">
+                  <div className="bg-emerald-200 h-full" style={{ width: `${r.totalMatches > 0 ? (r.winsA / r.totalMatches) * 100 : 50}%` }} />
+                  <div className="bg-indigo-200 h-full" style={{ width: `${r.totalMatches > 0 ? (r.winsB / r.totalMatches) * 100 : 50}%` }} />
                 </div>
               </div>
             ))}
@@ -157,9 +163,11 @@ export default async function RivalriesPage({params}: {params: Promise<{locale: 
       {/* Kryptonite Sweeps */}
       {sweeps.length > 0 && (
         <section>
-          <div className="flex items-center gap-3 mb-6 border-b border-slate-800 pb-3">
-            <Skull className="w-6 h-6 text-rose-500" />
-            <h2 className="text-2xl font-extrabold font-heading text-white">{t('kryptonite')}</h2>
+          <div className="flex items-center gap-3 mb-6 border-b border-white/10 pb-3">
+            <span className="px-2.5 py-0.5 rounded-md bg-rose-200/15 text-rose-200 border border-rose-200/30 font-mono text-xs font-bold">
+              03
+            </span>
+            <h2 className="text-2xl font-bold font-heading uppercase text-white">{t('kryptonite')}</h2>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -169,38 +177,36 @@ export default async function RivalriesPage({params}: {params: Promise<{locale: 
               const domWins = Math.max(rivalry.winsA, rivalry.winsB);
               
               return (
-                <div key={idx} className="glass-card p-6 border-rose-500/25 relative overflow-hidden flex items-center justify-between">
-                  <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 to-rose-500"></div>
-                  
+                <div key={idx} className="glass-card p-6 border-rose-200/20 relative overflow-hidden flex items-center justify-between">
                   <div className="flex flex-col items-center flex-1">
                     {dominator.avatarUrl ? (
-                      <Image src={dominator.avatarUrl} alt={dominator.displayName} width={60} height={60} className="rounded-full border-2 border-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.25)] mb-2" />
+                      <Image src={dominator.avatarUrl} alt={dominator.displayName} width={60} height={60} className="rounded-xl border border-emerald-200/60 mb-2" />
                     ) : (
-                      <div className="w-15 h-15 rounded-full bg-slate-800 border-2 border-emerald-400 flex items-center justify-center mb-2">
-                        <span className="font-bold">{dominator.displayName.substring(0, 2).toUpperCase()}</span>
+                      <div className="w-15 h-15 rounded-xl bg-[#111318] border border-emerald-200/60 flex items-center justify-center mb-2">
+                        <span className="font-bold text-emerald-200">{dominator.displayName.substring(0, 2).toUpperCase()}</span>
                       </div>
                     )}
-                    <span className="font-bold text-emerald-300 text-sm sm:text-base">{dominator.displayName}</span>
-                    <span className="text-3xl font-black font-mono text-white mt-0.5">{domWins}</span>
+                    <span className="font-heading font-bold uppercase text-emerald-200 text-sm sm:text-base">{dominator.displayName}</span>
+                    <span className="text-3xl font-bold font-mono text-white mt-0.5">{domWins}</span>
                   </div>
 
                   <div className="px-4 flex flex-col items-center">
-                    <span className="text-[10px] font-extrabold text-rose-400 bg-rose-500/15 border border-rose-500/30 px-2.5 py-0.5 rounded-full uppercase tracking-wider mb-1.5">
+                    <span className="text-[10px] font-mono font-bold text-rose-200 bg-rose-200/10 border border-rose-200/25 px-2.5 py-0.5 rounded uppercase tracking-wider mb-1.5">
                       {t('owns')}
                     </span>
-                    <Swords className="w-5 h-5 text-slate-600" />
+                    <Swords className="w-5 h-5 text-zinc-600" />
                   </div>
 
                   <div className="flex flex-col items-center flex-1 opacity-65">
                     {victim.avatarUrl ? (
-                      <Image src={victim.avatarUrl} alt={victim.displayName} width={60} height={60} className="rounded-full border-2 border-rose-500/40 mb-2 grayscale" />
+                      <Image src={victim.avatarUrl} alt={victim.displayName} width={60} height={60} className="rounded-xl border border-rose-200/40 mb-2 grayscale" />
                     ) : (
-                      <div className="w-15 h-15 rounded-full bg-slate-800 border-2 border-rose-500/40 flex items-center justify-center mb-2 grayscale">
+                      <div className="w-15 h-15 rounded-xl bg-[#111318] border border-rose-200/40 flex items-center justify-center mb-2 grayscale">
                         <span className="font-bold">{victim.displayName.substring(0, 2).toUpperCase()}</span>
                       </div>
                     )}
-                    <span className="font-bold text-slate-300 text-sm sm:text-base">{victim.displayName}</span>
-                    <span className="text-3xl font-black font-mono text-slate-500 mt-0.5">0</span>
+                    <span className="font-heading font-bold uppercase text-zinc-300 text-sm sm:text-base">{victim.displayName}</span>
+                    <span className="text-3xl font-bold font-mono text-zinc-500 mt-0.5">0</span>
                   </div>
                 </div>
               );
@@ -211,9 +217,11 @@ export default async function RivalriesPage({params}: {params: Promise<{locale: 
 
       {/* All Head-to-Head Records */}
       <section>
-        <div className="flex items-center gap-3 mb-6 border-b border-slate-800 pb-3">
-          <Trophy className="w-6 h-6 text-yellow-400" />
-          <h2 className="text-2xl font-extrabold font-heading text-white">{t('allHeadToHead')}</h2>
+        <div className="flex items-center gap-3 mb-6 border-b border-white/10 pb-3">
+          <span className="px-2.5 py-0.5 rounded-md bg-amber-200/15 text-amber-200 border border-amber-200/30 font-mono text-xs font-bold">
+            04
+          </span>
+          <h2 className="text-2xl font-bold font-heading uppercase text-white">{t('allHeadToHead')}</h2>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
@@ -237,25 +245,24 @@ export default async function RivalriesPage({params}: {params: Promise<{locale: 
 
             return (
               <div key={manager.userId} className="glass-card flex flex-col overflow-hidden relative">
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-500 to-blue-500"></div>
-                <div className="p-4 bg-slate-900/80 border-b border-slate-800 flex items-center justify-between gap-2">
+                <div className="p-4 bg-[#111318] border-b border-dashed border-white/10 flex items-center justify-between gap-2">
                   <div className="flex items-center gap-3 min-w-0">
                     {manager.avatarUrl ? (
-                      <Image src={manager.avatarUrl} alt={manager.displayName} width={40} height={40} className="rounded-full border border-slate-600 shrink-0" />
+                      <Image src={manager.avatarUrl} alt={manager.displayName} width={40} height={40} className="rounded-lg border border-white/15 shrink-0" />
                     ) : (
-                      <div className="w-10 h-10 rounded-full bg-slate-800 border border-slate-600 flex items-center justify-center shrink-0">
-                        <span className="font-bold text-xs">{manager.displayName.substring(0, 2).toUpperCase()}</span>
+                      <div className="w-10 h-10 rounded-lg bg-[#171a21] border border-white/15 flex items-center justify-center shrink-0">
+                        <span className="font-bold text-xs text-sky-200">{manager.displayName.substring(0, 2).toUpperCase()}</span>
                       </div>
                     )}
                     <div className="min-w-0">
-                      <h3 className="font-bold font-heading text-base text-white truncate">{manager.displayName}</h3>
-                      <p className="text-xs text-slate-400 font-mono">{totalWins}-{totalLosses}</p>
+                      <h3 className="font-bold font-heading uppercase text-base text-white truncate">{manager.displayName}</h3>
+                      <p className="text-xs text-zinc-400 font-mono">{totalWins}-{totalLosses}</p>
                     </div>
                   </div>
-                  <span className={`text-xs font-mono font-bold px-2 py-0.5 rounded-full border ${
+                  <span className={`text-xs font-mono font-bold px-2 py-0.5 rounded border ${
                     winRate >= 50
-                      ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
-                      : 'bg-rose-500/15 text-rose-300 border-rose-500/30'
+                      ? 'bg-emerald-200/10 text-emerald-200 border-emerald-200/25'
+                      : 'bg-rose-200/10 text-rose-200 border-rose-200/25'
                   }`}>
                     {winRate.toFixed(0)}%
                   </span>
@@ -270,22 +277,22 @@ export default async function RivalriesPage({params}: {params: Promise<{locale: 
                         <div key={r.opponent.userId} className="flex items-center justify-between group py-0.5">
                           <div className="flex items-center gap-2 overflow-hidden pr-2">
                             {r.opponent.avatarUrl ? (
-                              <Image src={r.opponent.avatarUrl} alt={r.opponent.displayName} width={24} height={24} className="rounded-full border border-slate-700 shrink-0" />
+                              <Image src={r.opponent.avatarUrl} alt={r.opponent.displayName} width={24} height={24} className="rounded-full border border-white/15 shrink-0" />
                             ) : (
-                              <div className="w-6 h-6 rounded-full bg-slate-800 flex items-center justify-center shrink-0">
+                              <div className="w-6 h-6 rounded-full bg-[#111318] flex items-center justify-center shrink-0">
                                 <span className="font-bold text-[10px]">{r.opponent.displayName.charAt(0)}</span>
                               </div>
                             )}
-                            <span className="text-xs font-semibold text-slate-300 group-hover:text-white transition-colors truncate">
+                            <span className="text-xs font-semibold text-zinc-300 group-hover:text-white transition-colors truncate">
                               {r.opponent.displayName}
                             </span>
                           </div>
                           <span className={`text-xs font-mono font-bold px-2 py-0.5 rounded shrink-0 ${
                             isWinning
-                              ? 'bg-emerald-500/20 text-emerald-300'
+                              ? 'bg-emerald-200/15 text-emerald-200'
                               : isLosing
-                              ? 'bg-rose-500/20 text-rose-300'
-                              : 'bg-slate-800 text-slate-400'
+                              ? 'bg-rose-200/15 text-rose-200'
+                              : 'bg-[#111318] text-zinc-400'
                           }`}>
                             {r.wins}-{r.losses}
                           </span>
