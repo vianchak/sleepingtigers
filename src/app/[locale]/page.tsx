@@ -288,7 +288,6 @@ export default async function DashboardHome({params}: {params: Promise<{locale: 
                 <div className="space-y-2">
                   {sortedTeams.slice(1, 4).map((contender, idx) => {
                     const seed = idx + 2;
-                    const gamesBack = leader.wins - contender.wins;
                     return (
                       <div
                         key={contender.rosterId}
@@ -319,14 +318,11 @@ export default async function DashboardHome({params}: {params: Promise<{locale: 
                         </div>
 
                         <div className="flex items-center gap-2.5 shrink-0 font-mono text-xs">
-                          <span className="text-zinc-400 hidden sm:inline">
-                            {contender.fpts.toFixed(1)} PF
+                          <span className="text-zinc-400">
+                            {contender.fpts.toFixed(1)} {t('pf')}
                           </span>
                           <span className="px-2 py-0.5 rounded bg-white/5 border border-white/10 text-emerald-200 font-bold">
                             {contender.wins}-{contender.losses}
-                          </span>
-                          <span className="text-[11px] text-zinc-500 w-12 text-right">
-                            {gamesBack > 0 ? `-${gamesBack} GB` : 'TIED'}
                           </span>
                         </div>
                       </div>
