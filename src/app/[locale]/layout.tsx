@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import { Space_Grotesk, IBM_Plex_Sans, IBM_Plex_Mono } from 'next/font/google';
 import '../globals.css';
 import NavbarClient from '@/components/NavbarClient';
 import { getDictionary, getScopedTranslator } from '@/lib/i18n/dictionaries';
@@ -8,27 +7,6 @@ import { getSiteConfig } from '@/lib/site-config';
 import { notFound } from 'next/navigation';
 
 const locales = ['en', 'uk'];
-
-const ibmPlexSans = IBM_Plex_Sans({
-  subsets: ['latin', 'cyrillic'],
-  weight: ['400', '500', '600', '700'],
-  variable: '--font-sans',
-  display: 'swap',
-});
-
-const spaceGrotesk = Space_Grotesk({
-  subsets: ['latin'],
-  weight: ['500', '600', '700'],
-  variable: '--font-heading',
-  display: 'swap',
-});
-
-const ibmPlexMono = IBM_Plex_Mono({
-  subsets: ['latin', 'cyrillic'],
-  weight: ['400', '500', '600', '700'],
-  variable: '--font-mono',
-  display: 'swap',
-});
 
 export async function generateMetadata({params}: {params: Promise<{locale: string}>}): Promise<Metadata> {
   const {locale} = await params;
@@ -77,8 +55,16 @@ export default async function RootLayout({
   };
 
   return (
-    <html lang={locale} className={`${ibmPlexSans.variable} ${spaceGrotesk.variable} ${ibmPlexMono.variable}`}>
-      <body className="text-zinc-100 antialiased selection:bg-emerald-200/30 selection:text-emerald-100">
+    <html lang={locale}>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+          rel="stylesheet"
+        />
+      </head>
+      <body className="font-sans text-zinc-100 antialiased selection:bg-emerald-200/30 selection:text-emerald-100">
         <TranslationProvider messages={messages}>
           <div className="flex flex-col min-h-screen">
             <NavbarClient

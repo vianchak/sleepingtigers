@@ -1,13 +1,16 @@
 @import "tailwindcss";
 
 @theme inline {
-  --font-sans: var(--font-sans), sans-serif;
-  --font-heading: var(--font-heading), sans-serif;
-  --font-mono: var(--font-mono), monospace;
+  --font-sans: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-heading: 'Space Grotesk', 'IBM Plex Sans', sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, monospace;
 }
 
 @layer base {
   :root {
+    --font-sans: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-heading: 'Space Grotesk', 'IBM Plex Sans', sans-serif;
+    --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, monospace;
     --bg-carbon: #111318;
     --bg-ledger: #171a21;
     --bg-ledger-raised: #1e222b;
