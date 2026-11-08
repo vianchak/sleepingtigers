@@ -98,3 +98,29 @@
   -webkit-text-fill-color: transparent;
   background-image: linear-gradient(95deg, #ffffff 0%, #a7f3d0 55%, #bae6fd 100%);
 }
+
+/* Hide scrollbars cleanly where .no-scrollbar is used */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Subtle dark scrollbars across the app on Windows/Chrome */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #111318;
+}
+::-webkit-scrollbar-thumb {
+  background: #272b36;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #393f4f;
+}
+

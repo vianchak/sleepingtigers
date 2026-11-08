@@ -73,35 +73,35 @@ export default function NavbarClient({
     <header className="sticky top-0 z-50 bg-[#111318]/92 backdrop-blur-xl border-b border-white/10">
       <div className="max-w-7xl mx-auto px-3 sm:px-6 h-16 flex items-center justify-between gap-2">
         {/* Left: Brand Identity */}
-        <Link href={`/${locale}`} className="flex items-center gap-2.5 shrink-0 group">
-          <div className="w-9 h-9 rounded-lg bg-emerald-200/15 border border-emerald-200/35 text-emerald-200 flex items-center justify-center group-hover:bg-emerald-200/25 transition-colors">
-            <Receipt className="w-5 h-5 stroke-[2.2]" />
+        <Link href={`/${locale}`} className="flex items-center gap-2 shrink-0 group">
+          <div className="w-8 h-8 rounded-lg bg-emerald-200/15 border border-emerald-200/35 text-emerald-200 flex items-center justify-center group-hover:bg-emerald-200/25 transition-colors">
+            <Receipt className="w-4 h-4 stroke-[2.2]" />
           </div>
-          <div className="hidden lg:flex flex-col">
-            <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-emerald-200 font-bold leading-none mb-0.5">
-              LEAGUE AUDIT // LIVE
+          <div className="hidden xl:flex flex-col">
+            <span className="text-[9px] font-mono uppercase tracking-[0.18em] text-emerald-200 font-bold leading-none mb-0.5">
+              LEAGUE AUDIT
             </span>
-            <h1 className="text-base xl:text-lg font-extrabold font-heading tracking-tight uppercase text-white leading-none">
+            <h1 className="text-sm font-extrabold font-heading tracking-tight uppercase text-white leading-none truncate max-w-[150px]">
               {labels.title}
             </h1>
           </div>
         </Link>
 
         {/* Center: Pastel Ledger Menu */}
-        <nav className="hidden md:flex items-center flex-nowrap gap-1 bg-[#171a21] p-1 rounded-xl border border-white/10 min-w-0 overflow-x-auto no-scrollbar">
+        <nav className="hidden md:flex items-center flex-nowrap gap-0.5 xl:gap-1 bg-[#171a21] p-1 rounded-xl border border-white/10 min-w-0 overflow-x-auto no-scrollbar">
           {navItems.map((item) => {
             const active = isActive(item.href, item.exact);
             return (
               <Link
                 key={item.href}
                 href={item.href}
-                className={`h-8 flex items-center gap-1.5 px-2.5 xl:px-3 rounded-lg text-xs font-mono font-bold uppercase tracking-wide whitespace-nowrap transition-all shrink-0 border ${
+                className={`h-8 flex items-center gap-1 px-2 xl:px-2.5 rounded-lg text-[11px] font-mono font-bold uppercase tracking-tight whitespace-nowrap transition-all shrink-0 border ${
                   active
                     ? item.pastel
                     : 'border-transparent text-zinc-400 hover:text-zinc-100 hover:bg-white/5'
                 }`}
               >
-                <span className={`text-[10px] hidden 2xl:inline ${active ? 'opacity-90' : 'text-zinc-500'}`}>
+                <span className={`text-[9px] hidden 2xl:inline ${active ? 'opacity-90' : 'text-zinc-500'}`}>
                   {item.code}
                 </span>
                 <span>{item.label}</span>
